@@ -9,6 +9,7 @@ public class FileWrite {
 		createFile.readFile();
 		//test endring
 		//double test
+		//kommentar
 	}
 
 }
