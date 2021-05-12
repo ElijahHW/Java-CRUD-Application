@@ -7,6 +7,7 @@ public class FileWrite {
 		createFile.createFile();
 		createFile.writeFile("yolo");
 		createFile.readFile();
+		//test endring
 	}
 
 }
