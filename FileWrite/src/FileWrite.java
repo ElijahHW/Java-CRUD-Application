@@ -8,6 +8,8 @@ public class FileWrite {
 		createFile.writeFile("yolo");
 		createFile.readFile();
 		//test endring
+		//double test
+		//kommentar
 	}
 
 }
