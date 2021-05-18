@@ -181,7 +181,7 @@ public class addCustomerView implements ActionListener {
 		
 	}
 
-	@Override
+	/*@Override
 	public void actionPerformed(ActionEvent e) {
 		
 		try {
@@ -196,5 +196,5 @@ public class addCustomerView implements ActionListener {
 		}
 		
 		
-	}
+	}*/
 }

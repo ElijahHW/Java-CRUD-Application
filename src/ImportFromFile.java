@@ -53,7 +53,7 @@ public class ImportFromFile implements ActionListener {
 		return selectTable;	
 	}
 	
-	private JPanel dataPreview(String[] columns, ArrayList<ArrayList<String>> data) { //Preview of the data in table format
+	/*private JPanel dataPreview(String[] columns, ArrayList<ArrayList<String>> data) { //Preview of the data in table format
 		JPanel dataPreview = new JPanel();
 		for (int i = 0; i < employeeList.size(); i++) {
 			employeeArray[i][0] = employeeList.get(i).get(0);
@@ -64,7 +64,7 @@ public class ImportFromFile implements ActionListener {
 		
 		return dataPreview;
 	}
-	
+	*/
 	
 	
 	

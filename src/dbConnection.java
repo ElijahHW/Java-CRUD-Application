@@ -50,6 +50,9 @@ public class dbConnection {
         }
     }
     
+    //
+    // Get table names
+    //
     
     public static String[] getTableNames() { //Returns the name of all tables in the classicmodels database
 		ArrayList<String> tablesList = new ArrayList<String>();
@@ -70,6 +73,9 @@ public class dbConnection {
 		return tables;
 	}
     
+    //
+    // Get column names
+    //
     
     public static String[] getColumnNames(String table) { //Returns all column names from a table
 		ArrayList<String> tablesList = new ArrayList<String>();
