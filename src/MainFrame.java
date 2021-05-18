@@ -83,6 +83,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			
 		}
 		if(e.getSource()==retrieveItem) {
+			getEmployees getemployees = new getEmployees();
 			
 		}		
 		if(e.getSource()==importItem) {
