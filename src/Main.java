@@ -5,7 +5,7 @@ import java.util.List;
 import javax.swing.JFrame;
 
 public class Main {
-	static JFrame frame = new JFrame("Application");
+	static JFrame frame = new JFrame();
 
 	public Main() {		
 		new MainFrame(frame);
