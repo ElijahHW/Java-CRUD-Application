@@ -146,7 +146,10 @@ public class MainFrame extends JFrame implements ActionListener {
 			
 		}
 		if(e.getSource()==listItem) {
-			
+			ListOrders panel = new ListOrders();
+			this.setContentPane(panel.GetPanel());
+			this.revalidate();
+			this.repaint();
 		}
 		if(e.getSource()==retrieveItem) {
 			//getEmployees getemployees = new getEmployees();
