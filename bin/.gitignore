@@ -1,3 +1,11 @@
+/ImportFromFile.class
 /Main.class
-/dbConnection.class
 /MainFrame.class
+<<<<<<< Updated upstream
+/addCustomerView.class
+/dbConnection.class
+=======
+/ImportFromFile.class
+/addCustomerView.class
+>>>>>>> Stashed changes
+/getEmployees.class

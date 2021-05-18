@@ -3,52 +3,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class dbConnection {
-	private Statement statement;
-    private Connection conn;
+	private static Statement statement;
+    private static Connection conn;
     private ResultSet rs;
     private String iq;
-    static String connection= "jdbc:mysql://localhost:3306/classicmodels";
-	static String username = "root";
-	static String password = "";
+    private static String connection= "jdbc:mysql://localhost:3306/classicmodels";
+    private static String username = "root";
+    private static String password = "";
 
-    //
-    // OPEN DB CONNECTION
-    //
-    public void open() throws SQLException {
-        try {
-            //Establish connection
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/classicmodels", "root", ""); // HUSKE Å ENDRE TIL STUDENT STUDENT
-            //Create statement that will be used for executing SQL queries
-            statement = conn.createStatement();
-            System.out.print("Database Connected! \n");
-        } catch (SQLException ex) {
-            System.out.print("Database Not Connected! \n");
-            ex.printStackTrace();// More elegant solutions for catching errors exist but they are out of the scope for this course
-        }
-    }
-
-    //
-    // CLOSE DB CONNECTION
-    //
-    public void close() throws SQLException {
-        try {
-            statement.close();
-            conn.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-    
+  
     //
     // Get data from a table
     //
     
-public static List<List<String>> getTable(String table) {
+    public static List<List<String>> getTable(String table) {
         
         List<List<String>> res = new ArrayList<List<String>>();
         
         try {
-            
+
             Connection con = DriverManager.getConnection(connection, username, password);
             
             Statement stm = con.createStatement();
@@ -76,5 +49,66 @@ public static List<List<String>> getTable(String table) {
             return new ArrayList<List<String>>();
         }
     }
+    
+    //
+    // Get table names
+    //
+    
+    public static String[] getTableNames() { //Returns the name of all tables in the classicmodels database
+		ArrayList<String> tablesList = new ArrayList<String>();
 
+		try {
+			Connection MyCon = DriverManager.getConnection(connection, username, password);
+			Statement stmt = MyCon.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'classicmodels'");
+			while (rs.next()) {
+				tablesList.add(rs.getString("table_name"));
+			}
+			MyCon.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		String[] tables = tablesList.toArray(new String[tablesList.size()]);
+		return tables;
+	}
+    
+    //
+    // Get column names
+    //
+    
+    public static String[] getColumnNames(String table) { //Returns all column names from a table
+		ArrayList<String> tablesList = new ArrayList<String>();
+
+		try {
+			Connection MyCon = DriverManager.getConnection(connection, username, password);
+			Statement stmt = MyCon.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("SELECT COLUMN_NAME FROM `INFORMATION_SCHEMA`.`COLUMNS`  WHERE `TABLE_SCHEMA`='classicmodels' AND `TABLE_NAME`='" + table + "';");
+			while (rs.next()) {
+				tablesList.add(rs.getString("column_name"));
+			}
+			MyCon.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		String[] tables = tablesList.toArray(new String[tablesList.size()]);
+		return tables;
+	}
+    
+    public static void addCustomer(int customerNumber, String customerName, String contactLastName, String contactFirstName, String phone, String addressLine1, String addressLine2, String city, String state, String postalCode, String country, int salesRepEmployeeNumber, double creditLimit) throws Exception {
+        try {
+            Connection con = DriverManager.getConnection(connection, username, password);
+            PreparedStatement posted = con.prepareStatement("INSERT INTO customers (customerNumber, customerName, contactLastName, contactFirstName, phone, addressLine1, addressLine2, city, state, postalCode, country, salesRepEmployeeNumber, creditLimit) VALUES ("+customerNumber+", '"+customerName+"', '"+contactLastName+"', '"+contactFirstName+"', '"+phone+"', '"+addressLine1+"', '"+addressLine2+"', '"+city+"', '"+state+"', '"+postalCode+"', '"+country+"', "+salesRepEmployeeNumber+", "+creditLimit+")");
+            posted.executeUpdate();
+        }catch (Exception e) {
+        	System.out.println(e);
+        } finally {
+        	System.out.println("Customer added!");
+        }
+    }
+    
+    
+    
+    
 }
