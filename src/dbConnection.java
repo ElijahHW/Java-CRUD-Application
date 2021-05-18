@@ -84,9 +84,9 @@ public class dbConnection {
 			Connection MyCon = DriverManager.getConnection(connection, username, password);
 			Statement stmt = MyCon.createStatement();
 			ResultSet rs = stmt
-					.executeQuery("SELECT COLUMN_NAME  FROM `INFORMATION_SCHEMA`.`COLUMNS`  WHERE `TABLE_SCHEMA`='classicmodels' AND `TABLE_NAME`=' " + table + "';");
+					.executeQuery("SELECT COLUMN_NAME FROM `INFORMATION_SCHEMA`.`COLUMNS`  WHERE `TABLE_SCHEMA`='classicmodels' AND `TABLE_NAME`='" + table + "';");
 			while (rs.next()) {
-				tablesList.add(rs.getString("table_name"));
+				tablesList.add(rs.getString("column_name"));
 			}
 			MyCon.close();
 		} catch (Exception e) {
@@ -107,6 +107,8 @@ public class dbConnection {
         	System.out.println("Customer added!");
         }
     }
+    
+    
     
     
 }
