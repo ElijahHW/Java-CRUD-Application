@@ -12,7 +12,7 @@ public class dbConnection {
     public void open() throws SQLException {
         try {
             //Establish connection
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/classicmodels", "root", "");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/classicmodels", "root", ""); // HUSKE Å ENDRE TIL STUDENT STUDENT
             //Create statement that will be used for executing SQL queries
             statement = conn.createStatement();
             System.out.print("Database Connected! \n");
@@ -37,7 +37,7 @@ public class dbConnection {
     //
     // VIEW USERS FROM DB
     //
-    public void viewUsers() throws SQLException {
+    public void viewEmployees() throws SQLException {
         try {
             open();
             iq = " SELECT * FROM `employees` ";
