@@ -39,8 +39,8 @@ public class MainFrame implements ActionListener {
         //These can be used by pressing 'key', the key will be underlined.
         addItem.setMnemonic(KeyEvent.VK_A); //key
         listItem.setMnemonic(KeyEvent.VK_L); //key
-        retrieveItem.setMnemonic(KeyEvent.VK_L); //key
-        importItem.setMnemonic(KeyEvent.VK_R); //key 
+        retrieveItem.setMnemonic(KeyEvent.VK_R); //key
+        importItem.setMnemonic(KeyEvent.VK_I); //key 
         storeItem.setMnemonic(KeyEvent.VK_S); //key
         exitItem.setMnemonic(KeyEvent.VK_E); //key
         

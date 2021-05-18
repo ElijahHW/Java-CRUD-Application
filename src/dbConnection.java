@@ -7,9 +7,9 @@ public class dbConnection {
     private static Connection conn;
     private ResultSet rs;
     private String iq;
-    static String connection= "jdbc:mysql://localhost:3306/classicmodels";
-	static String username = "root";
-	static String password = "";
+    private static String connection= "jdbc:mysql://localhost:3306/classicmodels";
+    private static String username = "root";
+    private static String password = "";
 
   
     //
