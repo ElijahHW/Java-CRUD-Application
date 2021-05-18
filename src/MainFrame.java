@@ -3,17 +3,18 @@ import java.awt.event.*;
 import java.io.File;
 import java.sql.*;
 import javax.swing.*;
-public class MainFrame implements ActionListener {
-	 	 JFrame frame;
+public class MainFrame extends JFrame implements ActionListener {
+	 	
 		private JMenuBar menuBar;
 	    private JMenu fileMenu, actionMenu, helpMenu;
 	    private JMenuItem addItem, listItem, retrieveItem, importItem, storeItem, exitItem;
+	    
 	
-	MainFrame(JFrame frame) {
+	MainFrame() {
 		// Defining application size, layout and close operation.
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(400, 400);
-		frame.setLayout(new FlowLayout());
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(400, 400);
+		this.setLayout(new FlowLayout());
 
 		// Defining application MenuBar.
         menuBar = new JMenuBar();
@@ -65,9 +66,9 @@ public class MainFrame implements ActionListener {
         menuBar.setFocusable(false);
         
         //Adding MenuBar to Application and setting it visible.
-        frame.setJMenuBar(menuBar);
-        frame.setVisible(true);
-        frame.setTitle("Application");
+        this.setJMenuBar(menuBar);
+        this.setVisible(true);
+        this.setTitle("Application");
         
 	}
 	
@@ -92,9 +93,16 @@ public class MainFrame implements ActionListener {
 		}
 		
 		if(e.getSource()==exitItem) {
+			 String[] exitResponse = {"Yes", "No"};
 			 System.out.println("Closing Application...");
-             try {
+			 try {
                  Thread.sleep(1000);
+    			 JOptionPane.showOptionDialog(null, 
+    					 "Are you sure you want to close this application?",
+    					 "Application Message", 
+    					 JOptionPane.YES_NO_CANCEL_OPTION, 
+    					 JOptionPane.WARNING_MESSAGE, null, exitResponse, 0);
+    			 
              } catch (InterruptedException interruptedException) {
                  interruptedException.printStackTrace();
              }
