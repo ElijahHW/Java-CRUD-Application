@@ -97,16 +97,16 @@ public class MainFrame extends JFrame implements ActionListener {
 			 System.out.println("Closing Application...");
 			 try {
                  Thread.sleep(1000);
-    			 JOptionPane.showOptionDialog(null, 
-    					 "Are you sure you want to close this application?",
-    					 "Application Message", 
-    					 JOptionPane.YES_NO_CANCEL_OPTION, 
-    					 JOptionPane.WARNING_MESSAGE, null, exitResponse, 0);
-    			 
+    			 if (JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Application Manager",
+    					 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+    				 		System.exit(0);
+    				} else {
+    				    // do nothing :)
+    				}
              } catch (InterruptedException interruptedException) {
                  interruptedException.printStackTrace();
              }
-             System.exit(0);
+             
          }
 		}
 }
