@@ -16,7 +16,7 @@ public class dbConnection {
     // Get data from a table
     //
     
-public static List<List<String>> getTable(String table) {
+    public static List<List<String>> getTable(String table) {
         
         List<List<String>> res = new ArrayList<List<String>>();
         
@@ -49,5 +49,46 @@ public static List<List<String>> getTable(String table) {
             return new ArrayList<List<String>>();
         }
     }
+    
+    
+    public static String[] getTableNames() { //Returns the name of all tables in the classicmodels database
+		ArrayList<String> tablesList = new ArrayList<String>();
 
+		try {
+			Connection MyCon = DriverManager.getConnection(connection, username, password);
+			Statement stmt = MyCon.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'classicmodels'");
+			while (rs.next()) {
+				tablesList.add(rs.getString("table_name"));
+			}
+			MyCon.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		String[] tables = tablesList.toArray(new String[tablesList.size()]);
+		return tables;
+	}
+    
+    
+    public static String[] getColumnNames(String table) { //Returns all column names from a table
+		ArrayList<String> tablesList = new ArrayList<String>();
+
+		try {
+			Connection MyCon = DriverManager.getConnection(connection, username, password);
+			Statement stmt = MyCon.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("SELECT COLUMN_NAME  FROM `INFORMATION_SCHEMA`.`COLUMNS`  WHERE `TABLE_SCHEMA`='classicmodels' AND `TABLE_NAME`=' " + table + "';");
+			while (rs.next()) {
+				tablesList.add(rs.getString("table_name"));
+			}
+			MyCon.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		String[] tables = tablesList.toArray(new String[tablesList.size()]);
+		return tables;
+	}
+    
+    
 }

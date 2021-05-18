@@ -56,7 +56,7 @@ public class MainFrame extends JFrame implements ActionListener {
         addItem.addActionListener(this);
         listItem.addActionListener(this);
         retrieveItem.addActionListener(this);
-        storeItem.addActionListener(this);
+        importItem.addActionListener(this);
         storeItem.addActionListener(this);
         exitItem.addActionListener(this);
         
@@ -86,7 +86,10 @@ public class MainFrame extends JFrame implements ActionListener {
 			
 		}		
 		if(e.getSource()==importItem) {
-			
+			ImportFromFile panel = new ImportFromFile();
+			this.setContentPane(panel.getPanel());
+			this.revalidate();
+			this.repaint();
 		}
 		if(e.getSource()==storeItem) {
 			
