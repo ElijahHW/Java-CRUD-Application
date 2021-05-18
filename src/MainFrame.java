@@ -3,17 +3,17 @@ import java.awt.event.*;
 import java.io.File;
 import java.sql.*;
 import javax.swing.*;
-public class MainFrame extends JFrame implements ActionListener {
-	 	
+public class MainFrame implements ActionListener {
+	 	 JFrame frame;
 		private JMenuBar menuBar;
 	    private JMenu fileMenu, actionMenu, helpMenu;
 	    private JMenuItem addItem, listItem, retrieveItem, importItem, storeItem, exitItem;
 	
-	MainFrame() {
+	MainFrame(JFrame frame) {
 		// Defining application size, layout and close operation.
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400, 400);
-        this.setLayout(new FlowLayout());
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(400, 400);
+		frame.setLayout(new FlowLayout());
 
 		// Defining application MenuBar.
         menuBar = new JMenuBar();
@@ -52,15 +52,22 @@ public class MainFrame extends JFrame implements ActionListener {
         actionMenu.add(storeItem);
         fileMenu.add(exitItem);
         
+        addItem.addActionListener(this);
+        listItem.addActionListener(this);
+        retrieveItem.addActionListener(this);
+        storeItem.addActionListener(this);
+        storeItem.addActionListener(this);
+        exitItem.addActionListener(this);
+        
         menuBar.add(fileMenu);
         menuBar.add(actionMenu);
         menuBar.add(helpMenu);
         menuBar.setFocusable(false);
         
         //Adding MenuBar to Application and setting it visible.
-        this.setJMenuBar(menuBar);
-        this.setVisible(true);
-        this.setTitle("Application");
+        frame.setJMenuBar(menuBar);
+        frame.setVisible(true);
+        frame.setTitle("Application");
         
 	}
 	

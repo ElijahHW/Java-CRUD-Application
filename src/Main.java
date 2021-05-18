@@ -2,12 +2,15 @@ import java.sql.SQLException;
 import javax.swing.JFrame;
 
 public class Main {
-	//JFrame frame = new JFrame("Application");
+	static JFrame frame = new JFrame("Application");
 
+	public Main() {		
+		new MainFrame(frame);
+	}
+	
 	public static void main(String[] args) {
-		
-		new MainFrame();
-		
+	
+		new MainFrame(frame);
 	}
 
 }
