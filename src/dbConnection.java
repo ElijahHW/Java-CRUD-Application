@@ -1,10 +1,15 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class dbConnection {
 	private Statement statement;
     private Connection conn;
     private ResultSet rs;
     private String iq;
+    static String connection= "jdbc:mysql://localhost:3306/classicmodels";
+	static String username = "root";
+	static String password = "";
 
     //
     // OPEN DB CONNECTION
@@ -35,19 +40,41 @@ public class dbConnection {
     }
     
     //
-    // VIEW USERS FROM DB
+    // Get data from a table
     //
-    public void viewEmployees() throws SQLException {
+    
+public static List<List<String>> getTable(String table) {
+        
+        List<List<String>> res = new ArrayList<List<String>>();
+        
         try {
-            open();
-            iq = " SELECT * FROM `employees` ";
-            rs = statement.executeQuery(iq);
+            
+            Connection con = DriverManager.getConnection(connection, username, password);
+            
+            Statement stm = con.createStatement();
+            ResultSet rs = stm.executeQuery("SELECT * FROM " + table + ";");
+            
             while (rs.next()) {
-                System.out.println(rs.getString(2)); //here you can get data, the '1' indicates column number based on your query
+
+                List<String> row = new ArrayList<String>();
+                
+                row.clear();
+                
+                for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                    
+                    row.add(rs.getString(i));
+                }
+                
+                
+                res.add(row);
             }
-            close();
-        } catch (SQLException ex) {
-            System.out.println("Error in getData: " + ex);
+            
+            stm.close();
+            return res;
+        } catch (Exception e) {
+            
+            return new ArrayList<List<String>>();
         }
     }
+
 }
