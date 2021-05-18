@@ -1,4 +1,6 @@
-/Main.class
-/dbConnection.class
-/MainFrame.class
 /ImportFromFile.class
+/Main.class
+/MainFrame.class
+/addCustomerView.class
+/dbConnection.class
+/getEmployees.class
