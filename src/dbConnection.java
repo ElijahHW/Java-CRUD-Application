@@ -50,4 +50,16 @@ public static List<List<String>> getTable(String table) {
         }
     }
 
+public static void addCustomer(int customerNumber, String customerName, String contactLastName, String contactFirstName, String phone, String addressLine1, String addressLine2, String city, String state, String postalCode, String country, int salesRepEmployeeNumber, double creditLimit) throws Exception {
+    try {
+        Connection con = DriverManager.getConnection(connection, username, password);
+        PreparedStatement posted = con.prepareStatement("INSERT INTO customers (customerNumber, customerName, contactLastName, contactFirstName, phone, addressLine1, addressLine2, city, state, postalCode, country, salesRepEmployeeNumber, creditLimit) VALUES ("+customerNumber+", '"+customerName+"', '"+contactLastName+"', '"+contactFirstName+"', '"+phone+"', '"+addressLine1+"', '"+addressLine2+"', '"+city+"', '"+state+"', '"+postalCode+"', '"+country+"', "+salesRepEmployeeNumber+", "+creditLimit+")");
+        posted.executeUpdate();
+    }catch (Exception e) {
+    	System.out.println(e);
+    } finally {
+    	System.out.println("Customer added!");
+    }
+}
+
 }
