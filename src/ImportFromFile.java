@@ -1,10 +1,14 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 import javax.swing.*;
 
@@ -13,10 +17,11 @@ public class ImportFromFile implements ActionListener {
 	private JButton openFile, addToTable;
 	private JFileChooser fc;
 	private String filePath;
-	private JLabel currentFile;
+	private JLabel currentFile, validationMessage;
 	private JComboBox<String> tableComboBox;
 	private ArrayList<ArrayList<String>> dataFromFile;
 	private GridBagConstraints gbc = new GridBagConstraints();
+	private JTable preview;
 	
 	
 	
@@ -71,7 +76,7 @@ public class ImportFromFile implements ActionListener {
 	
 
 	
-	//Method to preview the data in the text file	
+	//Method to preview the data in the text file before it is inserted	
 	private JPanel dataPreview(String[] columns, ArrayList<ArrayList<String>> data) { 
 		dataPreview = new JPanel();
 		
@@ -83,19 +88,30 @@ public class ImportFromFile implements ActionListener {
 
 		}
 			
-		JTable preview = new JTable(tableArray, columns);
+		preview = new JTable(tableArray, columns);
 		preview.setEnabled(false);
 		JScrollPane scrollPane = new JScrollPane(preview);
 		
-		addToTable = new JButton("Add to table");
-		addToTable.addActionListener(this);				
+		validationMessage = new JLabel("");
+		validationMessage.setAlignmentX(addToTable.CENTER_ALIGNMENT);
 		
-		dataPreview.add(scrollPane);
+		addToTable = new JButton("Add to table");
+		addToTable.setAlignmentX(addToTable.CENTER_ALIGNMENT);
+		addToTable.addActionListener(this);	
+		
+		JPanel validationPanel = new JPanel();
+		validationPanel.setLayout(new BoxLayout(validationPanel, BoxLayout.PAGE_AXIS));
+		validationPanel.add(validationMessage);
+		validationPanel.add(addToTable);
+		
+		dataPreview.setLayout(new BorderLayout());
+		dataPreview.add(scrollPane, BorderLayout.CENTER);
+		dataPreview.add(validationPanel, BorderLayout.PAGE_END);
 		return dataPreview;
 	}
 	
 	
-	//Compares the text file columns to the amount of columns in the selected database table.
+	//Compares the amount of columns in the text file to the amount of columns in the selected database table.
 	private ArrayList<Integer> checkIfDataMatches(String[] columns, ArrayList<ArrayList<String>> data) { 
 		ArrayList<Integer> lineError = new ArrayList<Integer>();
 		for(int i = 0;i<data.size();i++) {
@@ -104,6 +120,44 @@ public class ImportFromFile implements ActionListener {
 			}
 		}
 		return lineError;
+	}
+	
+	
+	//Method to validate the data before it is inserted into the database table
+	private boolean validateData() { 
+		boolean isValid = true;
+		String error = "";
+		String data;
+		String table = tableComboBox.getSelectedItem().toString();
+		String[] dataTypes = dbConnection.getColumnDataType(table);
+		int rows = preview.getRowCount();
+		
+		outerloop:
+		for(int i=0;i<dataTypes.length;i++) {
+			innerloop:
+			for(int j=0;j<rows;j++) {
+					data = preview.getValueAt(j, i).toString();
+					if(data.isEmpty()) {break innerloop;} // Skip iteration if the cell is empty
+					System.out.println(data);
+					try {
+					switch(dataTypes[i]) {	
+						case "decimal":
+							Double.parseDouble(data);
+							break;
+						case "int":
+							Integer.parseInt(data);
+							break;								
+					}	
+				}catch(Exception e) {	
+					isValid = false; //Data is not valid and cant be entered to database
+					error = "Error: Expected " + dataTypes[i] + " at row " + (j+1) + " column " + (i+1);
+					validationMessage.setText(error);
+					validationMessage.setForeground(Color.red);
+					break outerloop; //Break loops after exception to display error message for user
+				}
+			}
+		}
+		return isValid;
 	}
 	
 	
@@ -145,7 +199,7 @@ public class ImportFromFile implements ActionListener {
 			}
 		}	
 		
-		if (e.getSource() == tableComboBox && dataFromFile != null) { 
+		if (e.getSource() == tableComboBox && dataFromFile != null) { //Execute if user has selected table and file
 			String[] columnNames = dbConnection.getColumnNames(tableComboBox.getSelectedItem().toString());
 			
 			ArrayList<Integer> errors = checkIfDataMatches(columnNames, dataFromFile); //Checks for errors in the text file format
@@ -156,12 +210,15 @@ public class ImportFromFile implements ActionListener {
 			panel.repaint();
 			}else { //Tells the user about the errors
 				JOptionPane.showMessageDialog(panel, "The expected number of columns for the " + tableComboBox.getSelectedItem() + " table is " + columnNames.length + ". Your text file is not matching this on line " + errors.toString()
-				+ "\n\n Each column value in the text file should be seperated by ,");
+				+ "\n\n Each column value in the text file should be seperated by , and rows by a newline");
 			}
 		}
 		
 		if (e.getSource() == addToTable) {
-			
+			boolean validData = validateData(); //Datatype validation
+			if(validData) {
+				int test = Integer.parseInt(preview.getValueAt(0, 0).toString());
+			}
 		}
 	}		
 }
