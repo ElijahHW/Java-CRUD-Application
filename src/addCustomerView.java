@@ -44,17 +44,9 @@ public class addCustomerView implements ActionListener {
 	
 	public addCustomerView() {
 		
-	 frame = new JFrame ("Add customer");
 	 panel = new JPanel();
 		
 		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
-		panel.setLayout(null);
-		
-		frame.add(panel, BorderLayout.CENTER);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("Add Customer");
-		frame.pack();
-		frame.setVisible(true);
 		
 		customerNumberLabel = new JLabel("Customer number");
 		customerNumberLabel.setBounds(10, 20, 120, 25);
@@ -165,6 +157,8 @@ public class addCustomerView implements ActionListener {
 		addToDbButton = new JButton("Add customer to DB");
 		addToDbButton.setBounds(25, 420, 150, 25);
 		addToDbButton.addActionListener(this);
+		addToDbButton.setBackground(Color.WHITE);
+
 		panel.add(addToDbButton);
 		
 		

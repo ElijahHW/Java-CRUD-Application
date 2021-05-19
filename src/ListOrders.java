@@ -129,7 +129,7 @@ public class ListOrders {
 			}
 			
 			System.out.println("File Written");
-			
+			JOptionPane.showMessageDialog(null, "File saved to your system.", "User Mangement", JOptionPane.INFORMATION_MESSAGE);
 			WriterBuffer.close();
 			
 		} catch (IOException e) {
@@ -172,7 +172,8 @@ public class ListOrders {
 		
 		//puts the entire table in a scrollpane to allow for the scrollbar as the table itself is rather large
 		JScrollPane ScrollPanel = new JScrollPane(DataTable); 
-		
+		ScrollPanel.getVerticalScrollBar().setBackground(Color.WHITE);
+
 		return ScrollPanel;
 	}
 	
@@ -210,13 +211,15 @@ public class ListOrders {
 		JFileChooser PathChooser = new JFileChooser();
 		PathChooser.setDialogTitle("Export to...");
 		PathChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		PathChooser.setBackground(Color.WHITE);
+
 		
 		//A listener to initiate exporting the table. It gets the path from the filechooser and adds a filename 
 		ExportButton.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
 				
-				int ReturnValue = PathChooser.showOpenDialog(null);
+				int ReturnValue = PathChooser.showSaveDialog(null);
 				
 				if (ReturnValue == JFileChooser.APPROVE_OPTION) {
 					
@@ -262,7 +265,8 @@ public class ListOrders {
 		
 		SearchField = new JTextField();
 		SearchField.setPreferredSize(new Dimension(300, 30));
-		
+		SearchField.setBackground(Color.WHITE);
+
 		JLabel FilterLabel = new JLabel("Search: ");
 
 		panel.add(FilterLabel);
@@ -273,7 +277,6 @@ public class ListOrders {
 	
 	//Return the main panel
 	public JPanel getPanel() {
-		
 		return panel;
 	}
 

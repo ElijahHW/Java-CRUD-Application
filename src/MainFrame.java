@@ -3,15 +3,17 @@ import java.awt.event.*;
 import java.io.File;
 import java.sql.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.time.format.DateTimeFormatter;  
 import java.time.LocalDateTime;    
 public class MainFrame extends JFrame implements ActionListener {
 	 	
 	  //Header Elements
 		private JMenuBar menuBar;
-	    private JMenu homeMenu, fileMenu, actionMenu, helpMenu, dateMenu;
+	    private JMenu homeMenu, fileMenu, actionMenu, dateMenu;
 	    private JMenuItem addItem, listItem, retrieveItem, importItem, storeItem, exitItem;
-	    
+	    private JButton homeBtn;
 	  //Body Elements
 	    private JPanel panel = new JPanel();
 	    private JLabel welcomeLabel = new JLabel("Welcome to the Management Application");
@@ -25,7 +27,7 @@ public class MainFrame extends JFrame implements ActionListener {
     MainFrame() {
 		// Defining application size, layout and close operation.
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(400, 400);
+		this.setSize(800, 500);
 		this.setLayout(new FlowLayout());
 		this.setLocationRelativeTo(null);
 		
@@ -36,10 +38,15 @@ public class MainFrame extends JFrame implements ActionListener {
 		// Defining application MenuBar.
         menuBar = new JMenuBar();
         menuBar.setBackground(Color.WHITE);
-        homeMenu = new JMenu("Home");
+        
+        homeBtn = new JButton("Home");
+        homeBtn.setFocusable(false);
+        homeBtn.setBackground(Color.WHITE);
+        homeBtn.setBorder(null);
+        homeBtn.setBorder(new EmptyBorder(0, 10, 0, 0));
+
         fileMenu = new JMenu("File");
         actionMenu = new JMenu("Actions");
-        helpMenu = new JMenu("Help");
         dateMenu = new JMenu(date.format(now)); 
         dateMenu.setEnabled(false);
 
@@ -54,7 +61,7 @@ public class MainFrame extends JFrame implements ActionListener {
         retrieveItem.setBackground(Color.WHITE);
         
         importItem = new JMenuItem("Import from File");
-        retrieveItem.setBackground(Color.WHITE);
+        importItem.setBackground(Color.WHITE);
 
         storeItem = new JMenuItem("Store to file");
         storeItem.setBackground(Color.WHITE);
@@ -65,10 +72,8 @@ public class MainFrame extends JFrame implements ActionListener {
         
         //Adding shortcuts to each JMenu for accessibility.
         //These can be used by pressing 'alt + key', the key will be underlined.
-        homeMenu.setMnemonic(KeyEvent.VK_H); 
         fileMenu.setMnemonic(KeyEvent.VK_F); 
         actionMenu.setMnemonic(KeyEvent.VK_A); 
-        helpMenu.setMnemonic(KeyEvent.VK_H); 
         
         //Adding shortcuts to each JMenu for accessibility.
         //These can be used by pressing 'key', the key will be underlined.
@@ -87,7 +92,7 @@ public class MainFrame extends JFrame implements ActionListener {
         actionMenu.add(storeItem);
         fileMenu.add(exitItem);
         
-        homeMenu.addActionListener(this);
+        homeBtn.addActionListener(this);
         addItem.addActionListener(this);
         listItem.addActionListener(this);
         retrieveItem.addActionListener(this);
@@ -95,19 +100,13 @@ public class MainFrame extends JFrame implements ActionListener {
         storeItem.addActionListener(this);
         exitItem.addActionListener(this);
         
-        menuBar.add(homeMenu);
+        menuBar.add(homeBtn);
         menuBar.add(fileMenu);
         menuBar.add(actionMenu);
-        menuBar.add(helpMenu);
         menuBar.add(dateMenu);
         menuBar.setFocusable(false);
         
-        ButtonGroup bodyBtns = new ButtonGroup();
-        bodyBtns.add(addBtn);
-        bodyBtns.add(listBtn);
-        bodyBtns.add(retrieveBtn);
-        bodyBtns.add(importBtn);
-        bodyBtns.add(storeBtn);
+        
         ///
         //Start of panel / Main Part of Program
         ///
@@ -120,6 +119,7 @@ public class MainFrame extends JFrame implements ActionListener {
         addBtn = new JButton("Add Customer");
         addBtn.setFocusable(false);
         addBtn.setBackground(Color.WHITE);
+        addBtn.addActionListener(this);
         
         listBtn = new JButton("List Orders");
         listBtn.setFocusable(false);
@@ -140,7 +140,6 @@ public class MainFrame extends JFrame implements ActionListener {
         storeBtn.setFocusable(false);
         storeBtn.setBackground(Color.WHITE);
         storeBtn.addActionListener(this);
-
         
         panel.add(welcomeLabel);
         panel.add(addBtn);
@@ -154,74 +153,49 @@ public class MainFrame extends JFrame implements ActionListener {
         this.add(panel);
         this.setVisible(true);
         this.setTitle("Management Application");
+        //this.pack();
         }
 	
 	//Defining the actions of the MenuBar
-	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-	
-		if(e.getSource()==homeMenu) {
+		if(e.getSource() == homeBtn) {
 			MainFrame panel = new MainFrame();
-			this.setContentPane(panel.getPanel());
-			this.revalidate();
-			this.repaint();
+			this.dispose();
+			/// TODO: FIX THIS SHIT
 		}
-		if(e.getSource()==addItem) {
+		if(e.getSource() == addItem || e.getSource() == addBtn) {
 			addCustomerView panel = new addCustomerView();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
-		} else if (e.getSource()==addItem) {
-			addCustomerView panel = new addCustomerView();
-			this.setContentPane(panel.getPanel());
-			this.revalidate();
-			this.repaint();
-		}
-		if(e.getSource()==listItem) {
+			
+		} 
+		if(e.getSource() == listItem || e.getSource() == listBtn) {
 			ListOrders panel = new ListOrders();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
-		} else if (e.getSource()==listBtn) {
-			ListOrders panel = new ListOrders();
-			this.setContentPane(panel.getPanel());
-			this.revalidate();
-			this.repaint();
-		}
-		/* if(e.getSource()==retrieveItem) {
-			//getEmployees panel = new getEmployees();
-			//this.setContentPane(panel.getPanel());
-			//this.revalidate();
-			//this.repaint();
-		} else if (e.getSource()==retrieveItem) {
+		} 
+		
+		/* if(e.getSource() == retrieveItem || e.getSource() == retrieveBtn) {
 			getEmployees panel = new getEmployees();
-			this.setContentPane(panel.GetPanel());
-			this.revalidate();
-			this.repaint();
-		}	*/
-		if(e.getSource()==importItem) {
-			ImportFromFile panel = new ImportFromFile();
-			this.setContentPane(panel.getPanel());
-			this.revalidate();
-			this.repaint();
-		} else if (e.getSource()==importItem) {
-			ImportFromFile panel = new ImportFromFile();
-			this.setContentPane(panel.getPanel());
-			this.revalidate();
-			this.repaint();
-		}
-		/*if(e.getSource()==storeItem) {
-			storeToFile panel = new storeToFile();
-			this.setContentPane(panel.getPanel());
-			this.revalidate();
-			this.repaint();
-		} else if (e.getSource()==storeItem) {
-			storeToFile panel = new storeToFile();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
 		}*/
+		if(e.getSource() == importItem || e.getSource() == importBtn) {
+			ImportFromFile panel = new ImportFromFile();
+			this.setContentPane(panel.getPanel());
+			this.revalidate();
+			this.repaint();
+		} 
+		/*if(e.getSource() == storeItem || e.getSource() == storeBtn) {
+			storeToFile panel = new storeToFile();
+			this.setContentPane(panel.getPanel());
+			this.revalidate();
+			this.repaint();
+		} */
 		
 		if(e.getSource()==exitItem) {
 			 String[] exitResponse = {"Yes", "No"};
