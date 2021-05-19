@@ -164,6 +164,7 @@ public class ListOrders {
 		};
 		DataTable = new JTable(model);
 		DataTable.setAutoCreateRowSorter(true);
+		DataTable.getTableHeader().setReorderingAllowed(false);
 		
 		//defines a sorter to allow the search function to work properly
 		sorter = new TableRowSorter<TableModel>(model);
