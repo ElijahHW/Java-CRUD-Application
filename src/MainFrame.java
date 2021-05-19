@@ -11,13 +11,13 @@ public class MainFrame extends JFrame implements ActionListener {
 	//Header Elements
 		private JMenuBar menuBar;
 	    private JMenu fileMenu, actionMenu, dateMenu;
-	    private JMenuItem addItem, listItem, retrieveItem, importItem, exitItem;
+	    private JMenuItem addItem, listItem, retrieveItem, editItem, importItem, exitItem;
 	    private JButton homeBtn;
 	    
 	  //Body Elements
 	    private JPanel panel = new JPanel();
 	    private JLabel welcomeLabel = new JLabel("Welcome to the Management Application");
-	    private JButton addBtn, listBtn, retrieveBtn, importBtn;
+	    private JButton addBtn, listBtn, retrieveBtn, editBtn, importBtn;
 	    
 	  //Extra Elements for Body
 	    DateTimeFormatter date = DateTimeFormatter.ofPattern("MM/dd : HH:mm");  
@@ -62,6 +62,9 @@ public class MainFrame extends JFrame implements ActionListener {
         retrieveItem = new JMenuItem("Retrieve Employees");
         retrieveItem.setBackground(Color.WHITE);
         
+        editItem = new JMenuItem("Edit Data in DB");
+        editItem.setBackground(Color.WHITE);
+        
         importItem = new JMenuItem("Import from File");
         importItem.setBackground(Color.WHITE);
 
@@ -79,6 +82,7 @@ public class MainFrame extends JFrame implements ActionListener {
         addItem.setMnemonic(KeyEvent.VK_A); //key
         listItem.setMnemonic(KeyEvent.VK_L); //key
         retrieveItem.setMnemonic(KeyEvent.VK_R); //key
+        editItem.setMnemonic(KeyEvent.VK_E); //key
         importItem.setMnemonic(KeyEvent.VK_I); //key 
         exitItem.setMnemonic(KeyEvent.VK_E); //key
         
@@ -86,6 +90,7 @@ public class MainFrame extends JFrame implements ActionListener {
         actionMenu.add(addItem);
         actionMenu.add(listItem);
         actionMenu.add(retrieveItem);
+        actionMenu.add(editItem);
         actionMenu.add(importItem);
         fileMenu.add(exitItem);
         
@@ -93,6 +98,7 @@ public class MainFrame extends JFrame implements ActionListener {
         addItem.addActionListener(this);
         listItem.addActionListener(this);
         retrieveItem.addActionListener(this);
+        editItem.addActionListener(this);
         importItem.addActionListener(this);
         exitItem.addActionListener(this);
         
@@ -106,10 +112,11 @@ public class MainFrame extends JFrame implements ActionListener {
         ///
         //Start of panel / Main Part of Program
         ///
-        GridLayout layout = new GridLayout(6,3);
+        GridLayout layout = new GridLayout(5, 1);//create grid layout frame
         layout.setHgap(10);
         layout.setVgap(10);
         panel.setLayout(layout);
+        panel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
         welcomeLabel.setFont(new Font(null,Font.BOLD,15));
         
         addBtn = new JButton("Add Customer");
@@ -126,7 +133,12 @@ public class MainFrame extends JFrame implements ActionListener {
         retrieveBtn.setFocusable(false);
         retrieveBtn.setBackground(Color.WHITE);
         retrieveBtn.addActionListener(this);
-
+        
+        editBtn = new JButton("Edit Data in DB");        
+        editBtn.setFocusable(false);
+        editBtn.setBackground(Color.WHITE);
+        editBtn.addActionListener(this);
+        
         importBtn = new JButton("Bulk Import from file");
         importBtn.setFocusable(false);
         importBtn.setBackground(Color.WHITE);
@@ -136,22 +148,27 @@ public class MainFrame extends JFrame implements ActionListener {
         panel.add(addBtn);
         panel.add(listBtn);
         panel.add(retrieveBtn);
+        panel.add(editBtn);
         panel.add(importBtn);
         
         //Adding MenuBar to Application and setting it visible.
         this.setJMenuBar(menuBar);
-        this.add(panel);
+        this.add(panel, BorderLayout.CENTER);
         this.setVisible(true);
         this.setTitle("Management Application - Home");
         this.setPreferredSize(new Dimension(800,550));
+        this.pack();
         }
 	
 	//Defining the actions of the MenuBar
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == homeBtn) {
-			new MainFrame();
-			this.dispose();
+			this.getContentPane().removeAll();
+            this.add(panel);
+            this.repaint();
+			this.revalidate();
+			this.pack();
 		}
 		if(e.getSource() == addItem || e.getSource() == addBtn) {
 	        this.setTitle("Management Application - Add Customer");
@@ -181,6 +198,15 @@ public class MainFrame extends JFrame implements ActionListener {
 	        this.pack();
 
 		}
+		 if(e.getSource() == editItem || e.getSource() == editBtn) {
+		        this.setTitle("Management Application - Edit Tables");
+				editTables panel = new EditTables();
+				this.setContentPane(panel.getPanel());
+				this.revalidate();
+				this.repaint();
+		        this.pack();
+
+			}
 		if(e.getSource() == importItem || e.getSource() == importBtn) {
 	        this.setTitle("Management Application - Import from File");
 			ImportFromFile panel = new ImportFromFile();
@@ -211,5 +237,6 @@ public class MainFrame extends JFrame implements ActionListener {
 	public JPanel getPanel() {
 		return panel;
 	}
+	
 }
 
