@@ -22,6 +22,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	  //Extra Elements for Body
 	    DateTimeFormatter date = DateTimeFormatter.ofPattern("MM/dd : HH:mm");  
 	    LocalDateTime now = LocalDateTime.now();  
+	    private ImageIcon icon;
 	
 	    
     MainFrame() {
@@ -234,6 +235,7 @@ public class MainFrame extends JFrame implements ActionListener {
              
          }
 		}
+	
 	public JPanel getPanel() {
 		return panel;
 	}
