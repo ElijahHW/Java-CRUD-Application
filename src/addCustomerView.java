@@ -1,10 +1,24 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.List;
 
 import javax.swing.*;
 
 public class addCustomerView implements ActionListener {
+	
+	private static Statement statement;
+	private static PreparedStatement pst;
+    private static Connection conn;
+    private ResultSet rs;
+    private static String connection= "jdbc:mysql://localhost:3311/classicmodels";
+    private static String username = "root";
+    private static String password = "";
 
 	private JLabel customerNumberLabel;
 	private JLabel customerNameLabel;
@@ -34,19 +48,38 @@ public class addCustomerView implements ActionListener {
 	private JTextField salesRepEmployeeNumberInput;
 	private JTextField creditLimitInput;
 	
-	
+    private JComboBox<String> salesRepNumberList;
+    
 	private JLabel responseText;
 	private JFrame frame;
 	private JPanel panel;
 	private JButton addToDbButton;
-//	private JButton resetButton;
+	private JButton resetButton;
+
 	
 	
 	public addCustomerView() {
 		
+<<<<<<< Updated upstream
 	 panel = new JPanel();
 		
 		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
+=======
+		frame = new JFrame ("Add customer");
+		panel = new JPanel();
+				
+	    frame.setPreferredSize(new Dimension(400, 520));
+	    frame.add(panel, BorderLayout.CENTER);
+	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    frame.setTitle("Add Customer");
+	    frame.pack();
+	    frame.setLocationRelativeTo(null);
+	    frame.setVisible(true);
+		
+		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
+		panel.setLayout(null);
+		
+>>>>>>> Stashed changes
 		
 		customerNumberLabel = new JLabel("Customer number");
 		customerNumberLabel.setBounds(10, 20, 120, 25);
@@ -136,9 +169,17 @@ public class addCustomerView implements ActionListener {
 		countryInput.setBounds(150, 320, 165, 25);
 		panel.add(countryInput);
 		
+
 		salesRepEmployeeNumberLabel = new JLabel("Sales rep employee number");
 		salesRepEmployeeNumberLabel.setBounds(10, 350, 120, 25);
 		panel.add(salesRepEmployeeNumberLabel);
+		
+
+
+	    salesRepNumberList = new JComboBox();
+	    salesRepNumberList.setBounds(150, 350, 165, 25);
+		panel.add(salesRepNumberList);	
+		updateCombobox();
 		
 		salesRepEmployeeNumberInput = new JTextField(20);
 		salesRepEmployeeNumberInput.setBounds(150, 350, 165, 25);
@@ -162,36 +203,93 @@ public class addCustomerView implements ActionListener {
 		panel.add(addToDbButton);
 		
 		
-		/*
+		
 		resetButton = new JButton("Reset");
 		resetButton.setBounds(200, 420, 80, 25);
 		resetButton.addActionListener(this);
 		panel.add(resetButton);
-		*/
+		
 			
 		responseText = new JLabel("");
-		responseText.setBounds(10, 110, 300, 25);
+		responseText.setBounds(25, 450, 200, 25);
 		panel.add(responseText);
 		
+		panel.revalidate();
+		panel.repaint();
+		frame.pack();
+		
+		
+		
+		
 	}
+	
+	//Populate dropdownlist / combobox
 
+		private void updateCombobox() {
+		String sql = ("SELECT employeeNumber, firstName, lastName FROM employees WHERE jobTitle = 'Sales Rep'");
+		
+		try {
+		Connection con = DriverManager.getConnection(connection, username, password);	
+		pst = con.prepareStatement(sql);
+		rs = pst.executeQuery();
+				while(rs.next()) {
+					salesRepNumberList.addItem(rs.getString("employeeNumber") + " - " + rs.getString("firstName") +" "+ rs.getString("lastName"));
+				}
+		}catch (Exception e) {
+					
+				}
+	}
+	
+
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		
+		if(e.getSource()==addToDbButton) {
 		try {
-		dbConnection.addCustomer(Integer.parseInt(customerNumberInput.getText()), customerNameInput.getText(),
+		String respons = dbConnection.addCustomer(customerNumberInput.getText(), customerNameInput.getText(),
 				contactLastNameInput.getText(), contactFirstNameInput.getText(), 
 				phoneInput.getText(), addressLine1Input.getText(), addressLine2Input.getText(), 
 				cityInput.getText(), stateInput.getText(), postalCodeInput.getText(), 
-				countryInput.getText(), Integer.parseInt(salesRepEmployeeNumberInput.getText()), 
-				Double.parseDouble(creditLimitInput.getText()));
+				countryInput.getText(), salesRepEmployeeNumberInput.getText(), 
+				creditLimitInput.getText());
+		
+		responseText.setText(respons);
+				
 		} catch (Exception e1) {
-			System.out.println("noe gikk galt");
+			responseText.setText("Something went wrong");
 		}
+	} else if (e.getSource()==resetButton) {
 		
+		customerNumberInput.setText(null);
+		customerNameInput.setText(null);
+		contactLastNameInput.setText(null);
+		contactFirstNameInput.setText(null);
+		phoneInput.setText(null);
+		addressLine1Input.setText(null);
+		addressLine2Input.setText(null);
+		cityInput.setText(null);
+		stateInput.setText(null);
+		postalCodeInput.setText(null);
+		countryInput.setText(null);
+		salesRepEmployeeNumberInput.setText(null);
+		creditLimitInput.setText(null);
 		
+		responseText.setText("All fields reset.");
+	}
+		
+
+		
+<<<<<<< Updated upstream
 	}
 	public JPanel getPanel() {
 		return panel;
 	}
+=======
+}
+>>>>>>> Stashed changes
 }
