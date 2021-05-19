@@ -165,17 +165,21 @@ public class ImportFromFile implements ActionListener {
 	
 	public String callDb() {
 		String result = "Data inserted";
+		int rowCount = 0;
+		outerloop:
 		for (int i = 0;i<preview.getRowCount();i++) {
-					String[] row = new String[preview.getColumnCount()];
+			String[] row = new String[preview.getColumnCount()];
 					
-					for(int j=0;j<preview.getColumnCount();j++) {
-						row[j] = preview.getValueAt(i, j).toString();
-					};
-					if(result.equals("Data inserted")) { //Continue if nothing changed
-						result = dbConnection.insertIntoTable(tableComboBox.getSelectedItem().toString(), preview.getColumnCount(), row);
-					}else { //an error happened, STOP!
-						break;
-					}
+			for(int j=0;j<preview.getColumnCount();j++) {
+				row[j] = preview.getValueAt(i, j).toString();
+			};
+			if(result.equals("Data inserted")) { //Continue if nothing changed
+				result = dbConnection.insertIntoTable(tableComboBox.getSelectedItem().toString(), preview.getColumnCount(), row);
+			}else { //an error happened, STOP!
+				result += " Stopped on row " + String.valueOf(rowCount);
+				break outerloop;
+			}
+			rowCount++;
 		}
 		return result;
 	}

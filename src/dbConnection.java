@@ -194,10 +194,52 @@ public class dbConnection {
             return "Data inserted";
     	}catch(Exception e) {
     		System.out.println(e);
-    		if(e.getClass().getSimpleName().equals("SQLIntegrityConstraintViolationException")) {
+    		if(e.getMessage().contains("foreign key")) {
     			return ("One of your foreign key constraints failed. Check your foreign keys!");
     		}
-    		return e.getMessage(); 
+    		return e.getMessage().toString(); 
+    	}        		
+   }
+    
+    
+    
+    /*Dynamical method to update data in the database
+    table = name of table to insert into
+    input = array of all values that is to be inserted
+    columns = array of column names*/
+    
+    
+    public static String updateTable(String table, String[] input, String[] columns) {
+    	String primarykey = columns[0];
+		String changes = " SET";
+    	
+		for(int i = 1;i<columns.length;i++) { //Creates a string with the correct amount of parameters and skips over the primary key
+    		changes += " " + columns[i] + "=?,"; 
+    	}	
+		changes = changes.substring(0, changes.length() - 1);  	
+    	try {	
+    		Connection con = DriverManager.getConnection(connection, username, password);
+    		String query = "UPDATE " + table + changes + " WHERE " + primarykey + "=" + input[0];
+    		PreparedStatement sql = con.prepareStatement(query);
+        
+    		for(int i=1;i<input.length;i++) { // Skips over the first index, as this should be the primary key
+    			if(input[i] == null) {
+    				sql.setString((i), null);
+    			}else {
+    				sql.setString((i), input[i]);
+    			}
+    			System.out.println(input[i]);
+    		}
+    		
+    		sql.executeUpdate();
+            con.close();
+            return "Data updated";
+    	}catch(Exception e) {
+    		System.out.println(e);
+    		if(e.getMessage().contains("foreign key")) {
+    			return ("One of your foreign key constraints failed. Check your foreign keys!");
+    		}
+    		return e.getMessage().toString(); 
     	}        		
    }
     
