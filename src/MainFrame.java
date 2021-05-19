@@ -178,12 +178,12 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.repaint();
 		} 
 		
-		/* if(e.getSource() == retrieveItem || e.getSource() == retrieveBtn) {
+		 if(e.getSource() == retrieveItem || e.getSource() == retrieveBtn) {
 			getEmployees panel = new getEmployees();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
-		}*/
+		}
 		if(e.getSource() == importItem || e.getSource() == importBtn) {
 			ImportFromFile panel = new ImportFromFile();
 			this.setContentPane(panel.getPanel());
