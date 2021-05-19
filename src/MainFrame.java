@@ -182,7 +182,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		} 
 		if(e.getSource() == listItem || e.getSource() == listBtn) {
 	        this.setTitle("Management Application - List Orders");
-			ListOrders panel = new ListOrders();
+			DisplayTable panel = new DisplayTable();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
