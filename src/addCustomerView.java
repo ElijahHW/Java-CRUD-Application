@@ -23,7 +23,7 @@ public class addCustomerView implements ActionListener {
 	private GridBagConstraints LeftCon, RightCon;
 	private Dimension PreferedDimension= new Dimension(100, 20);
 	
-	private boolean UniqueName = false;
+	private boolean UniqueName = false, ValidCredit = true;
 	private double CreditNumber = 0f;
 	
 	public addCustomerView() {
@@ -35,7 +35,7 @@ public class addCustomerView implements ActionListener {
 		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
 
 		responseText = new JLabel("");
-		responseText.setBounds(25, 450, 200, 25);
+		//responseText.setBounds(25, 450, 200, 25);
 		
 		gbc.fill = GridBagConstraints.BOTH; 
 		gbc.weightx = 55;
@@ -120,28 +120,35 @@ public class addCustomerView implements ActionListener {
 			
 			if (UniqueName) {
 				
-				try {
-					String respons = dbConnection.addCustomer(
-							customerNumberInput.getText(), 
-							customerNameInput.getText(),
-							contactLastNameInput.getText(), 
-							contactFirstNameInput.getText(), 
-							phoneInput.getText(), 
-							addressLine1Input.getText(), 
-							addressLine2Input.getText(), 
-							cityInput.getText(), 
-							stateInput.getText(), 
-							postalCodeInput.getText(), 
-							countryInput.getText(),
-							salesRepNumberList.getSelectedItem().toString(),
-							CreditNumber + "");
+				if (ValidCredit) {
 					
-					responseText.setText(respons);
-							
-				} catch (Exception e1) {
-					System.out.println(e1);
-					responseText.setText("Something went wrong");
+					try {
+						String respons = dbConnection.addCustomer(
+								customerNumberInput.getText(), 
+								customerNameInput.getText(),
+								contactLastNameInput.getText(), 
+								contactFirstNameInput.getText(), 
+								phoneInput.getText(), 
+								addressLine1Input.getText(), 
+								addressLine2Input.getText(), 
+								cityInput.getText(), 
+								stateInput.getText(), 
+								postalCodeInput.getText(), 
+								countryInput.getText(),
+								salesRepNumberList.getSelectedItem().toString(),
+								CreditNumber + "");
+						
+						responseText.setText(respons);
+								
+					} catch (Exception e1) {
+						System.out.println(e1);
+						responseText.setText("Something went wrong");
+					}
+				} else {
+					
+					responseText.setText("Credit number not valid");
 				}
+				
 			} else {
 				
 				responseText.setText("Customer number not valid");
@@ -430,16 +437,19 @@ public class addCustomerView implements ActionListener {
                     if (String.valueOf(Math.round(tempNumber)).length() > 10) {
                     	
                     	responseText.setText("The credit number must be less than 10000000000");
+                    	ValidCredit = false;
                     } else {
                     	
                     	responseText.setText(null);
                     	CreditNumber = tempNumber;
+                    	ValidCredit = true;
                     }
                     
                    
                 } else {
                 	
                 	CreditNumber = 0f;
+                	ValidCredit = true;
                 }
 			}
 		});
