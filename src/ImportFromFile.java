@@ -165,19 +165,15 @@ public class ImportFromFile implements ActionListener {
 	
 	public String callDb() {
 		String result = "fail";
-		System.out.println(tableComboBox.getSelectedItem().toString());
 		for (int i = 0;i<preview.getRowCount();i++) {
-			switch(tableComboBox.getSelectedItem().toString()) {
-				case "customers":
-				
-					result = dbConnection.addCustomer(preview.getValueAt(i, 0).toString(), preview.getValueAt(i, 1).toString(), preview.getValueAt(i, 2).toString(), preview.getValueAt(i, 3).toString(),
-							preview.getValueAt(i, 4).toString(), preview.getValueAt(i, 5).toString(), preview.getValueAt(i, 6).toString(), preview.getValueAt(i, 7).toString(), preview.getValueAt(i, 8).toString(),
-							preview.getValueAt(i, 9).toString(), preview.getValueAt(i, 10).toString(), preview.getValueAt(i, 11).toString(), preview.getValueAt(i, 12).toString());
-					System.out.println(result);
-					break;
-			}
+					String[] row = new String[preview.getColumnCount()];
+					
+					for(int j=0;j<preview.getColumnCount();j++) {
+						row[j] = preview.getValueAt(i, j).toString();
+					};
+					
+					result = dbConnection.insertIntoTable(tableComboBox.getSelectedItem().toString(), preview.getColumnCount(), row);
 		}
-		System.out.println();
 		return result;
 	}
 	
@@ -209,6 +205,11 @@ public class ImportFromFile implements ActionListener {
 						for(int i = 0;i<parts.length;i++) {
 							dataFromFile.get(index).add(parts[i]);
 						}
+						if(dataPreview != null) { //Remove old table when a new file is selected
+							panel.remove(dataPreview);
+							panel.revalidate();
+							panel.repaint();
+						}
 						index++;
 					}
 					myReader.close();
@@ -227,7 +228,7 @@ public class ImportFromFile implements ActionListener {
 			ArrayList<Integer> errors = checkIfDataMatches(columnNames, dataFromFile); //Checks for errors in the text file format
 			
 			if(errors.size() <= 0) { //No errors
-			panel.add(dataPreview(columnNames, dataFromFile), gbc); // the constraints from the constructor is added here
+			panel.add(dataPreview(columnNames, dataFromFile), gbc); // the gridbag constraints from the constructor is added here
 			panel.revalidate();
 			panel.repaint();
 			}else { //Tells the user about the errors
@@ -239,7 +240,9 @@ public class ImportFromFile implements ActionListener {
 		if (e.getSource() == addToTable) {
 			boolean validData = validateData(); //Datatype validation
 			if(validData) {		
-					callDb();
+					String message = callDb();
+					validationMessage.setText(message);
+					
 			}
 		}
 		

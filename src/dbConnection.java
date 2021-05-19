@@ -118,31 +118,31 @@ public class dbConnection {
 		return dataType;
     }
         
-    	public static String addCustomer(String customerNumber, String customerName, 
+    public static String addCustomer(String customerNumber, String customerName, 
     		String contactLastName, String contactFirstName, String phone, 
     		String addressLine1, String addressLine2, String city, String state, 
     		String postalCode, String country, String salesRepEmployeeNumber, 
     		String creditLimit){
     	
-        try {
+    	try {
         	
-            Connection con = DriverManager.getConnection(connection, username, password);
-            String query = "INSERT INTO customers "
+    		Connection con = DriverManager.getConnection(connection, username, password);
+    		String query = "INSERT INTO customers "
             		+ "(customerNumber, customerName, contactLastName, contactFirstName, "
             		+ "phone, addressLine1, addressLine2, city, state, postalCode, country, "
             		+ "salesRepEmployeeNumber, creditLimit) "
             		+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            PreparedStatement sql = con.prepareStatement(query);
+    		PreparedStatement sql = con.prepareStatement(query);
             
-            sql.setString((1), customerNumber);
-            sql.setString((2), customerName);
-            sql.setString((3), contactLastName);
-            sql.setString((4), contactFirstName);
-            sql.setString((5), phone);
-            sql.setString((6), addressLine1);
-            sql.setString((7), addressLine2);
-            sql.setString((8), city);
-            sql.setString((9), state);
+    		sql.setString((1), customerNumber);
+    		sql.setString((2), customerName);
+    		sql.setString((3), contactLastName);
+    		sql.setString((4), contactFirstName);
+    		sql.setString((5), phone);
+    		sql.setString((6), addressLine1);
+    		sql.setString((7), addressLine2);
+    		sql.setString((8), city);
+    		sql.setString((9), state);
             sql.setString((10), postalCode);
             sql.setString((11), country);
             sql.setString((12), salesRepEmployeeNumber);
@@ -153,16 +153,51 @@ public class dbConnection {
             
             return "Customer was added to DB!";
             
-        }catch (Exception e) {
+    	}catch (Exception e) {
         	
-        	System.out.println(e);
+    		System.out.println(e);
         	
-            return "Something went wrong.";
-        }
-  
+    		return "Something went wrong.";
+    	}
     }
+
+        
+         
+    /*Dynamical method to insert data in the database
+    table = name of table to insert into
+    parameterCount = amount of parameters needed
+    input = array of all values that is to be inserted*/
     
+    public static String insertIntoTable(String table, int parameterCount, String[] input) {
+    	String parameters = "";
+    	
+    	for(int i = 0;i<parameterCount;i++) { //Creates a string with the correct amount of parameters
+    		parameters += "?,";
+    	}	
+    	parameters = parameters.substring(0, parameters.length() - 1);
+    	
+    	try {	
+    		Connection con = DriverManager.getConnection(connection, username, password);
+    		String query = "INSERT INTO " + table + " VALUES ( " + parameters + ")";
+    		PreparedStatement sql = con.prepareStatement(query);
+        
+    		for(int i=0;i<input.length;i++) {
+    			if(input[i].length() == 0) {
+    				sql.setString((1+i), null);
+    			}else {
+    				sql.setString((1+i), input[i]);
+    			}
+    		}
+    		
+    		sql.executeUpdate();
+            con.close();
+            return "Data inserted";
+    	}catch(Exception e) {
+    		System.out.println(e);
+    		return "Something went wrong"; 
+    	}        		
+   }
     
-    
+        
     
 }
