@@ -44,8 +44,8 @@ public class addCustomerView implements ActionListener {
 	
 	public addCustomerView() {
 		
-		 frame = new JFrame ("Add customer");
-		 panel = new JPanel();
+	 frame = new JFrame ("Add customer");
+	 panel = new JPanel();
 		
 		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
 		panel.setLayout(null);
@@ -181,7 +181,7 @@ public class addCustomerView implements ActionListener {
 		
 	}
 
-	/*@Override
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		
 		try {
@@ -196,5 +196,8 @@ public class addCustomerView implements ActionListener {
 		}
 		
 		
-	}*/
+	}
+	public JPanel getPanel() {
+		return panel;
+	}
 }

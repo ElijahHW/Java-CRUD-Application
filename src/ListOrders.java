@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -190,9 +192,11 @@ public class ListOrders {
 		JComboBox<String> SearchFilterColumns = new JComboBox<String>(SearchArray);
 		SearchFilterColumns.setPreferredSize(new Dimension(100, 50));
 		SearchFilterColumns.setMaximumSize(new Dimension(200, 50));
+		SearchFilterColumns.setBackground(Color.WHITE);
+
 		
 		JButton ExportButton = new JButton("Export to File");
-		
+		ExportButton.setBackground(Color.WHITE);
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(9, 1));
 		
