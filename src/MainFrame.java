@@ -1,7 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.sql.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -9,9 +7,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;    
 public class MainFrame extends JFrame implements ActionListener {
 	 	
-	  //Header Elements
+	
+	//Header Elements
 		private JMenuBar menuBar;
-	    private JMenu homeMenu, fileMenu, actionMenu, dateMenu;
+	    private JMenu fileMenu, actionMenu, dateMenu;
 	    private JMenuItem addItem, listItem, retrieveItem, importItem, exitItem;
 	    private JButton homeBtn;
 	    
@@ -144,7 +143,7 @@ public class MainFrame extends JFrame implements ActionListener {
         this.add(panel);
         this.setVisible(true);
         this.setTitle("Management Application - Home");
-        //this.pack();
+        this.setPreferredSize(new Dimension(800,550));
         }
 	
 	//Defining the actions of the MenuBar
@@ -169,6 +168,8 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
+	        this.pack();
+
 		} 
 		
 		 if(e.getSource() == retrieveItem || e.getSource() == retrieveBtn) {
@@ -177,6 +178,8 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
+	        this.pack();
+
 		}
 		if(e.getSource() == importItem || e.getSource() == importBtn) {
 	        this.setTitle("Management Application - Import from File");
@@ -184,6 +187,8 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
+	        this.pack();
+
 		} 
 		
 		if(e.getSource()==exitItem) {
