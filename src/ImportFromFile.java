@@ -50,6 +50,7 @@ public class ImportFromFile implements ActionListener {
 		JPanel fileChooser = new JPanel();
 		openFile = new JButton("Find a file");
 		openFile.addActionListener(this);
+		openFile.setBackground(Color.WHITE);
 		
 		currentFile = new JLabel(""); // Label for the file that is currently opened
 		
@@ -68,6 +69,7 @@ public class ImportFromFile implements ActionListener {
 		String[] tableNames = dbConnection.getTableNames();
 		tableComboBox = new JComboBox<String>(tableNames);
 		tableComboBox.addActionListener(this);
+		tableComboBox.setBackground(Color.WHITE);
 		
 		selectTable.add(dbTableLabel);
 		selectTable.add(tableComboBox);
@@ -98,6 +100,7 @@ public class ImportFromFile implements ActionListener {
 		addToTable = new JButton("Add to table");
 		addToTable.setAlignmentX(addToTable.CENTER_ALIGNMENT);
 		addToTable.addActionListener(this);	
+		addToTable.setBackground(Color.WHITE);
 		
 		JPanel validationPanel = new JPanel();
 		validationPanel.setLayout(new BoxLayout(validationPanel, BoxLayout.PAGE_AXIS));

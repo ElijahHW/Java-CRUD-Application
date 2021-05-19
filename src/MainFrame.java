@@ -3,21 +3,23 @@ import java.awt.event.*;
 import java.io.File;
 import java.sql.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.time.format.DateTimeFormatter;  
 import java.time.LocalDateTime;    
 public class MainFrame extends JFrame implements ActionListener {
 	 	
-	//Header Elements
+	  //Header Elements
 		private JMenuBar menuBar;
-	    private JMenu homeMenu, fileMenu, actionMenu, helpMenu, dateMenu;
+	    private JMenu homeMenu, fileMenu, actionMenu, dateMenu;
 	    private JMenuItem addItem, listItem, retrieveItem, importItem, storeItem, exitItem;
-	    
+	    private JButton homeBtn;
 	  //Body Elements
-	    private JPanel bodyPanel = new JPanel();
+	    private JPanel panel = new JPanel();
 	    private JLabel welcomeLabel = new JLabel("Welcome to the Management Application");
 	    private JButton addBtn, listBtn, retrieveBtn, importBtn, storeBtn;
 	    
-	   //Extra Elements for Body
+	  //Extra Elements for Body
 	    DateTimeFormatter date = DateTimeFormatter.ofPattern("MM/dd : HH:mm");  
 	    LocalDateTime now = LocalDateTime.now();  
 	
@@ -25,7 +27,7 @@ public class MainFrame extends JFrame implements ActionListener {
     MainFrame() {
 		// Defining application size, layout and close operation.
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(400, 400);
+		this.setSize(800, 500);
 		this.setLayout(new FlowLayout());
 		this.setLocationRelativeTo(null);
 		
@@ -35,29 +37,43 @@ public class MainFrame extends JFrame implements ActionListener {
 		
 		// Defining application MenuBar.
         menuBar = new JMenuBar();
-        menuBar.setForeground(Color.BLACK);
         menuBar.setBackground(Color.WHITE);
-        homeMenu = new JMenu("Home");
+        
+        homeBtn = new JButton("Home");
+        homeBtn.setFocusable(false);
+        homeBtn.setBackground(Color.WHITE);
+        homeBtn.setBorder(null);
+        homeBtn.setBorder(new EmptyBorder(0, 10, 0, 0));
+
         fileMenu = new JMenu("File");
         actionMenu = new JMenu("Actions");
-        helpMenu = new JMenu("Help");
         dateMenu = new JMenu(date.format(now)); 
         dateMenu.setEnabled(false);
 
 		// Defining the MenuItems under each JMenu.
         addItem = new JMenuItem("Add Customer");
+        addItem.setBackground(Color.WHITE);
+
         listItem = new JMenuItem("List Orders");
+        listItem.setBackground(Color.WHITE);
+
         retrieveItem = new JMenuItem("Retrieve Employees");
+        retrieveItem.setBackground(Color.WHITE);
+        
         importItem = new JMenuItem("Import from File");
+        importItem.setBackground(Color.WHITE);
+
         storeItem = new JMenuItem("Store to file");
+        storeItem.setBackground(Color.WHITE);
+
         exitItem = new JMenuItem("Exit Application");
+        exitItem.setBackground(Color.WHITE);
+
         
         //Adding shortcuts to each JMenu for accessibility.
         //These can be used by pressing 'alt + key', the key will be underlined.
-        homeMenu.setMnemonic(KeyEvent.VK_H); 
         fileMenu.setMnemonic(KeyEvent.VK_F); 
         actionMenu.setMnemonic(KeyEvent.VK_A); 
-        helpMenu.setMnemonic(KeyEvent.VK_H); 
         
         //Adding shortcuts to each JMenu for accessibility.
         //These can be used by pressing 'key', the key will be underlined.
@@ -76,6 +92,7 @@ public class MainFrame extends JFrame implements ActionListener {
         actionMenu.add(storeItem);
         fileMenu.add(exitItem);
         
+        homeBtn.addActionListener(this);
         addItem.addActionListener(this);
         listItem.addActionListener(this);
         retrieveItem.addActionListener(this);
@@ -83,90 +100,108 @@ public class MainFrame extends JFrame implements ActionListener {
         storeItem.addActionListener(this);
         exitItem.addActionListener(this);
         
-        menuBar.add(homeMenu);
+        menuBar.add(homeBtn);
         menuBar.add(fileMenu);
         menuBar.add(actionMenu);
-        menuBar.add(helpMenu);
         menuBar.add(dateMenu);
         menuBar.setFocusable(false);
         
+        
         ///
-        //Start of BodyPanel / Main Part of Program
+        //Start of panel / Main Part of Program
         ///
-        GridLayout bodyLayout = new GridLayout(6,3);
-        bodyLayout.setHgap(10);
-        bodyLayout.setVgap(10);
-        bodyPanel.setLayout(bodyLayout);
+        GridLayout layout = new GridLayout(6,3);
+        layout.setHgap(10);
+        layout.setVgap(10);
+        panel.setLayout(layout);
         welcomeLabel.setFont(new Font(null,Font.BOLD,15));
         
         addBtn = new JButton("Add Customer");
         addBtn.setFocusable(false);
-        addBtn.setForeground(Color.BLACK);
         addBtn.setBackground(Color.WHITE);
+        addBtn.addActionListener(this);
+        
         listBtn = new JButton("List Orders");
         listBtn.setFocusable(false);
-        listBtn.setForeground(Color.BLACK);
         listBtn.setBackground(Color.WHITE);
-        retrieveBtn = new JButton("Retrieve Employees");
+        listBtn.addActionListener(this);
+
+        retrieveBtn = new JButton("Retrieve Employees");        
         retrieveBtn.setFocusable(false);
-        retrieveBtn.setForeground(Color.BLACK);
         retrieveBtn.setBackground(Color.WHITE);
+        retrieveBtn.addActionListener(this);
+
         importBtn = new JButton("Bulk Import from file");
         importBtn.setFocusable(false);
-        importBtn.setForeground(Color.BLACK);
         importBtn.setBackground(Color.WHITE);
+        importBtn.addActionListener(this);
+
         storeBtn = new JButton("Store Results to file");
         storeBtn.setFocusable(false);
-        storeBtn.setForeground(Color.BLACK);
         storeBtn.setBackground(Color.WHITE);
+        storeBtn.addActionListener(this);
         
-        bodyPanel.add(welcomeLabel);
-        bodyPanel.add(addBtn);
-        bodyPanel.add(listBtn);
-        bodyPanel.add(retrieveBtn);
-        bodyPanel.add(importBtn);
-        bodyPanel.add(storeBtn);
+        panel.add(welcomeLabel);
+        panel.add(addBtn);
+        panel.add(listBtn);
+        panel.add(retrieveBtn);
+        panel.add(importBtn);
+        panel.add(storeBtn);
         
         //Adding MenuBar to Application and setting it visible.
         this.setJMenuBar(menuBar);
-        this.add(bodyPanel);
+        this.add(panel);
         this.setVisible(true);
-        this.setTitle("Application");
+        this.setTitle("Management Application");
+        //this.pack();
         }
 	
 	//Defining the actions of the MenuBar
-	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == homeBtn) {
+			MainFrame panel = new MainFrame();
+			this.dispose();
+			/// TODO: FIX THIS SHIT
+		}
+		if(e.getSource() == addItem || e.getSource() == addBtn) {
+			addCustomerView panel = new addCustomerView();
+			this.setContentPane(panel.getPanel());
+			this.revalidate();
+			this.repaint();
+			
+		} 
+		if(e.getSource() == listItem || e.getSource() == listBtn) {
+			ListOrders panel = new ListOrders();
+			this.setContentPane(panel.getPanel());
+			this.revalidate();
+			this.repaint();
+		} 
 		
-		if(e.getSource()==homeMenu) {
-			
-		}
-		if(e.getSource()==addItem) {
-			
-		}
-		if(e.getSource()==listItem) {
-			
-		}
-		if(e.getSource()==retrieveItem) {
-			//getEmployees getemployees = new getEmployees();
-			
-		}		
-		if(e.getSource()==importItem) {
-			ImportFromFile panel = new ImportFromFile();
+		 if(e.getSource() == retrieveItem || e.getSource() == retrieveBtn) {
+			getEmployees panel = new getEmployees();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
 		}
-		if(e.getSource()==storeItem) {
-			
-		}
+		if(e.getSource() == importItem || e.getSource() == importBtn) {
+			ImportFromFile panel = new ImportFromFile();
+			this.setContentPane(panel.getPanel());
+			this.revalidate();
+			this.repaint();
+		} 
+		/*if(e.getSource() == storeItem || e.getSource() == storeBtn) {
+			storeToFile panel = new storeToFile();
+			this.setContentPane(panel.getPanel());
+			this.revalidate();
+			this.repaint();
+		} */
 		
 		if(e.getSource()==exitItem) {
 			 String[] exitResponse = {"Yes", "No"};
 			 System.out.println("Closing Application...");
 			 try {
-                 Thread.sleep(1000);
+                 Thread.sleep(500);
     			 if (JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Application Manager",
     					 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
     				 		System.exit(0);
@@ -179,5 +214,8 @@ public class MainFrame extends JFrame implements ActionListener {
              
          }
 		}
+	public JPanel getPanel() {
+		return panel;
+	}
 }
 
