@@ -8,8 +8,8 @@ public class dbConnection {
     private ResultSet rs;
     private String iq;
     private static String connection= "jdbc:mysql://localhost:3306/classicmodels";
-    private static String username = "student";
-    private static String password = "student";
+    private static String username = "root";
+    private static String password = "";
 
   
     //
@@ -194,7 +194,10 @@ public class dbConnection {
             return "Data inserted";
     	}catch(Exception e) {
     		System.out.println(e);
-    		return "Something went wrong"; 
+    		if(e.getClass().getSimpleName().equals("SQLIntegrityConstraintViolationException")) {
+    			return ("One of your foreign key constraints failed. Check your foreign keys!");
+    		}
+    		return e.getMessage(); 
     	}        		
    }
     

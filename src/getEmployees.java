@@ -7,19 +7,25 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.PatternSyntaxException;
 
 public class getEmployees {
 	
-	String SearchString = "";
-	JPanel panel;
-	JTable DataTable;
-	TableRowSorter<TableModel> sorter;
-	JTextField SearchField;
-	
+	private String SearchString = "";
+	private JPanel panel;
+	private JTable DataTable;
+	private TableRowSorter<TableModel> sorter;
+	private JTextField SearchField;
+	private JButton ExportButton;
+	private JFileChooser PathChooser;
 	public getEmployees() {
 		
 		panel = new JPanel();
@@ -40,7 +46,6 @@ public class getEmployees {
 		c.weightx = 0; 
 		c.weighty = 0;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		
 		
 		c.gridx = 0;
 		c.gridy = 10;
@@ -115,10 +120,8 @@ public class getEmployees {
 		return ScrollPanel;
 	}
 	
-	
-	
-	//Generates the top panel
-	JPanel FilterSearchPanel() {
+		//Generates the top panel
+		JPanel FilterSearchPanel() {
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout());
@@ -128,38 +131,80 @@ public class getEmployees {
 		SearchField.setBackground(Color.WHITE);
 
 		JLabel FilterLabel = new JLabel("Search: ");
-
+		
+		ExportButton = new JButton("Export to File");
+		ExportButton.setBackground(Color.WHITE);
+		
+		PathChooser = new JFileChooser();
+		PathChooser.setDialogTitle("Export to...");
+		PathChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		PathChooser.setBackground(Color.WHITE);
+		
 		panel.add(FilterLabel);
 		panel.add(SearchField);
+		panel.add(ExportButton);
+
+		//A listener to initiate exporting the table. It gets the path from the filechooser and adds a filename 
+		ExportButton.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) {
+				int ReturnValue = PathChooser.showSaveDialog(null);
+				if (ReturnValue == JFileChooser.APPROVE_OPTION) {
+				ExportTable(DataTable, PathChooser.getSelectedFile().getAbsolutePath() + "//EmployeesData.txt");
+				}
+			}
+		});
 		
 		//a rather lengthy listener to add a onKeyUp function to the searchbar
-				SearchField.addKeyListener(new KeyAdapter() {
-		            public void keyReleased(KeyEvent e) {
-		                JTextField textField = (JTextField) e.getSource();
-		                SearchString = textField.getText();
-		                
-		                //Checks what is selected
-		                if (SearchString.length() == 0) {
-		                	
-		                	sorter.setRowFilter(null);
-		                } else {
-		                	
-		                	try {
-		                		
-		                		
-		                		sorter.setRowFilter(RowFilter.regexFilter("(?i)" + SearchString, 7));
-		                	} catch (PatternSyntaxException pse) {
-		                		
-		                		System.out.println("Failed to search");
-		                		System.out.println(pse);
-		                	}
-		                }
-		            }
-		        });
+		SearchField.addKeyListener(new KeyAdapter() 
+		{
+            public void keyReleased(KeyEvent e) {
+                JTextField textField = (JTextField) e.getSource();
+                SearchString = textField.getText();
+                //Checks what is selected
+                if (SearchString.length() == 0) {
+                	sorter.setRowFilter(null);
+                } else {
+                	try {
+                		sorter.setRowFilter(RowFilter.regexFilter("(?i)" + SearchString, 7));
+                	} catch (PatternSyntaxException pse) {
+                		System.out.println("Failed to search");
+                		System.out.println(pse);
+                	}
+                }
+            }
+        });
 		
 		return panel;
 	}
-	
+	//A function to export the table into a file at a given path
+		void ExportTable(JTable table, String savePath) {
+			try {
+				FileWriter TableExport = new FileWriter(savePath);
+				BufferedWriter WriterBuffer = new BufferedWriter(TableExport);
+				for (int i = 0; i < table.getRowCount(); i++) {
+					for (int r = 0; r < table.getColumnCount(); r++) {
+						if (table.getValueAt(i, r) != null && !table.getValueAt(i, r).equals("")) {
+							WriterBuffer.write(table.getValueAt(i, r).toString() + ";");
+						} else {
+							//in case of a null or empty value
+							WriterBuffer.write(";");
+						}
+					}
+					WriterBuffer.newLine();
+				}
+				System.out.println("File Written");
+				JOptionPane.showMessageDialog(null, "File saved to your system.", "User Mangement - Export Data", JOptionPane.INFORMATION_MESSAGE);
+				WriterBuffer.close();
+				
+			} catch (IOException e) {
+				
+				System.out.println("failed to export file");
+				System.out.println(e);
+			}
+		}
+		
+		
 	//Return the main panel
 	public JPanel getPanel() {
 		return panel;
