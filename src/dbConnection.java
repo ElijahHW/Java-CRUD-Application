@@ -51,10 +51,9 @@ public class dbConnection {
     }
     
     //
-    // Get table names
+    // Returns the name of all tables in the classicmodels database
     //
-    
-    public static String[] getTableNames() { //Returns the name of all tables in the classicmodels database
+    public static String[] getTableNames() { 
 		ArrayList<String> tablesList = new ArrayList<String>();
 
 		try {
@@ -73,11 +72,11 @@ public class dbConnection {
 		return tables;
 	}
     
-    //
-    // Get column names
-    //
     
-    public static String[] getColumnNames(String table) { //Returns all column names from a table
+    //
+    // Returns all column names from a table
+    //  
+    public static String[] getColumnNames(String table) { 
 		ArrayList<String> tablesList = new ArrayList<String>();
 
 		try {
@@ -95,6 +94,29 @@ public class dbConnection {
 		String[] tables = tablesList.toArray(new String[tablesList.size()]);
 		return tables;
 	}
+    
+    
+    //
+    // Returns data type for all columns in a table
+    //
+    public static String[] getColumnDataType(String table) { 
+    	ArrayList<String> dataTypeList = new ArrayList<String>();
+    	
+    	try {
+			Connection MyCon = DriverManager.getConnection(connection, username, password);
+			Statement stmt = MyCon.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("SELECT DATA_TYPE FROM `INFORMATION_SCHEMA`.`COLUMNS`  WHERE `TABLE_SCHEMA`='classicmodels' AND `TABLE_NAME`='" + table + "';");
+			while (rs.next()) {
+				dataTypeList.add(rs.getString("data_type"));
+			}
+			MyCon.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		String[] dataType = dataTypeList.toArray(new String[dataTypeList.size()]);
+		return dataType;
+    }
     
     public static void addCustomer(int customerNumber, String customerName, String contactLastName, String contactFirstName, String phone, String addressLine1, String addressLine2, String city, String state, String postalCode, String country, int salesRepEmployeeNumber, double creditLimit) throws Exception {
         try {
