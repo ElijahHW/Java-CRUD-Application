@@ -272,7 +272,7 @@ public class ListOrders {
 	}
 	
 	//Return the main panel
-	public JPanel GetPanel() {
+	public JPanel getPanel() {
 		
 		return panel;
 	}

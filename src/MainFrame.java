@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;    
 public class MainFrame extends JFrame implements ActionListener {
 	 	
-	//Header Elements
+	  //Header Elements
 		private JMenuBar menuBar;
 	    private JMenu homeMenu, fileMenu, actionMenu, helpMenu, dateMenu;
 	    private JMenuItem addItem, listItem, retrieveItem, importItem, storeItem, exitItem;
@@ -17,7 +17,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	    private JLabel welcomeLabel = new JLabel("Welcome to the Management Application");
 	    private JButton addBtn, listBtn, retrieveBtn, importBtn, storeBtn;
 	    
-	   //Extra Elements for Body
+	  //Extra Elements for Body
 	    DateTimeFormatter date = DateTimeFormatter.ofPattern("MM/dd : HH:mm");  
 	    LocalDateTime now = LocalDateTime.now();  
 	
@@ -120,18 +120,27 @@ public class MainFrame extends JFrame implements ActionListener {
         addBtn = new JButton("Add Customer");
         addBtn.setFocusable(false);
         addBtn.setBackground(Color.WHITE);
+        
         listBtn = new JButton("List Orders");
         listBtn.setFocusable(false);
         listBtn.setBackground(Color.WHITE);
-        retrieveBtn = new JButton("Retrieve Employees");
+        listBtn.addActionListener(this);
+
+        retrieveBtn = new JButton("Retrieve Employees");        
         retrieveBtn.setFocusable(false);
         retrieveBtn.setBackground(Color.WHITE);
+        retrieveBtn.addActionListener(this);
+
         importBtn = new JButton("Bulk Import from file");
         importBtn.setFocusable(false);
         importBtn.setBackground(Color.WHITE);
+        importBtn.addActionListener(this);
+
         storeBtn = new JButton("Store Results to file");
         storeBtn.setFocusable(false);
         storeBtn.setBackground(Color.WHITE);
+        storeBtn.addActionListener(this);
+
         
         panel.add(welcomeLabel);
         panel.add(addBtn);
@@ -144,14 +153,14 @@ public class MainFrame extends JFrame implements ActionListener {
         this.setJMenuBar(menuBar);
         this.add(panel);
         this.setVisible(true);
-        this.setTitle("Application");
+        this.setTitle("Management Application");
         }
 	
 	//Defining the actions of the MenuBar
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+	
 		if(e.getSource()==homeMenu) {
 			MainFrame panel = new MainFrame();
 			this.setContentPane(panel.getPanel());
@@ -163,29 +172,56 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
-		}
-		if(e.getSource()==listItem) {
-			ListOrders panel = new ListOrders();
-			this.setContentPane(panel.GetPanel());
+		} else if (e.getSource()==addItem) {
+			addCustomerView panel = new addCustomerView();
+			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
 		}
-		if(e.getSource()==retrieveItem) {
-			//getEmployees getEmployees = new getEmployees();
+		if(e.getSource()==listItem) {
+			ListOrders panel = new ListOrders();
+			this.setContentPane(panel.getPanel());
+			this.revalidate();
+			this.repaint();
+		} else if (e.getSource()==listBtn) {
+			ListOrders panel = new ListOrders();
+			this.setContentPane(panel.getPanel());
+			this.revalidate();
+			this.repaint();
+		}
+		/* if(e.getSource()==retrieveItem) {
+			//getEmployees panel = new getEmployees();
 			//this.setContentPane(panel.getPanel());
 			//this.revalidate();
 			//this.repaint();
-			
-		}		
+		} else if (e.getSource()==retrieveItem) {
+			getEmployees panel = new getEmployees();
+			this.setContentPane(panel.GetPanel());
+			this.revalidate();
+			this.repaint();
+		}	*/
 		if(e.getSource()==importItem) {
 			ImportFromFile panel = new ImportFromFile();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
+		} else if (e.getSource()==importItem) {
+			ImportFromFile panel = new ImportFromFile();
+			this.setContentPane(panel.getPanel());
+			this.revalidate();
+			this.repaint();
 		}
-		if(e.getSource()==storeItem) {
-			
-		}
+		/*if(e.getSource()==storeItem) {
+			storeToFile panel = new storeToFile();
+			this.setContentPane(panel.getPanel());
+			this.revalidate();
+			this.repaint();
+		} else if (e.getSource()==storeItem) {
+			storeToFile panel = new storeToFile();
+			this.setContentPane(panel.getPanel());
+			this.revalidate();
+			this.repaint();
+		}*/
 		
 		if(e.getSource()==exitItem) {
 			 String[] exitResponse = {"Yes", "No"};
