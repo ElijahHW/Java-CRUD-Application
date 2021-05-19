@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 public class addCustomerView implements ActionListener {
 	
@@ -14,7 +15,7 @@ public class addCustomerView implements ActionListener {
 	
     private JComboBox<Integer> salesRepNumberList;
     
-	private JLabel responseText;
+	private JLabel responseText, label;
 	private JPanel panel;
 	
 	private JButton addToDbButton;
@@ -33,55 +34,64 @@ public class addCustomerView implements ActionListener {
 		panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
 		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
-
+		
+		label = new JLabel();
+		label.setFont(new Font(null,Font.BOLD,20));
+		label.setForeground(new Color(0x203c56));
+		label.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		label.setText("Add a customer to the Database");
+		
 		responseText = new JLabel("");
 		
 		gbc.fill = GridBagConstraints.BOTH; 
 		gbc.weightx = 55;
 		gbc.weighty = 55;
-		panel.add((panelCustomerNumber()), gbc);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 1;
+        panel.add(label);
+		panel.add((panelCustomerNumber()), gbc);
+		gbc.gridx = 0;
+		gbc.gridy = 2;
 		panel.add((panelCustomerName()), gbc);
 		
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		panel.add((panelFirstName()), gbc);
 		
-		gbc.gridy = 3;
+		gbc.gridy = 4;
 		panel.add((panelLastName()), gbc);
 		
-		gbc.gridy = 4;
+		gbc.gridy = 5;
 		panel.add((panelPhone()), gbc);
 		
-		gbc.gridy = 5;
+		gbc.gridy = 6;
 		panel.add((panelAdressOne()), gbc);
 		
-		gbc.gridy = 6;
+		gbc.gridy = 7;
 		panel.add((panelAdressTwo()), gbc);
 		
-		gbc.gridy = 7;
+		gbc.gridy = 8;
 		panel.add((panelCity()), gbc);
 		
-		gbc.gridy = 8;
+		gbc.gridy = 9;
 		panel.add((panelState()), gbc);
 		
-		gbc.gridy = 9;
+		gbc.gridy = 10;
 		panel.add((panelPostCode()), gbc);
 		
-		gbc.gridy = 10;
+		gbc.gridy = 11;
 		panel.add((panelCountry()), gbc);
 		
-		gbc.gridy = 11;
+		gbc.gridy = 12;
 		panel.add((panelSREmployee()), gbc);
 		
-		gbc.gridy = 12;
+		gbc.gridy = 13;
 		panel.add((panelCreditLimit()), gbc);
 		
-		gbc.gridy = 13;
+		gbc.gridy = 14;
 		panel.add((panelButtons()), gbc);
 		
-		gbc.gridy = 14;
+		gbc.gridy = 15;
 		panel.add(responseText, gbc);		
 		
 		panel.revalidate();
@@ -407,7 +417,7 @@ public class addCustomerView implements ActionListener {
 	private JPanel panelSREmployee() {
 		
 		JPanel pane = new JPanel();
-		JLabel label = new JLabel("Employee Nr.");
+		JLabel label = new JLabel("Sales Rep Nr.");
 		label.setPreferredSize(PreferedDimension);
 	    salesRepNumberList = new JComboBox<Integer>(); updateCombobox();
 	    
@@ -442,19 +452,15 @@ public class addCustomerView implements ActionListener {
                     
                     //checks if the rounded number is longer than 10 digits
                     if (String.valueOf(Math.round(tempNumber)).length() > 10) {
-                    	
                     	responseText.setText("The credit number must be less than 10000000000");
                     	ValidCredit = false;
                     } else {
-                    	
                     	responseText.setText(null);
                     	CreditNumber = tempNumber;
                     	ValidCredit = true;
                     }
-                    
-                   
+                                      
                 } else {
-                	
                 	CreditNumber = 0f;
                 	ValidCredit = true;
                 }

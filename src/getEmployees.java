@@ -8,6 +8,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -24,11 +25,11 @@ public class getEmployees {
 	private JPanel panel;
 	private JTable DataTable;
 	private TableRowSorter<TableModel> sorter;
-	private JTextField SearchField;
+	private JTextField searchField;
 	private JButton ExportButton;
 	private JFileChooser PathChooser;
+	private JLabel headerLabel, filterLabel;
 	public getEmployees() {
-		
 		panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
 		
@@ -61,23 +62,16 @@ public class getEmployees {
 	
 	//A function to convert the list list from the database into a 2d object array with date value types in the correct places
 	Object[][] GetEmployees() {
-		
+
 		List<List<String>> ListTable = dbConnection.getTable("employees");
 		Object[][] data = new Object[ListTable.size()][7];
-		
 		for (int i = 0; i < ListTable.size(); i++) {
-			
 			Object[] row = new Object[ListTable.get(i).size()];
-			
 			for (int r = 0; r < row.length; r++) {
-			
-				
 				row[r] = ListTable.get(i).get(r);
 			}
-			
 			data[i] = row;
 		}
-		
 		return data;
 	}
 	
@@ -105,7 +99,8 @@ public class getEmployees {
 		};
 		DataTable = new JTable(model);
 		DataTable.setAutoCreateRowSorter(true);
-		
+		DataTable.setCellSelectionEnabled(true);
+
 		//defines a sorter to allow the search function to work properly
 		sorter = new TableRowSorter<TableModel>(model);
 		DataTable.setRowSorter(sorter);
@@ -120,12 +115,18 @@ public class getEmployees {
 		JPanel FilterSearchPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout());
-		SearchField = new JTextField();
-		SearchField.setPreferredSize(new Dimension(300, 30));
-		SearchField.setBackground(Color.WHITE);
+		searchField = new JTextField();
+		searchField.setPreferredSize(new Dimension(300, 30));
+		searchField.setBackground(Color.WHITE);
 
-		JLabel FilterLabel = new JLabel("Search: ");
-		FilterLabel.setFont(new Font(null, Font.BOLD,15));
+		headerLabel = new JLabel();
+		headerLabel.setFont(new Font(null,Font.BOLD,20));
+		headerLabel.setForeground(new Color(0x203c56));
+		headerLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		headerLabel.setText("Table of all Employee Data");
+		
+		filterLabel = new JLabel("Search: ");
+		filterLabel.setFont(new Font(null, Font.BOLD,15));
 		
 		ExportButton = new JButton("Export to File");
 		ExportButton.setBackground(Color.WHITE);
@@ -137,10 +138,11 @@ public class getEmployees {
 		PathChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		PathChooser.setBackground(Color.WHITE);
 		
-		panel.add(FilterLabel);
-		panel.add(SearchField);
+		panel.add(headerLabel);
+		panel.add(filterLabel);
+		panel.add(searchField);
 		panel.add(ExportButton);
-
+		
 		//A listener to initiate exporting the table. It gets the path from the filechooser and adds a filename 
 		ExportButton.addActionListener(new ActionListener() 
 		{
@@ -153,7 +155,7 @@ public class getEmployees {
 		});
 		
 		//a rather lengthy listener to add a onKeyUp function to the searchbar
-		SearchField.addKeyListener(new KeyAdapter() 
+		searchField.addKeyListener(new KeyAdapter() 
 		{
             public void keyReleased(KeyEvent e) {
                 JTextField textField = (JTextField) e.getSource();

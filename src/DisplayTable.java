@@ -126,7 +126,8 @@ public class DisplayTable {
 		UpdateTable("customers");
 		DataTable.setAutoCreateRowSorter(true);
 		DataTable.getTableHeader().setReorderingAllowed(false);
-		
+		DataTable.setCellSelectionEnabled(true);
+
 		//defines a sorter to allow the search function to work properly
 		sorter = new TableRowSorter<TableModel>(model);
 		DataTable.setRowSorter(sorter);

@@ -165,7 +165,8 @@ public class ListOrders {
 		DataTable = new JTable(model);
 		DataTable.setAutoCreateRowSorter(true);
 		DataTable.getTableHeader().setReorderingAllowed(false);
-		
+		DataTable.setCellSelectionEnabled(true);
+
 		//defines a sorter to allow the search function to work properly
 		sorter = new TableRowSorter<TableModel>(model);
 		DataTable.setRowSorter(sorter);
@@ -194,7 +195,7 @@ public class ListOrders {
 		SearchFilterColumns.setPreferredSize(new Dimension(100, 50));
 		SearchFilterColumns.setMaximumSize(new Dimension(200, 50));
 		SearchFilterColumns.setBackground(Color.WHITE);
-
+		SearchFilterColumns.setFocusable(false);
 		
 		JButton ExportButton = new JButton("Export to File");
 		ExportButton.setBackground(Color.WHITE);

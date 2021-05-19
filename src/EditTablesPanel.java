@@ -85,6 +85,8 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		validation = new JLabel("");
 		validation.setAlignmentX(validation.CENTER_ALIGNMENT);
 		submit = new JButton("Save changes");
+		submit.setFocusable(false);
+		submit.setBackground(Color.WHITE);
 		submit.addActionListener(this);
 		submit.setAlignmentX(submit.CENTER_ALIGNMENT);
 		

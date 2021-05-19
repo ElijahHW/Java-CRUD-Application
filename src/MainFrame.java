@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -11,7 +13,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	//Header Elements
 		private JMenuBar menuBar;
 	    private JMenu fileMenu, actionMenu, dateMenu;
-	    private JMenuItem addItem, listItem, retrieveItem, editItem, importItem, exitItem;
+	    private JMenuItem addItem, listItem, retrieveItem, editItem, importItem, copyItem, exitItem;
 	    private JButton homeBtn;
 	    
 	  //Body Elements
@@ -22,7 +24,6 @@ public class MainFrame extends JFrame implements ActionListener {
 	  //Extra Elements for Body
 	    DateTimeFormatter date = DateTimeFormatter.ofPattern("MM/dd : HH:mm");  
 	    LocalDateTime now = LocalDateTime.now();  
-	    private ImageIcon icon;
 	
 	    
     MainFrame() {
@@ -30,28 +31,37 @@ public class MainFrame extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(800, 550);
 		this.setLayout(new FlowLayout());
-		this.setLocationRelativeTo(null);
 		
 		///
 		//Start of Header / Menu Bar
 		///
 		
 		// Defining application MenuBar.
+		Image appIcon = Toolkit.getDefaultToolkit().getImage("src/assets/manager.png");
+		this.setIconImage(appIcon);  
         menuBar = new JMenuBar();
         menuBar.setBackground(Color.WHITE);
         
         homeBtn = new JButton("Home");
         homeBtn.setFocusable(false);
         homeBtn.setBackground(Color.WHITE);
+        homeBtn.setFont(new Font(null, Font.BOLD,15));
+        homeBtn.setForeground(new Color(0x203c56));
         homeBtn.setBorder(null);
         homeBtn.setBorder(new EmptyBorder(0, 10, 0, 10));
 
         actionMenu = new JMenu("Actions");
+        actionMenu.setFont(new Font(null, Font.BOLD,15));
+        actionMenu.setForeground(new Color(0x203c56));
+
         dateMenu = new JMenu(date.format(now)); 
+        dateMenu.setFont(new Font(null, Font.BOLD,15));
         dateMenu.setEnabled(false);
         
         fileMenu = new JMenu("File");
-        
+        fileMenu.setFont(new Font(null, Font.BOLD,15));
+        fileMenu.setForeground(new Color(0x203c56));
+
 
 		// Defining the MenuItems under each JMenu.
         addItem = new JMenuItem("Add Customer");
@@ -69,31 +79,60 @@ public class MainFrame extends JFrame implements ActionListener {
         importItem = new JMenuItem("Import from File");
         importItem.setBackground(Color.WHITE);
 
+        copyItem = new JMenuItem("Copy");
+        copyItem.setBackground(Color.WHITE);
+        
         exitItem = new JMenuItem("Exit Application");
         exitItem.setBackground(Color.WHITE);
 
         
         //Adding shortcuts to each JMenu for accessibility.
         //These can be used by pressing 'alt + key', the key will be underlined.
+        KeyStroke keyStrokeHomeBtn = KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_DOWN_MASK);
+        homeBtn.setMnemonic(KeyEvent.VK_H); 
         fileMenu.setMnemonic(KeyEvent.VK_F); 
         actionMenu.setMnemonic(KeyEvent.VK_A); 
         
-        //Adding shortcuts to each JMenu for accessibility.
-        //These can be used by pressing 'key', the key will be underlined.
+        //Adding shortcuts/KeyStrokes to each JMenuItem for accessibility.
+        //These can be used by pressing 'ctrl + key', the key will be underlined in the application.
+        KeyStroke keyStrokeAddItem = KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke keyStrokeListItem = KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke keyStrokeRetrieveItem = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke keyStrokeEditItem = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke keyStrokeImportItem = KeyStroke.getKeyStroke(KeyEvent.VK_I, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke keyStrokeCopyItem = KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke keyStrokeExitItem = KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK);
+
         addItem.setMnemonic(KeyEvent.VK_A); //key
+        addItem.setAccelerator(keyStrokeAddItem);
+
         listItem.setMnemonic(KeyEvent.VK_L); //key
-        retrieveItem.setMnemonic(KeyEvent.VK_R); //key
-        editItem.setMnemonic(KeyEvent.VK_E); //key
-        importItem.setMnemonic(KeyEvent.VK_I); //key 
-        exitItem.setMnemonic(KeyEvent.VK_E); //key
+        listItem.setAccelerator(keyStrokeListItem);
         
+        retrieveItem.setMnemonic(KeyEvent.VK_R); //key
+        retrieveItem.setAccelerator(keyStrokeRetrieveItem);
+
+        editItem.setMnemonic(KeyEvent.VK_E); //key
+        editItem.setAccelerator(keyStrokeEditItem);
+
+        importItem.setMnemonic(KeyEvent.VK_I); //key 
+        importItem.setAccelerator(keyStrokeImportItem);
+
+        copyItem.setMnemonic(KeyEvent.VK_W); //key
+        copyItem.setAccelerator(keyStrokeCopyItem);
+        
+        exitItem.setMnemonic(KeyEvent.VK_W); //key
+        exitItem.setAccelerator(keyStrokeExitItem);
+
         //Adding each Item to its JMenu Parent
         actionMenu.add(addItem);
         actionMenu.add(listItem);
         actionMenu.add(retrieveItem);
         actionMenu.add(editItem);
         actionMenu.add(importItem);
+        fileMenu.add(copyItem);
         fileMenu.add(exitItem);
+        
         
         homeBtn.addActionListener(this);
         addItem.addActionListener(this);
@@ -101,8 +140,9 @@ public class MainFrame extends JFrame implements ActionListener {
         retrieveItem.addActionListener(this);
         editItem.addActionListener(this);
         importItem.addActionListener(this);
+        copyItem.addActionListener(this);
         exitItem.addActionListener(this);
-        
+
         menuBar.add(homeBtn);
         menuBar.add(fileMenu);
         menuBar.add(actionMenu);
@@ -117,32 +157,38 @@ public class MainFrame extends JFrame implements ActionListener {
         layout.setHgap(10);
         layout.setVgap(10);
         panel.setLayout(layout);
-        panel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
-        welcomeLabel.setFont(new Font(null,Font.BOLD,15));
-        
+        welcomeLabel.setFont(new Font(null,Font.BOLD,20));
+        welcomeLabel.setForeground(new Color(0x203c56));
+
         addBtn = new JButton("Add Customer");
         addBtn.setFocusable(false);
         addBtn.setBackground(Color.WHITE);
+        addBtn.setFont(new Font(null, Font.BOLD,15));
+        addBtn.setForeground(new Color(0x102533));
         addBtn.addActionListener(this);
         
         listBtn = new JButton("List Orders");
         listBtn.setFocusable(false);
         listBtn.setBackground(Color.WHITE);
+        listBtn.setFont(new Font(null, Font.BOLD,15));
         listBtn.addActionListener(this);
 
         retrieveBtn = new JButton("Retrieve Employees");        
         retrieveBtn.setFocusable(false);
         retrieveBtn.setBackground(Color.WHITE);
+        retrieveBtn.setFont(new Font(null, Font.BOLD,15));
         retrieveBtn.addActionListener(this);
         
         editBtn = new JButton("Edit Data in DB");        
         editBtn.setFocusable(false);
         editBtn.setBackground(Color.WHITE);
+        editBtn.setFont(new Font(null, Font.BOLD,15));
         editBtn.addActionListener(this);
         
         importBtn = new JButton("Bulk Import from file");
         importBtn.setFocusable(false);
         importBtn.setBackground(Color.WHITE);
+        importBtn.setFont(new Font(null, Font.BOLD,15));
         importBtn.addActionListener(this);
         
         panel.add(welcomeLabel);
@@ -159,8 +205,11 @@ public class MainFrame extends JFrame implements ActionListener {
         this.setTitle("Management Application - Home");
         this.setPreferredSize(new Dimension(800,550));
         this.pack();
+		this.setLocationRelativeTo(null);
+
         }
-	
+
+    
 	//Defining the actions of the MenuBar
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -215,9 +264,13 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.revalidate();
 			this.repaint();
 	        this.pack();
-
 		} 
-		
+	
+		if(e.getSource() == copyItem ) {
+		///hmmmm
+		} 
+	
+		//Defining what the Exit button should do.
 		if(e.getSource()==exitItem) {
 			 String[] exitResponse = {"Yes", "No"};
 			 System.out.println("Closing Application...");
@@ -234,7 +287,7 @@ public class MainFrame extends JFrame implements ActionListener {
              }
              
          }
-		}
+	}
 	
 	public JPanel getPanel() {
 		return panel;
