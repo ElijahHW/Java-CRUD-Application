@@ -82,7 +82,6 @@ public class getEmployees {
 			}
 			
 			data[i] = row;
-			
 		}
 		
 		return data;

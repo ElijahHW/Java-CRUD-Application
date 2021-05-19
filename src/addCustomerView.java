@@ -16,23 +16,8 @@ public class addCustomerView implements ActionListener {
 	private static PreparedStatement pst;
     private static Connection conn;
     private ResultSet rs;
-    private static String connection= "jdbc:mysql://localhost:3311/classicmodels";
-    private static String username = "root";
-    private static String password = "";
-
-	private JLabel customerNumberLabel;
-	private JLabel customerNameLabel;
-	private JLabel contactLastNameLabel;
-	private JLabel contactFirstNameLabel;
-	private JLabel phoneLabel;
-	private JLabel addressLine1Label;
-	private JLabel addressLine2Label;
-	private JLabel cityLabel;
-	private JLabel stateLabel;
-	private JLabel postalCodeLabel;
-	private JLabel countryLabel;
-	private JLabel salesRepEmployeeNumberLabel;
-	private JLabel creditLimitLabel;
+	private JLabel customerNumberLabel, customerNameLabel,contactLastNameLabel, contactFirstNameLabel, phoneLabel,
+	addressLine1Label, addressLine2Label, cityLabel, stateLabel, postalCodeLabel,countryLabel,salesRepEmployeeNumberLabel, creditLimitLabel;
 	
 	private JTextField customerNumberInput; 
 	private JTextField customerNameInput; 
@@ -55,28 +40,15 @@ public class addCustomerView implements ActionListener {
 	private JPanel panel;
 	private JButton addToDbButton;
 	private JButton resetButton;
+    private static Connection MyCon;
 
 	
-	
 	public addCustomerView() {
-		
 		panel = new JPanel();
-		
 		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
-		frame = new JFrame ("Add customer");
-		panel = new JPanel();
-				
-	    frame.setPreferredSize(new Dimension(400, 520));
-	    frame.add(panel, BorderLayout.CENTER);
-	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    frame.setTitle("Add Customer");
-	    frame.pack();
-	    frame.setLocationRelativeTo(null);
-	    frame.setVisible(true);
-		
+		panel = new JPanel();		
 		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
 		panel.setLayout(null);
-		
 		
 		customerNumberLabel = new JLabel("Customer number");
 		customerNumberLabel.setBounds(10, 20, 120, 25);
@@ -172,7 +144,6 @@ public class addCustomerView implements ActionListener {
 		panel.add(salesRepEmployeeNumberLabel);
 		
 
-
 	    salesRepNumberList = new JComboBox();
 	    salesRepNumberList.setBounds(150, 350, 165, 25);
 		panel.add(salesRepNumberList);	
@@ -190,8 +161,6 @@ public class addCustomerView implements ActionListener {
 		creditLimitInput.setBounds(150, 380, 165, 25);
 		panel.add(creditLimitInput);
 		
-		
-
 		addToDbButton = new JButton("Add customer to DB");
 		addToDbButton.setBounds(25, 420, 150, 25);
 		addToDbButton.addActionListener(this);
@@ -199,45 +168,19 @@ public class addCustomerView implements ActionListener {
 
 		panel.add(addToDbButton);
 		
-		
-		
 		resetButton = new JButton("Reset");
 		resetButton.setBounds(200, 420, 80, 25);
 		resetButton.addActionListener(this);
 		panel.add(resetButton);
-		
 			
 		responseText = new JLabel("");
 		responseText.setBounds(25, 450, 200, 25);
 		panel.add(responseText);
 		
 		panel.revalidate();
-		panel.repaint();
-		frame.pack();
-		
-		
-		
+		panel.repaint();	
 		
 	}
-	
-	//Populate dropdownlist / combobox
-
-		private void updateCombobox() {
-		String sql = ("SELECT employeeNumber, firstName, lastName FROM employees WHERE jobTitle = 'Sales Rep'");
-		
-		try {
-		Connection con = DriverManager.getConnection(connection, username, password);	
-		pst = con.prepareStatement(sql);
-		rs = pst.executeQuery();
-				while(rs.next()) {
-					salesRepNumberList.addItem(rs.getString("employeeNumber") + " - " + rs.getString("firstName") +" "+ rs.getString("lastName"));
-				}
-		}catch (Exception e) {
-					
-				}
-	}
-	
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -275,10 +218,19 @@ public class addCustomerView implements ActionListener {
 		
 		responseText.setText("All fields reset.");
 	}
-		
-
-		
+			
+}
+	private void updateCombobox()
+	{
+			List<List<String>> list = dbConnection.getTable("employees");
+			for (List<String> row : list) {
+				if (row.get(7).equals("Sales Rep")) {
+					salesRepNumberList.addItem(row.get(0) + " - " + row.get(2) + " - " + row.get(1));
+	        }
+	    }
+		      
 	}
+	
 	public JPanel getPanel() {
 		return panel;
 	}
