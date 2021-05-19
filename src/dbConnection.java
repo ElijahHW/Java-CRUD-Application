@@ -51,7 +51,7 @@ public class dbConnection {
     }
     
     //
-    // Returns the name of all tables in the classicmodels database
+    // Returns the name of all tables in the classicModels database
     //
     public static String[] getTableNames() { 
 		ArrayList<String> tablesList = new ArrayList<String>();
@@ -118,14 +118,16 @@ public class dbConnection {
 		return dataType;
     }
         
-    	public static String addCustomer(String customerNumber, String customerName, 
+	///
+    // AddCustomer Function
+    ///
+    public static String addCustomer(String customerNumber, String customerName, 
     		String contactLastName, String contactFirstName, String phone, 
     		String addressLine1, String addressLine2, String city, String state, 
     		String postalCode, String country, String salesRepEmployeeNumber, 
     		String creditLimit){
     	
         try {
-        	
             Connection con = DriverManager.getConnection(connection, username, password);
             String query = "INSERT INTO customers "
             		+ "(customerNumber, customerName, contactLastName, contactFirstName, "
@@ -152,7 +154,6 @@ public class dbConnection {
             con.close();
             
             return "Customer was added to DB!";
-            
         }catch (Exception e) {
         	
         	System.out.println(e);
@@ -160,9 +161,7 @@ public class dbConnection {
             return "Something went wrong.";
         }
   
-    }
-    
-    
+    }    
     
     
 }
