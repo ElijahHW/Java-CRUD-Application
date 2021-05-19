@@ -5,6 +5,7 @@ import javax.swing.table.TableRowSorter;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -82,8 +83,8 @@ public class getEmployees {
 	
 	
 	//Creates the center panel
-	JScrollPane ScrollPanel() {
-		
+	JScrollPane ScrollPanel() 
+	{
 		//Provides the Column names for the main table
 		Object columns[] ={ "EmployeeNumber", 
 				"lastName", 
@@ -97,14 +98,10 @@ public class getEmployees {
 		Object rows[][] = GetEmployees();
 		
 		//Creates a model for the table. The potential warning should disappear during compilation as far as I could understand
-		TableModel model = new DefaultTableModel(rows, columns) {
-			
-			//an override needed to stop the table from being editable
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				
-				return false;
-			}
+		TableModel model = new DefaultTableModel(rows, columns) 
+		{
+		//an override needed to stop the table from being editable
+		@Override public boolean isCellEditable(int row, int column) {return false;}
 		};
 		DataTable = new JTable(model);
 		DataTable.setAutoCreateRowSorter(true);
@@ -113,28 +110,29 @@ public class getEmployees {
 		sorter = new TableRowSorter<TableModel>(model);
 		DataTable.setRowSorter(sorter);
 		
-		//puts the entire table in a scrollpane to allow for the scrollbar as the table itself is rather large
+		//puts the entire table in a scrollPane to allow for the scrollBar as the table itself is rather large
 		JScrollPane ScrollPanel = new JScrollPane(DataTable); 
 		ScrollPanel.getVerticalScrollBar().setBackground(Color.WHITE);
-
 		return ScrollPanel;
 	}
 	
 		//Generates the top panel
 		JPanel FilterSearchPanel() {
-		
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout());
-		
+		ImageIcon icon = new ImageIcon();
 		SearchField = new JTextField();
 		SearchField.setPreferredSize(new Dimension(300, 30));
 		SearchField.setBackground(Color.WHITE);
 
 		JLabel FilterLabel = new JLabel("Search: ");
+		FilterLabel.setFont(new Font(null, Font.BOLD,15));
 		
 		ExportButton = new JButton("Export to File");
 		ExportButton.setBackground(Color.WHITE);
-		
+		icon = new ImageIcon("src/assets/download.png");	
+		ExportButton.setIcon(Main.getScaledImage(icon));
+
 		PathChooser = new JFileChooser();
 		PathChooser.setDialogTitle("Export to...");
 		PathChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -177,6 +175,8 @@ public class getEmployees {
 		
 		return panel;
 	}
+	
+
 	//A function to export the table into a file at a given path
 		void ExportTable(JTable table, String savePath) {
 			try {
