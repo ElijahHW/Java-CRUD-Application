@@ -12,12 +12,13 @@ public class MainFrame extends JFrame implements ActionListener {
 	  //Header Elements
 		private JMenuBar menuBar;
 	    private JMenu homeMenu, fileMenu, actionMenu, dateMenu;
-	    private JMenuItem addItem, listItem, retrieveItem, importItem, storeItem, exitItem;
+	    private JMenuItem addItem, listItem, retrieveItem, importItem, exitItem;
 	    private JButton homeBtn;
+	    
 	  //Body Elements
 	    private JPanel panel = new JPanel();
 	    private JLabel welcomeLabel = new JLabel("Welcome to the Management Application");
-	    private JButton addBtn, listBtn, retrieveBtn, importBtn, storeBtn;
+	    private JButton addBtn, listBtn, retrieveBtn, importBtn;
 	    
 	  //Extra Elements for Body
 	    DateTimeFormatter date = DateTimeFormatter.ofPattern("MM/dd : HH:mm");  
@@ -43,12 +44,14 @@ public class MainFrame extends JFrame implements ActionListener {
         homeBtn.setFocusable(false);
         homeBtn.setBackground(Color.WHITE);
         homeBtn.setBorder(null);
-        homeBtn.setBorder(new EmptyBorder(0, 10, 0, 0));
+        homeBtn.setBorder(new EmptyBorder(0, 10, 0, 10));
 
-        fileMenu = new JMenu("File");
         actionMenu = new JMenu("Actions");
         dateMenu = new JMenu(date.format(now)); 
         dateMenu.setEnabled(false);
+        
+        fileMenu = new JMenu("File");
+        
 
 		// Defining the MenuItems under each JMenu.
         addItem = new JMenuItem("Add Customer");
@@ -62,9 +65,6 @@ public class MainFrame extends JFrame implements ActionListener {
         
         importItem = new JMenuItem("Import from File");
         importItem.setBackground(Color.WHITE);
-
-        storeItem = new JMenuItem("Store to file");
-        storeItem.setBackground(Color.WHITE);
 
         exitItem = new JMenuItem("Exit Application");
         exitItem.setBackground(Color.WHITE);
@@ -81,7 +81,6 @@ public class MainFrame extends JFrame implements ActionListener {
         listItem.setMnemonic(KeyEvent.VK_L); //key
         retrieveItem.setMnemonic(KeyEvent.VK_R); //key
         importItem.setMnemonic(KeyEvent.VK_I); //key 
-        storeItem.setMnemonic(KeyEvent.VK_S); //key
         exitItem.setMnemonic(KeyEvent.VK_E); //key
         
         //Adding each Item to its JMenu Parent
@@ -89,7 +88,6 @@ public class MainFrame extends JFrame implements ActionListener {
         actionMenu.add(listItem);
         actionMenu.add(retrieveItem);
         actionMenu.add(importItem);
-        actionMenu.add(storeItem);
         fileMenu.add(exitItem);
         
         homeBtn.addActionListener(this);
@@ -97,7 +95,6 @@ public class MainFrame extends JFrame implements ActionListener {
         listItem.addActionListener(this);
         retrieveItem.addActionListener(this);
         importItem.addActionListener(this);
-        storeItem.addActionListener(this);
         exitItem.addActionListener(this);
         
         menuBar.add(homeBtn);
@@ -135,18 +132,12 @@ public class MainFrame extends JFrame implements ActionListener {
         importBtn.setFocusable(false);
         importBtn.setBackground(Color.WHITE);
         importBtn.addActionListener(this);
-
-        storeBtn = new JButton("Store Results to file");
-        storeBtn.setFocusable(false);
-        storeBtn.setBackground(Color.WHITE);
-        storeBtn.addActionListener(this);
         
         panel.add(welcomeLabel);
         panel.add(addBtn);
         panel.add(listBtn);
         panel.add(retrieveBtn);
         panel.add(importBtn);
-        panel.add(storeBtn);
         
         //Adding MenuBar to Application and setting it visible.
         this.setJMenuBar(menuBar);
@@ -190,12 +181,6 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.revalidate();
 			this.repaint();
 		} 
-		/*if(e.getSource() == storeItem || e.getSource() == storeBtn) {
-			storeToFile panel = new storeToFile();
-			this.setContentPane(panel.getPanel());
-			this.revalidate();
-			this.repaint();
-		} */
 		
 		if(e.getSource()==exitItem) {
 			 String[] exitResponse = {"Yes", "No"};
