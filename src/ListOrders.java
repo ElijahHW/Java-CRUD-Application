@@ -43,7 +43,7 @@ public class ListOrders {
 		c.gridx = 90;
 		c.gridy = 0;
 		c.gridheight = 100;
-		c.weightx = 0;
+		c.weightx = 0; 
 		c.weighty = 0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		panel.add(SorterChoicePanel(), c);
