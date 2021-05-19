@@ -8,8 +8,8 @@ public class dbConnection {
     private ResultSet rs;
     private String iq;
     private static String connection= "jdbc:mysql://localhost:3306/classicmodels";
-    private static String username = "root";
-    private static String password = "";
+    private static String username = "student";
+    private static String password = "student";
 
   
     //
