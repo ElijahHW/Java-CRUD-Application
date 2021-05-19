@@ -126,7 +126,7 @@ public class ImportFromFile implements ActionListener {
 	}
 	
 	
-	//Method to validate the data before it is inserted into the database table
+	//Method to validate the data before it is inserted into the database table. Checks for int and double
 	private boolean validateData() { 
 		boolean isValid = true;
 		String error = "";
@@ -141,7 +141,6 @@ public class ImportFromFile implements ActionListener {
 			for(int j=0;j<rows;j++) {
 					data = preview.getValueAt(j, i).toString();
 					if(data.isEmpty()) {break innerloop;} // Skip iteration if the cell is empty
-					System.out.println(data);
 					try {
 					switch(dataTypes[i]) {	
 						case "decimal":
@@ -186,7 +185,7 @@ public class ImportFromFile implements ActionListener {
 					while (myReader.hasNextLine()) {
 						dataFromFile.add(new ArrayList<String>());
 						String textFromLine = myReader.nextLine(); 
-					    String[] parts = textFromLine.split(","); //Splits the string into an array based on the delimeter
+					    String[] parts = textFromLine.split(";"); //Splits the string into an array based on the delimeter
 					    
 						for(int i = 0;i<parts.length;i++) {
 							dataFromFile.get(index).add(parts[i]);
@@ -213,14 +212,20 @@ public class ImportFromFile implements ActionListener {
 			panel.repaint();
 			}else { //Tells the user about the errors
 				JOptionPane.showMessageDialog(panel, "The expected number of columns for the " + tableComboBox.getSelectedItem() + " table is " + columnNames.length + ". Your text file is not matching this on line " + errors.toString()
-				+ "\n\n Each column value in the text file should be seperated by , and rows by a newline");
+				+ "\n\n Each column value in the text file should be seperated by ; and rows by a newline");
 			}
 		}
 		
 		if (e.getSource() == addToTable) {
 			boolean validData = validateData(); //Datatype validation
 			if(validData) {
-				int test = Integer.parseInt(preview.getValueAt(0, 0).toString());
+				for (int i = 0;i<preview.getRowCount();i++) {
+					for(int j = 0;j<preview.getColumnCount();j++) {
+						String test = preview.getValueAt(i, j).toString();
+						System.out.print(test + " ");
+					}
+					System.out.println();
+				}
 			}
 		}
 	}		
