@@ -109,7 +109,7 @@ public class addCustomerView implements ActionListener {
 		responseText.setText(respons);
 				
 		} catch (Exception e1) {
-			responseText.setText("Something went wrong" + e1);
+			responseText.setText("Something went wrong");
 		}
 	} else if (e.getSource()==resetButton) {
 		customerNumberInput.setText(null);

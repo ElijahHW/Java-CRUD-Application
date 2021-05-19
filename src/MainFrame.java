@@ -200,8 +200,8 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 		 if(e.getSource() == editItem || e.getSource() == editBtn) {
 		        this.setTitle("Management Application - Edit Tables");
-				editTables panel = new EditTables();
-				this.setContentPane(panel.getPanel());
+				//editTables panel = new EditTables();
+				//this.setContentPane(panel.getPanel());
 				this.revalidate();
 				this.repaint();
 		        this.pack();

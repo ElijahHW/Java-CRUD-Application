@@ -128,7 +128,7 @@ public class ListOrders {
 			}
 			
 			System.out.println("File Written");
-			JOptionPane.showMessageDialog(null, "File saved to your system.", "User Mangement", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "File saved to your system.", "User Mangement - Export Data", JOptionPane.INFORMATION_MESSAGE);
 			WriterBuffer.close();
 			
 		} catch (IOException e) {
