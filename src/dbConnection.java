@@ -194,7 +194,10 @@ public class dbConnection {
             return "Data inserted";
     	}catch(Exception e) {
     		System.out.println(e);
-    		return "Something went wrong"; 
+    		if(e.getClass().getSimpleName().equals("SQLIntegrityConstraintViolationException")) {
+    			return ("One of your foreign key constraints failed. Check your foreign keys!");
+    		}
+    		return e.getMessage(); 
     	}        		
    }
     

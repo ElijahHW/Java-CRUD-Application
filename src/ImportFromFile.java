@@ -164,15 +164,18 @@ public class ImportFromFile implements ActionListener {
 	
 	
 	public String callDb() {
-		String result = "fail";
+		String result = "Data inserted";
 		for (int i = 0;i<preview.getRowCount();i++) {
 					String[] row = new String[preview.getColumnCount()];
 					
 					for(int j=0;j<preview.getColumnCount();j++) {
 						row[j] = preview.getValueAt(i, j).toString();
 					};
-					
-					result = dbConnection.insertIntoTable(tableComboBox.getSelectedItem().toString(), preview.getColumnCount(), row);
+					if(result.equals("Data inserted")) { //Continue if nothing changed
+						result = dbConnection.insertIntoTable(tableComboBox.getSelectedItem().toString(), preview.getColumnCount(), row);
+					}else { //an error happened, STOP!
+						break;
+					}
 		}
 		return result;
 	}
@@ -241,8 +244,13 @@ public class ImportFromFile implements ActionListener {
 			boolean validData = validateData(); //Datatype validation
 			if(validData) {		
 					String message = callDb();
+					if(message.equals("Data inserted")) {
 					validationMessage.setText(message);
-					
+					validationMessage.setForeground(Color.green);				
+					}else {
+						validationMessage.setText("Error: " + message);
+						validationMessage.setForeground(Color.red);	
+					}
 			}
 		}
 		
