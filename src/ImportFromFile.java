@@ -28,12 +28,15 @@ public class ImportFromFile implements ActionListener {
 	public ImportFromFile() {
 		panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
+		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		panel.add(fileChooser(), gbc);
+		
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		panel.add(selectTable(), gbc);
+		
 		gbc.fill = GridBagConstraints.BOTH; // these constraints will be added to a JPanel later
 		gbc.weightx =  1;
 		gbc.weighty = 1;
@@ -63,14 +66,16 @@ public class ImportFromFile implements ActionListener {
 	}
 	
 	
-	//Method for the user to select to which table to the add data
+	//Method for the combobox, where the user can select tables
 	private JPanel selectTable() { 
 		JPanel selectTable = new JPanel();
 		JLabel dbTableLabel = new JLabel("Choose table to add data");
 		String[] tableNames = dbConnection.getTableNames();
+		
 		tableComboBox = new JComboBox<String>(tableNames);
 		tableComboBox.addActionListener(this);
 		tableComboBox.setBackground(Color.WHITE);
+		
 		selectTable.add(dbTableLabel);
 		selectTable.add(tableComboBox);
 		return selectTable;	
@@ -87,7 +92,6 @@ public class ImportFromFile implements ActionListener {
 			for(int j = 0;j< data.get(i).size();j++) {
 				tableArray [i][j] = data.get(i).get(j);
 			}		
-
 		}
 			
 		preview = new JTable(tableArray, columns);
@@ -119,7 +123,7 @@ public class ImportFromFile implements ActionListener {
 		ArrayList<Integer> lineError = new ArrayList<Integer>();
 		for(int i = 0;i<data.size();i++) {
 			if(columns.length != data.get(i).size()) {
-				lineError.add(i+1);
+				lineError.add(i+1); //Stores which line the error(s) is on
 			}
 		}
 		return lineError;
@@ -132,7 +136,7 @@ public class ImportFromFile implements ActionListener {
 		String error = "";
 		String data;
 		String table = tableComboBox.getSelectedItem().toString();
-		String[] dataTypes = dbConnection.getColumnDataType(table);
+		String[] dataTypes = dbConnection.getColumnDataType(table); //Gets the datatypes for each column in the table
 		int rows = preview.getRowCount();
 		
 		outerloop:
@@ -142,7 +146,7 @@ public class ImportFromFile implements ActionListener {
 					data = preview.getValueAt(j, i).toString();
 					if(data.isEmpty()) {break innerloop;} // Skip iteration if the cell is empty
 					try {
-					switch(dataTypes[i]) {	
+					switch(dataTypes[i]) {	//Checks for different data types
 						case "decimal":
 							Double.parseDouble(data);
 							break;
@@ -155,7 +159,7 @@ public class ImportFromFile implements ActionListener {
 					error = "Error: Expected " + dataTypes[i] + " at row " + (j+1) + " column " + (i+1);
 					validationMessage.setText(error);
 					validationMessage.setForeground(Color.red);
-					break outerloop; //Break loops after exception to display error message for user
+					break outerloop; //Break loops after exception so the error message can be displayed to the user
 				}
 			}
 		}
@@ -163,7 +167,7 @@ public class ImportFromFile implements ActionListener {
 	}
 	
 	
-	public String callDb() {
+	public String callDb() { //Method to loop through all the data and send it to the database method for insertion in dbConnection class
 		String result = "Data inserted";
 		int rowCount = 0;
 		outerloop:
@@ -173,7 +177,7 @@ public class ImportFromFile implements ActionListener {
 			for(int j=0;j<preview.getColumnCount();j++) {
 				row[j] = preview.getValueAt(i, j).toString();
 			};
-			if(result.equals("Data inserted")) { //Continue if nothing changed
+			if(result.equals("Data inserted")) { //Continue if result didnt change
 				result = dbConnection.insertIntoTable(tableComboBox.getSelectedItem().toString(), preview.getColumnCount(), row);
 			}else { //an error happened, STOP!
 				result += " Stopped on row " + String.valueOf(rowCount);
@@ -224,7 +228,7 @@ public class ImportFromFile implements ActionListener {
 					System.out.println("An error occurred.");
 					fe.printStackTrace();
 				}
-				currentFile.setText("Current file: " + file.getName());	//Shows the user the name of current open file	
+				currentFile.setText("Current file: " + file.getName());	//Shows the user the name of the current open file	
 			}
 		}	
 				
@@ -232,12 +236,12 @@ public class ImportFromFile implements ActionListener {
 		if (e.getSource() == tableComboBox && dataFromFile != null) { //Execute if user has selected table and file
 			String[] columnNames = dbConnection.getColumnNames(tableComboBox.getSelectedItem().toString());
 			
-			ArrayList<Integer> errors = checkIfDataMatches(columnNames, dataFromFile); //Checks for errors in the text file format
+			ArrayList<Integer> errors = checkIfDataMatches(columnNames, dataFromFile); //Checks for datatype errors in the text file format
 			
 			if(errors.size() <= 0) { //No errors
-			panel.add(dataPreview(columnNames, dataFromFile), gbc); // the gridbag constraints from the constructor is added here
-			panel.revalidate();
-			panel.repaint();
+				panel.add(dataPreview(columnNames, dataFromFile), gbc); // the gridbag constraints from the constructor is added here
+				panel.revalidate();
+				panel.repaint();
 			}else { //Tells the user about the errors
 				JOptionPane.showMessageDialog(panel, "The expected number of columns for the " + tableComboBox.getSelectedItem() + " table is " + columnNames.length + ". Your text file is not matching this on line " + errors.toString()
 				+ "\n\n Each column value in the text file should be seperated by ; and rows by a newline");
@@ -250,7 +254,7 @@ public class ImportFromFile implements ActionListener {
 					String message = callDb();
 					if(message.equals("Data inserted")) {
 					validationMessage.setText(message);
-					validationMessage.setForeground(Color.green);				
+					validationMessage.setForeground(Color.green); 			
 					}else {
 						validationMessage.setText("Error: " + message);
 						validationMessage.setForeground(Color.red);	

@@ -74,7 +74,7 @@ public class dbConnection {
     
     
     //
-    // Returns all column names from a table
+    // Returns all column names from a given table
     //  
     public static String[] getColumnNames(String table) { 
 		ArrayList<String> tablesList = new ArrayList<String>();
@@ -97,7 +97,7 @@ public class dbConnection {
     
     
     //
-    // Returns data type for all columns in a table
+    // Returns data type for all columns in a given table
     //
     public static String[] getColumnDataType(String table) { 
     	ArrayList<String> dataTypeList = new ArrayList<String>();
@@ -117,7 +117,12 @@ public class dbConnection {
 		String[] dataType = dataTypeList.toArray(new String[dataTypeList.size()]);
 		return dataType;
     }
-        
+    
+    
+    
+    //
+    // Inserts a new row into the customer table
+    //    
     public static String addCustomer(String customerNumber, String customerName, 
     		String contactLastName, String contactFirstName, String phone, 
     		String addressLine1, String addressLine2, String city, String state, 
@@ -163,10 +168,12 @@ public class dbConnection {
 
         
          
-    /*Dynamical method to insert data in the database
+    /*
+    Dynamical method to insert a new row into database
     table = name of table to insert into
     parameterCount = amount of parameters needed
-    input = array of all values that is to be inserted*/
+    input = array of all values that is to be inserted
+    */
     
     public static String insertIntoTable(String table, int parameterCount, String[] input) {
     	String parameters = "";
@@ -203,10 +210,12 @@ public class dbConnection {
     
     
     
-    /*Dynamical method to update data in the database
+    /*
+    Dynamical method to update a row in the database
     table = name of table to insert into
     input = array of all values that is to be inserted
-    columns = array of column names*/
+    columns = array of column names
+    */
     
     
     public static String updateTable(String table, String[] input, String[] columns) {

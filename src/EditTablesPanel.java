@@ -35,6 +35,8 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		gbc.gridy = 1;
 	}
 	
+	
+	//Method for the combobox 
 	private JPanel comboBox() {
 		JPanel comboBoxPanel = new JPanel();
 		JLabel comboBoxLabel = new JLabel("Choose table to edit");
@@ -49,6 +51,8 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		return comboBoxPanel;
 	}
 	
+	
+	//Method for the JTable
 	private JPanel displayTable() {
 		displayTable = new JPanel();
 		List<List<String>> dataList = dbConnection.getTable(selectTable.getSelectedItem().toString());
@@ -73,6 +77,7 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 	}
 	
 	
+	//Method for the submit button and jlabel to display validation messages
 	private JPanel submitTable() {
 		JPanel submitButton = new JPanel();
 		submitButton.setLayout(new BoxLayout(submitButton, BoxLayout.PAGE_AXIS));
@@ -88,6 +93,8 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		return submitButton;
 	}
 	
+	
+	//Gets the data from a row that has been changed
 	private String[] getDataFromTable(int index) {
 		String[] data = new String[table.getColumnCount()];
 		for(int i = 0;i<table.getColumnCount();i++) {
@@ -102,18 +109,19 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 	}
 	
 	
-	
 	public JPanel getPanel() {
 		return panel;
 	}
 
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		if (e.getSource() == selectTable) {
+		if (e.getSource() == selectTable) { //User has selected a table in the combobox
 			if(displayTable != null) {
 				panel.remove(displayTable);
 			}
+			
 			panel.add(displayTable(), gbc);
 			panel.revalidate();
 			panel.repaint();
@@ -121,6 +129,7 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		
 		if (e.getSource() == submit) {
 			String message = "";
+			
 			for(int i = 0;i<row.size();i++) {
 				int index = row.get(i);
 				String[] data = getDataFromTable(index);
@@ -130,6 +139,7 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		}
 		
 	}
+¨
 
 	@Override
 	public void tableChanged(TableModelEvent e) {
