@@ -3,20 +3,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.List;
-import java.util.regex.PatternSyntaxException;
 
 import javax.swing.*;
 
 public class addCustomerView implements ActionListener {
 	
 	private JTextField customerNumberInput, customerNameInput, contactLastNameInput, contactFirstNameInput, phoneInput, addressLine1Input,
-						addressLine2Input, cityInput, stateInput, postalCodeInput, countryInput, salesRepEmployeeNumberInput, creditLimitInput;
+						addressLine2Input, cityInput, stateInput, postalCodeInput, countryInput, creditLimitInput;
 	
     private JComboBox<Integer> salesRepNumberList;
     
@@ -114,12 +108,13 @@ public class addCustomerView implements ActionListener {
 							stateInput.getText(), 
 							postalCodeInput.getText(), 
 							countryInput.getText(),
-							salesRepEmployeeNumberInput.getSelectedText(),
+							salesRepNumberList.getSelectedItem().toString(),
 							creditLimitInput.getText());
 					
 					responseText.setText(respons);
 							
 				} catch (Exception e1) {
+					System.out.println(e1);
 					responseText.setText("Something went wrong");
 				}
 			} else {
@@ -340,6 +335,7 @@ public class addCustomerView implements ActionListener {
 		JPanel pane = new JPanel();
 		JLabel label = new JLabel("Credit limit");
 		creditLimitInput = new JTextField(20);
+		//creditLimitInput.addKeyListener(null);
 		pane.add(label); 
 		pane.add(creditLimitInput); 
 		
