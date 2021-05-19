@@ -60,11 +60,9 @@ public class addCustomerView implements ActionListener {
 	
 	public addCustomerView() {
 		
-<<<<<<< Updated upstream
-	 panel = new JPanel();
+		panel = new JPanel();
 		
 		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
-=======
 		frame = new JFrame ("Add customer");
 		panel = new JPanel();
 				
@@ -79,7 +77,6 @@ public class addCustomerView implements ActionListener {
 		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
 		panel.setLayout(null);
 		
->>>>>>> Stashed changes
 		
 		customerNumberLabel = new JLabel("Customer number");
 		customerNumberLabel.setBounds(10, 20, 120, 25);
@@ -241,10 +238,7 @@ public class addCustomerView implements ActionListener {
 	}
 	
 
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -284,12 +278,9 @@ public class addCustomerView implements ActionListener {
 		
 
 		
-<<<<<<< Updated upstream
 	}
 	public JPanel getPanel() {
 		return panel;
 	}
-=======
 }
->>>>>>> Stashed changes
-}
+

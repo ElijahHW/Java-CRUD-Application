@@ -95,7 +95,6 @@ public class dbConnection {
 		return tables;
 	}
     
-<<<<<<< Updated upstream
     
     //
     // Returns data type for all columns in a table
@@ -118,16 +117,13 @@ public class dbConnection {
 		String[] dataType = dataTypeList.toArray(new String[dataTypeList.size()]);
 		return dataType;
     }
-    
-    public static void addCustomer(int customerNumber, String customerName, String contactLastName, String contactFirstName, String phone, String addressLine1, String addressLine2, String city, String state, String postalCode, String country, int salesRepEmployeeNumber, double creditLimit) throws Exception {
-=======
-    public static String addCustomer(String customerNumber, String customerName, 
+        
+    	public static String addCustomer(String customerNumber, String customerName, 
     		String contactLastName, String contactFirstName, String phone, 
     		String addressLine1, String addressLine2, String city, String state, 
     		String postalCode, String country, String salesRepEmployeeNumber, 
     		String creditLimit) throws Exception {
     	
->>>>>>> Stashed changes
         try {
         	
             Connection con = DriverManager.getConnection(connection, username, password);
@@ -152,6 +148,7 @@ public class dbConnection {
         	
             return "Something went wrong.";
         }
+  
     }
     
     
