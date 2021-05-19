@@ -35,7 +35,6 @@ public class addCustomerView implements ActionListener {
 		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
 
 		responseText = new JLabel("");
-		//responseText.setBounds(25, 450, 200, 25);
 		
 		gbc.fill = GridBagConstraints.BOTH; 
 		gbc.weightx = 55;
@@ -118,10 +117,13 @@ public class addCustomerView implements ActionListener {
 		//The add customer button is pressed
 		if(e.getSource()==addToDbButton) {
 			
+			//Makes sure that the usernumber does not exist already
 			if (UniqueName) {
 				
+				//makes sure that the credit input is valid
 				if (ValidCredit) {
 					
+					//tries to insert the values added to the database
 					try {
 						String respons = dbConnection.addCustomer(
 								customerNumberInput.getText(), 
@@ -154,28 +156,30 @@ public class addCustomerView implements ActionListener {
 				responseText.setText("Customer number not valid");
 			}
 		
-	//The Resetbutton is pressed
-	} else if (e.getSource()==resetButton) {
-		customerNumberInput.setText(null);
-		customerNameInput.setText(null);
-		contactLastNameInput.setText(null);
-		contactFirstNameInput.setText(null);
-		phoneInput.setText(null);
-		addressLine1Input.setText(null);
-		addressLine2Input.setText(null);
-		cityInput.setText(null);
-		stateInput.setText(null);
-		postalCodeInput.setText(null);
-		countryInput.setText(null);
-		creditLimitInput.setText(null);
-		
-		responseText.setText("All fields reset.");
-	} else if (e.getSource()==customerNumberInput) {
-		
-		
-	}
+		//The Resetbutton is pressed
+		} else if (e.getSource()==resetButton) {
+			customerNumberInput.setText(null);
+			customerNameInput.setText(null);
+			contactLastNameInput.setText(null);
+			contactFirstNameInput.setText(null);
+			phoneInput.setText(null);
+			addressLine1Input.setText(null);
+			addressLine2Input.setText(null);
+			cityInput.setText(null);
+			stateInput.setText(null);
+			postalCodeInput.setText(null);
+			countryInput.setText(null);
+			creditLimitInput.setText(null);
 			
-}
+			responseText.setText("All fields reset.");
+		} else if (e.getSource()==customerNumberInput) {
+			
+			
+		}
+			
+	}
+	
+	//A simple function to populate the listbox with valid sales personell
 	private void updateCombobox()
 	{
 			List<List<String>> list = dbConnection.getTable("employees");
@@ -195,6 +199,7 @@ public class addCustomerView implements ActionListener {
 		customerNumberInput = new JTextField(20);
 		customerNumberInput.addKeyListener(new KeyAdapter() {
 			
+			//If a key is pressed in the customer number input
 			public void keyReleased(KeyEvent e) {
 				
 				JTextField textField = (JTextField) e.getSource();
@@ -215,6 +220,7 @@ public class addCustomerView implements ActionListener {
                 		textField.setText(SearchString.replaceAll("[^\\d]", ""));
                 	}
                 	
+                	//checks if the number entered is unique. A rather reseource heavy task sadly
                 	List<List<String>> list = dbConnection.getTable("customers");
                 	for (List<String> row : list) {
                 		
@@ -262,6 +268,7 @@ public class addCustomerView implements ActionListener {
 		return pane;
 	}
 	
+	//A bunch of functions creating JPanels containing the label/input pairs
 	private JPanel panelFirstName() {
 		
 		JPanel pane = new JPanel();
