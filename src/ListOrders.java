@@ -2,7 +2,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -45,7 +44,7 @@ public class ListOrders {
 		c.gridheight = 100;
 		c.weightx = 0;
 		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		panel.add(SorterChoicePanel(), c);
 		
 		c.gridx = 0;
@@ -138,6 +137,7 @@ public class ListOrders {
 		}
 	}
 	
+	//Creates the center panel
 	JScrollPane ScrollPanel() {
 		
 		//Provides the Column names for the main table
@@ -174,6 +174,7 @@ public class ListOrders {
 		return ScrollPanel;
 	}
 	
+	//Creates the right panel with the choice of column to sort by
 	JPanel SorterChoicePanel() {
 		
 		JLabel FilterButtonLabel = new JLabel("Filter by: ");
@@ -249,6 +250,7 @@ public class ListOrders {
 		return panel;
 	}
 	
+	//Generates the top panel
 	JPanel FilterSearchPanel() {
 		
 		JPanel panel = new JPanel();
@@ -265,6 +267,7 @@ public class ListOrders {
 		return panel;
 	}
 	
+	//Return the main panel
 	public JPanel GetPanel() {
 		
 		return panel;
