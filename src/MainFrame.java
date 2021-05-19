@@ -143,7 +143,7 @@ public class MainFrame extends JFrame implements ActionListener {
         this.setJMenuBar(menuBar);
         this.add(panel);
         this.setVisible(true);
-        this.setTitle("Management Application");
+        this.setTitle("Management Application - Home");
         //this.pack();
         }
 	
@@ -151,18 +151,20 @@ public class MainFrame extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == homeBtn) {
-			MainFrame panel = new MainFrame();
+			new MainFrame();
 			this.dispose();
-			/// TODO: FIX THIS SHIT
 		}
 		if(e.getSource() == addItem || e.getSource() == addBtn) {
+	        this.setTitle("Management Application - Add Customer");
 			addCustomerView panel = new addCustomerView();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
 			this.pack();
+			
 		} 
 		if(e.getSource() == listItem || e.getSource() == listBtn) {
+	        this.setTitle("Management Application - List Orders");
 			ListOrders panel = new ListOrders();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
@@ -170,12 +172,14 @@ public class MainFrame extends JFrame implements ActionListener {
 		} 
 		
 		 if(e.getSource() == retrieveItem || e.getSource() == retrieveBtn) {
+	        this.setTitle("Management Application - Retrieve Employees");
 			getEmployees panel = new getEmployees();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
 		}
 		if(e.getSource() == importItem || e.getSource() == importBtn) {
+	        this.setTitle("Management Application - Import from File");
 			ImportFromFile panel = new ImportFromFile();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
