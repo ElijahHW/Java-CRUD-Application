@@ -117,11 +117,11 @@ public class ListOrders {
 					
 					if (table.getValueAt(i, r) != null && !table.getValueAt(i, r).equals("")) {
 						
-						WriterBuffer.write(table.getValueAt(i, r).toString() + ",");
+						WriterBuffer.write(table.getValueAt(i, r).toString() + ";");
 					} else {
 						
 						//in case of a null or empty value
-						WriterBuffer.write(",");
+						WriterBuffer.write(";");
 					}
 				}
 				
