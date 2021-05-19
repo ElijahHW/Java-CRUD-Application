@@ -28,7 +28,7 @@ public class MainFrame extends JFrame implements ActionListener {
     MainFrame() {
 		// Defining application size, layout and close operation.
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(800, 500);
+		this.setSize(800, 550);
 		this.setLayout(new FlowLayout());
 		this.setLocationRelativeTo(null);
 		
@@ -160,7 +160,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
-			
+			this.pack();
 		} 
 		if(e.getSource() == listItem || e.getSource() == listBtn) {
 			ListOrders panel = new ListOrders();
