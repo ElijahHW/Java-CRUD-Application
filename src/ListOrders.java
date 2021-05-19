@@ -197,6 +197,9 @@ public class ListOrders {
 		
 		JButton ExportButton = new JButton("Export to File");
 		ExportButton.setBackground(Color.WHITE);
+		Icon iconD = UIManager.getIcon("FileView.floppyDriveIcon");
+		ExportButton.setIcon(iconD);
+		
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(9, 1));
 		

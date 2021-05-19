@@ -349,7 +349,8 @@ public class addCustomerView implements ActionListener {
 		addToDbButton = new JButton("Add customer to DB");
 		addToDbButton.addActionListener(this);
 		addToDbButton.setBackground(Color.WHITE);
-	
+		Icon iconD = UIManager.getIcon("FileView.hardDriveIcon");
+		addToDbButton.setIcon(iconD);
 		resetButton = new JButton("Reset");
 		resetButton.setBounds(200, 420, 80, 25);
 		resetButton.addActionListener(this);

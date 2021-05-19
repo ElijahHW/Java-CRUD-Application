@@ -49,6 +49,8 @@ public class ImportFromFile implements ActionListener {
 		
 		JPanel fileChooser = new JPanel();
 		openFile = new JButton("Find a file");
+		Icon iconD = UIManager.getIcon("FileChooser.upFolderIcon");
+		openFile.setIcon(iconD);
 		openFile.addActionListener(this);
 		openFile.setBackground(Color.WHITE);
 		
@@ -64,13 +66,11 @@ public class ImportFromFile implements ActionListener {
 	//Method for the user to select to which table to the add data
 	private JPanel selectTable() { 
 		JPanel selectTable = new JPanel();
-		
 		JLabel dbTableLabel = new JLabel("Choose table to add data");
 		String[] tableNames = dbConnection.getTableNames();
 		tableComboBox = new JComboBox<String>(tableNames);
 		tableComboBox.addActionListener(this);
 		tableComboBox.setBackground(Color.WHITE);
-		
 		selectTable.add(dbTableLabel);
 		selectTable.add(tableComboBox);
 		return selectTable;	

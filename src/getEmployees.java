@@ -120,7 +120,6 @@ public class getEmployees {
 		JPanel FilterSearchPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout());
-		ImageIcon icon = new ImageIcon();
 		SearchField = new JTextField();
 		SearchField.setPreferredSize(new Dimension(300, 30));
 		SearchField.setBackground(Color.WHITE);
@@ -130,8 +129,8 @@ public class getEmployees {
 		
 		ExportButton = new JButton("Export to File");
 		ExportButton.setBackground(Color.WHITE);
-		icon = new ImageIcon("src/assets/download.png");	
-		ExportButton.setIcon(Main.getScaledImage(icon));
+		Icon iconD = UIManager.getIcon("FileView.floppyDriveIcon");
+		ExportButton.setIcon(iconD);
 
 		PathChooser = new JFileChooser();
 		PathChooser.setDialogTitle("Export to...");
