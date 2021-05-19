@@ -205,7 +205,6 @@ public class addCustomerView implements ActionListener {
                 		
                 		responseText.setText("Customer Number already exists");
                 	}
-                	System.out.println("" + UniqueName);
                 }
 			}
 		});
