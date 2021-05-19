@@ -163,6 +163,25 @@ public class ImportFromFile implements ActionListener {
 	}
 	
 	
+	public String callDb() {
+		String result = "fail";
+		System.out.println(tableComboBox.getSelectedItem().toString());
+		for (int i = 0;i<preview.getRowCount();i++) {
+			switch(tableComboBox.getSelectedItem().toString()) {
+				case "customers":
+				
+					result = dbConnection.addCustomer(preview.getValueAt(i, 0).toString(), preview.getValueAt(i, 1).toString(), preview.getValueAt(i, 2).toString(), preview.getValueAt(i, 3).toString(),
+							preview.getValueAt(i, 4).toString(), preview.getValueAt(i, 5).toString(), preview.getValueAt(i, 6).toString(), preview.getValueAt(i, 7).toString(), preview.getValueAt(i, 8).toString(),
+							preview.getValueAt(i, 9).toString(), preview.getValueAt(i, 10).toString(), preview.getValueAt(i, 11).toString(), preview.getValueAt(i, 12).toString());
+					System.out.println(result);
+					break;
+			}
+		}
+		System.out.println();
+		return result;
+	}
+	
+	
 	public JPanel getPanel() {
 		return panel;
 	}
@@ -200,6 +219,7 @@ public class ImportFromFile implements ActionListener {
 				currentFile.setText("Current file: " + file.getName());	//Shows the user the name of current open file	
 			}
 		}	
+				
 		
 		if (e.getSource() == tableComboBox && dataFromFile != null) { //Execute if user has selected table and file
 			String[] columnNames = dbConnection.getColumnNames(tableComboBox.getSelectedItem().toString());
@@ -218,16 +238,11 @@ public class ImportFromFile implements ActionListener {
 		
 		if (e.getSource() == addToTable) {
 			boolean validData = validateData(); //Datatype validation
-			if(validData) {
-				for (int i = 0;i<preview.getRowCount();i++) {
-					for(int j = 0;j<preview.getColumnCount();j++) {
-						String test = preview.getValueAt(i, j).toString();
-						System.out.print(test + " ");
-					}
-					System.out.println();
-				}
+			if(validData) {		
+					callDb();
 			}
 		}
+		
 	}		
 }
 

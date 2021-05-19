@@ -122,23 +122,34 @@ public class dbConnection {
     		String contactLastName, String contactFirstName, String phone, 
     		String addressLine1, String addressLine2, String city, String state, 
     		String postalCode, String country, String salesRepEmployeeNumber, 
-    		String creditLimit) throws Exception {
+    		String creditLimit){
     	
         try {
         	
             Connection con = DriverManager.getConnection(connection, username, password);
-            
-            PreparedStatement sql = con.prepareStatement("INSERT INTO customers "
+            String query = "INSERT INTO customers "
             		+ "(customerNumber, customerName, contactLastName, contactFirstName, "
             		+ "phone, addressLine1, addressLine2, city, state, postalCode, country, "
             		+ "salesRepEmployeeNumber, creditLimit) "
-            		+ "VALUES ("+customerNumber+", '"+customerName+"', '"+contactLastName+"', "
-            		+ "'"+contactFirstName+"', '"+phone+"', '"+addressLine1+"', "
-            		+ "'"+addressLine2+"', '"+city+"', '"+state+"', "
-            		+ "'"+postalCode+"', '"+country+"', "+salesRepEmployeeNumber+", "
-            				+ ""+creditLimit+")");
+            		+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            PreparedStatement sql = con.prepareStatement(query);
+            
+            sql.setString((1), customerNumber);
+            sql.setString((2), customerName);
+            sql.setString((3), contactLastName);
+            sql.setString((4), contactFirstName);
+            sql.setString((5), phone);
+            sql.setString((6), addressLine1);
+            sql.setString((7), addressLine2);
+            sql.setString((8), city);
+            sql.setString((9), state);
+            sql.setString((10), postalCode);
+            sql.setString((11), country);
+            sql.setString((12), salesRepEmployeeNumber);
+            sql.setString((13), creditLimit);
             
             sql.executeUpdate();
+            con.close();
             
             return "Customer was added to DB!";
             
