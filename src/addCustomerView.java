@@ -1,12 +1,15 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.*;
 
@@ -23,6 +26,8 @@ public class addCustomerView implements ActionListener {
 	private JButton addToDbButton;
 	private JButton resetButton;
 	private GridBagConstraints gbc = new GridBagConstraints();
+	
+	private boolean UniqueName = false;
 	
 	public addCustomerView() {
 		panel = new JPanel();
@@ -87,30 +92,42 @@ public class addCustomerView implements ActionListener {
 	}
 
 	
+	//Action listeners
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==addToDbButton) {
-		try {
-		String respons = dbConnection.addCustomer(
-				customerNumberInput.getText(), 
-				customerNameInput.getText(),
-				contactLastNameInput.getText(), 
-				contactFirstNameInput.getText(), 
-				phoneInput.getText(), 
-				addressLine1Input.getText(), 
-				addressLine2Input.getText(), 
-				cityInput.getText(), 
-				stateInput.getText(), 
-				postalCodeInput.getText(), 
-				countryInput.getText(),
-				salesRepEmployeeNumberInput.getSelectedText(),
-				creditLimitInput.getText());
 		
-		responseText.setText(respons);
+		//The add customer button is pressed
+		if(e.getSource()==addToDbButton) {
+			
+			if (UniqueName) {
 				
-		} catch (Exception e1) {
-			responseText.setText("Something went wrong" + e1);
-		}
+				try {
+					String respons = dbConnection.addCustomer(
+							customerNumberInput.getText(), 
+							customerNameInput.getText(),
+							contactLastNameInput.getText(), 
+							contactFirstNameInput.getText(), 
+							phoneInput.getText(), 
+							addressLine1Input.getText(), 
+							addressLine2Input.getText(), 
+							cityInput.getText(), 
+							stateInput.getText(), 
+							postalCodeInput.getText(), 
+							countryInput.getText(),
+							salesRepEmployeeNumberInput.getSelectedText(),
+							creditLimitInput.getText());
+					
+					responseText.setText(respons);
+							
+				} catch (Exception e1) {
+					responseText.setText("Something went wrong");
+				}
+			} else {
+				
+				responseText.setText("Customer number not valid");
+			}
+		
+	//The Resetbutton is pressed
 	} else if (e.getSource()==resetButton) {
 		customerNumberInput.setText(null);
 		customerNameInput.setText(null);
@@ -126,6 +143,9 @@ public class addCustomerView implements ActionListener {
 		creditLimitInput.setText(null);
 		
 		responseText.setText("All fields reset.");
+	} else if (e.getSource()==customerNumberInput) {
+		
+		
 	}
 			
 }
@@ -145,6 +165,50 @@ public class addCustomerView implements ActionListener {
 		JPanel pane = new JPanel();
 		JLabel label = new JLabel("Customer number");
 		customerNumberInput = new JTextField(20);
+		customerNumberInput.addKeyListener(new KeyAdapter() {
+			
+			public void keyReleased(KeyEvent e) {
+				
+				JTextField textField = (JTextField) e.getSource();
+                String SearchString = textField.getText();
+                
+                //Checks the length of the input string
+                if (SearchString.length() == 0) {
+                	
+                	UniqueName = false;
+                } else {
+                	
+                	//tries to parse the input to see if it contains non integers
+                	try {
+                		Integer.parseInt(SearchString);
+                	} catch (NumberFormatException nfe) {
+                		
+                		//if the input contains non integers, removes non-integers
+                		textField.setText(SearchString.replaceAll("[^\\d]", ""));
+                	}
+                	
+                	boolean numberExists = false;
+                	List<List<String>> list = dbConnection.getTable("customers");
+                	for (List<String> row : list) {
+                		
+                		if (row.get(0).equals(SearchString)) {
+                			
+                			UniqueName = false;
+                			break;
+                		} else {
+                			
+                			UniqueName = true;
+                		}
+                	}
+                	
+                	if (!UniqueName) {
+                		
+                		responseText.setText("Customer Number already exists");
+                	}
+                	System.out.println("" + UniqueName);
+                }
+			}
+		});
 		pane.add(label);
 		pane.add(customerNumberInput);
 		
