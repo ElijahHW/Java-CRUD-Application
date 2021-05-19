@@ -112,7 +112,7 @@ public class MainFrame extends JFrame implements ActionListener {
         ///
         //Start of panel / Main Part of Program
         ///
-        GridLayout layout = new GridLayout(5, 1);//create grid layout frame
+        GridLayout layout = new GridLayout(6, 1);//create grid layout frame
         layout.setHgap(10);
         layout.setVgap(10);
         panel.setLayout(layout);
