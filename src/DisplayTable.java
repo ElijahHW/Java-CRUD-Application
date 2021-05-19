@@ -13,20 +13,21 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.PatternSyntaxException;
 
-public class ListOrders {
+public class DisplayTable {
 	
 	String SearchString = "";
 	JPanel panel;
 	JTable DataTable;
 	TableRowSorter<TableModel> sorter;
 	JTextField SearchField;
+	JComboBox<String> TableList, SearchFilterColumns;
+	TableModel model;
+	String[] columns = {""};
 	
-	public ListOrders() {
+	public DisplayTable() {
 		
 		panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
@@ -60,36 +61,16 @@ public class ListOrders {
 	
 	
 	//A function to convert the list list from the database into a 2d object array with date value types in the correct places
-	Object[][] GetOrders() {
+	String[][] GetRows(String table, String[] columns) {
 		
-		List<List<String>> ListTable = dbConnection.getTable("orders");
-		Object[][] data = new Object[ListTable.size()][7];
+		List<List<String>> ListTable = dbConnection.getTable(table);
+		String[][] data = new String[ListTable.size()][columns.length];
 		
 		for (int i = 0; i < ListTable.size(); i++) {
 			
-			Object[] row = new Object[ListTable.get(i).size()];
+			String[] row = new String[ListTable.get(i).size()];
 			
 			for (int r = 0; r < row.length; r++) {
-				
-				if (r >= 1 && r <= 3) {
-					
-					if (ListTable.get(i).get(r) != null && !ListTable.get(i).get(r).equals("")) {
-						
-						//if the column is between 1 and 3, the value should be a date
-						Date date;
-						try {
-							
-							date = new SimpleDateFormat("yyyy-MM-dd").parse(ListTable.get(i).get(r));
-						} catch (ParseException e) {
-							
-							System.out.println("couldn't convert date at GetOrder()");
-							System.out.println(e);
-							
-							date = null;
-						}
-						row[r] = date;
-					}
-				}
 				
 				row[r] = ListTable.get(i).get(r);
 			}
@@ -141,28 +122,8 @@ public class ListOrders {
 	//Creates the center panel
 	JScrollPane ScrollPanel() {
 		
-		//Provides the Column names for the main table
-		Object columns[] = { "Order Number", 
-				"Order Date", 
-				"Required Date", 
-				"Shipped Date", 
-				"Status", 
-				"Comments", 
-				"Customer Number" };
-		//sets a 2d object array to a 2d array generated from the database
-		Object rows[][] = GetOrders();
-		
-		//Creates a model for the table. The potential warning should disappear during compilation as far as I could understand
-		TableModel model = new DefaultTableModel(rows, columns) {
-			
-			//an override needed to stop the table from being editable
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				
-				return false;
-			}
-		};
-		DataTable = new JTable(model);
+		DataTable = new JTable();
+		UpdateTable("customers");
 		DataTable.setAutoCreateRowSorter(true);
 		DataTable.getTableHeader().setReorderingAllowed(false);
 		
@@ -181,16 +142,9 @@ public class ListOrders {
 	JPanel SorterChoicePanel() {
 		
 		JLabel FilterButtonLabel = new JLabel("Filter by: ");
-		
-		String[] SearchArray = {"Order Number", 
-				"Order Date", 
-				"Required Date", 
-				"Shipped Date", 
-				"Status", 
-				"Comments", 
-				"Customer Number"};
-		
-		JComboBox<String> SearchFilterColumns = new JComboBox<String>(SearchArray);
+				
+		SearchFilterColumns = new JComboBox<String>();
+		SearchFilterColumns.setModel(new DefaultComboBoxModel<String>(dbConnection.getColumnNames("customers")));
 		SearchFilterColumns.setPreferredSize(new Dimension(100, 50));
 		SearchFilterColumns.setMaximumSize(new Dimension(200, 50));
 		SearchFilterColumns.setBackground(Color.WHITE);
@@ -226,7 +180,7 @@ public class ListOrders {
 				
 				if (ReturnValue == JFileChooser.APPROVE_OPTION) {
 					
-					ExportTable(DataTable, PathChooser.getSelectedFile().getAbsolutePath() + "//OrderTable.txt");
+					ExportTable(DataTable, PathChooser.getSelectedFile().getAbsolutePath() + "//" + TableList.getSelectedItem().toString() + ".txt");
 				}
 			}
 		});
@@ -260,6 +214,22 @@ public class ListOrders {
 		return panel;
 	}
 	
+	//a function to update the sorter when the displayed table changes
+	void UpdateSorter() {
+		
+		sorter = new TableRowSorter<TableModel>(model);
+		
+		sorter.setComparator(0, new Comparator<Object>() {
+			
+			@Override
+			public int compare(Object o1, Object o2) {
+				
+				return 0;
+			}
+		});
+		DataTable.setRowSorter(sorter);
+	}
+	
 	//Generates the top panel
 	JPanel FilterSearchPanel() {
 		
@@ -271,11 +241,56 @@ public class ListOrders {
 		SearchField.setBackground(Color.WHITE);
 
 		JLabel FilterLabel = new JLabel("Search: ");
-
+		
+		String[] TableArray = {"customers", 
+				"employees",
+				"offices",
+				"orderdetails",
+				"orders",
+				"payments",
+				"productlines",
+				"products"};
+		TableList = new JComboBox<String>(TableArray);
+		TableList.addActionListener(new ActionListener () {
+			
+			public void actionPerformed(ActionEvent e) {
+				
+				UpdateTable(TableList.getSelectedItem().toString());
+			}
+		});
+		
+		panel.add(TableList);
 		panel.add(FilterLabel);
 		panel.add(SearchField);
 		
 		return panel;
+	}
+	
+	//function to update the table based on a table name
+	void UpdateTable(String tableName) {
+		
+		columns = dbConnection.getColumnNames(tableName);
+		String[][] rows = GetRows(tableName, columns);
+		
+		model = new DefaultTableModel(rows, columns) {
+			
+			//an override needed to stop the table from being editable
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				
+				return false;
+			}
+		};;
+		DataTable.setModel(model);
+		SearchField.setText(null);
+		UpdateFilterBox();
+	}
+	
+	//Function to Update the filterbox
+	void UpdateFilterBox() {
+		
+		SearchFilterColumns.setModel(new DefaultComboBoxModel<String>(columns));
+		UpdateSorter();
 	}
 	
 	//Return the main panel

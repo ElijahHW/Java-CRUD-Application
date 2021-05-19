@@ -22,6 +22,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	  //Extra Elements for Body
 	    DateTimeFormatter date = DateTimeFormatter.ofPattern("MM/dd : HH:mm");  
 	    LocalDateTime now = LocalDateTime.now();  
+	    private ImageIcon icon;
 	
 	    
     MainFrame() {
@@ -181,7 +182,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		} 
 		if(e.getSource() == listItem || e.getSource() == listBtn) {
 	        this.setTitle("Management Application - List Orders");
-			ListOrders panel = new ListOrders();
+			DisplayTable panel = new DisplayTable();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
@@ -234,6 +235,7 @@ public class MainFrame extends JFrame implements ActionListener {
              
          }
 		}
+	
 	public JPanel getPanel() {
 		return panel;
 	}
