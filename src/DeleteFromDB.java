@@ -10,7 +10,10 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.*;
+import java.util.regex.PatternSyntaxException;
 
 public class DeleteFromDB {
 	
@@ -23,7 +26,7 @@ public class DeleteFromDB {
 	private String[] columns = {""};
 	private Object[][] Rows;
 	private JButton deleteButton;
-	private String table;
+	private String table, SearchString = "";
 	private JLabel ResponseText;
 	
 	public DeleteFromDB() {
@@ -128,6 +131,8 @@ public class DeleteFromDB {
 						String response = DBConnection.delete(table, (String)columns[1], (String)DataTable.getValueAt(i, 1));
 						
 						ResponseText.setText(response);
+						
+						UpdateTable();
 					}
 				}
 			}
@@ -179,6 +184,30 @@ public class DeleteFromDB {
 			}
 		});
 		
+		//a rather lengthy listener to add a onKeyUp function to the searchBar
+		SearchField.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                JTextField textField = (JTextField) e.getSource();
+                SearchString = textField.getText();
+                
+                //Checks what is selected
+                if (SearchString.length() == 0) {
+                	
+                	sorter.setRowFilter(null);
+                } else {
+                	
+                	try {
+                		
+                		sorter.setRowFilter(RowFilter.regexFilter("(?i)" + SearchString, 1));
+                	} catch (PatternSyntaxException pse) {
+                		
+                		System.out.println("Failed to search");
+                		System.out.println(pse);
+                	}
+                }
+            }
+        });
+		
 		panel.add(searchLabel);
 		panel.add(SearchField);
 		panel.add(TableList);
@@ -204,6 +233,8 @@ public class DeleteFromDB {
 		
 		DataTable.setModel(model);
 		SearchField.setText(null);
+		
+		UpdateSorter();
 
 	}
 	class model extends AbstractTableModel {
@@ -256,7 +287,7 @@ public class DeleteFromDB {
         }
 
     }
-		
+
 	
 	//Return the main panel
 	public JPanel getPanel() {
