@@ -26,7 +26,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	    LocalDateTime now = LocalDateTime.now();  
 	    
 	  //Previous panel
-	    JPanel PreviousPanel;
+	    JPanel PreviousPanel, StartPanel;
 	    
     MainFrame() {
 		// Defining application size, layout and close operation.
@@ -219,6 +219,8 @@ public class MainFrame extends JFrame implements ActionListener {
         this.setPreferredSize(new Dimension(800,550));
         this.pack();
 		this.setLocationRelativeTo(null);
+		
+		StartPanel = (JPanel)this.getContentPane();
 
         }
 
@@ -228,11 +230,11 @@ public class MainFrame extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == homeBtn) {
 			PreviousPanel = (JPanel)this.getContentPane();
-			this.getContentPane().removeAll();
-            this.add(panel);
+			this.setContentPane(StartPanel);
             this.repaint();
 			this.revalidate();
 			this.pack();
+			//Backbutton won't work on home as everything is reset
 			backBtn.setVisible(true);
 		}
 		if(e.getSource() == addItem || e.getSource() == addBtn) {
