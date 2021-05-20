@@ -227,13 +227,13 @@ public class DisplayTable {
 	JPanel FilterSearchPanel() {
 		
 		JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout());
+		panel.setLayout(new GridBagLayout());
 		
 		SearchField = new JTextField();
-		SearchField.setPreferredSize(new Dimension(300, 30));
+		SearchField.setPreferredSize(new Dimension(200, 20));
 		SearchField.setBackground(Color.WHITE);
 
-		JLabel FilterLabel = new JLabel("Search: ");
+		JLabel FilterLabel = new JLabel("Search: ", SwingConstants.RIGHT);
 		
 		String[] TableArray = {"customers", 
 				"employees",
@@ -244,6 +244,7 @@ public class DisplayTable {
 				"productlines",
 				"products"};
 		TableList = new JComboBox<String>(TableArray);
+		TableList.setPreferredSize(new Dimension(300, 20));
 		TableList.addActionListener(new ActionListener () {
 			
 			public void actionPerformed(ActionEvent e) {
@@ -252,9 +253,23 @@ public class DisplayTable {
 			}
 		});
 		
-		panel.add(TableList);
-		panel.add(FilterLabel);
-		panel.add(SearchField);
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1.0;
+		
+		c.gridx = 2;
+		c.gridy = 0;
+		c.gridwidth = 8;
+		panel.add(TableList, c);
+		
+		c.gridx = 2;
+		c.gridy = 1;
+		panel.add(SearchField, c);
+		
+		c.gridx = 1;
+		c.gridy = 1;
+		c.gridwidth = 1;
+		panel.add(FilterLabel, c);
 		
 		return panel;
 	}
