@@ -151,7 +151,6 @@ public class DisplayTable {
 		ExportButton.setIcon(iconD);
 		
 		JPanel panel = new JPanel();
-		
 		panel.add(ExportButton);
 		
 		

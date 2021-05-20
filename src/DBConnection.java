@@ -5,7 +5,7 @@ import java.util.List;
 public class DBConnection {
 	private static Statement statement;
     private static Connection conn;
-    private ResultSet rs;
+    private static ResultSet rs;
     private String iq;
     private static String connection= "jdbc:mysql://localhost:3306/classicmodels";
     private static String username = "root";
@@ -248,7 +248,26 @@ public class DBConnection {
     		return e.getMessage().toString(); 
     	}        		
    }
-    
+    public Boolean delete(String id)
+    {
+        //SQL STMT
+        String sql="DELETE FROM customer WHERE customerNumber ='"+id+"'";
+        try
+        {
+            //GET COONECTION
+            Connection con=DriverManager.getConnection(connection, username, password);
+            //STATEMENT
+            Statement s=con.prepareStatement(sql);
+            //EXECUTE
+            s.execute(sql);
+            return true;
+
+        }catch(Exception ex)
+        {
+            ex.printStackTrace();
+            return false;
+        }
+    }
         
     
 }

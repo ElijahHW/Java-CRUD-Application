@@ -24,8 +24,8 @@ public class DeleteFromDB {
 	private JComboBox<String> TableList;
 	private TableModel model;
 	private String[] columns = {""};
-	private JButton deleteButton;
-	private JCheckBox checkBox = null;
+	private JButton deleteBtn, clearBtn;
+	private JCheckBox checkBox;
 	
 	public DeleteFromDB() {
 		
@@ -61,20 +61,19 @@ public class DeleteFromDB {
 	
 	
 	//A function to convert the list list from the database into a 2d object array with date value types in the correct places
-	String[][] GetRows(String table, String[] columns) {
+	Object[][] GetRows(String table, String[] columns) {
 		List<List<String>> ListTable = DBConnection.getTable(table);
-		String[][] data = new String[ListTable.size()][columns.length];
-		for (int i = 0; i < ListTable.size(); i++) {
-			String[] row = new String[ListTable.get(i).size()];
-			for (int r = 0; r < row.length; r++) {
-				row[r] = ListTable.get(i).get(r);
-			}
-			
-			data[i] = row;
-			
-		}
-		
-		return data;
+        Object[][] data = new Object[ListTable.size()][columns.length];
+
+        for (int i = 0; i < ListTable.size(); i++) {
+            Object[] row = new Object[ListTable.get(i).size()]; 
+            row[0] = new JCheckBox();
+            for (int r = 1; r < row.length; r++) {
+                row[r] = ListTable.get(i).get(r);
+            }
+            data[i] = row;
+        }
+        return data;
 	}
 	
 	
@@ -104,9 +103,14 @@ public class DeleteFromDB {
 		panel.setLayout(new GridLayout(9, 1));
 				
 		//A listener to initiate deleting the table. It gets the path from the fileChooser and adds a filename 
-		deleteButton.addActionListener(new ActionListener() {
+		deleteBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				 JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected data?", "Warning Message",  JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE); 
+			}
+		});
+		clearBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			  
 			}
 		});
 		return panel;
@@ -120,14 +124,19 @@ public class DeleteFromDB {
 	
 	//Generates the top panel
 	JPanel SearchPanel() {
-		deleteButton = new JButton("Delete data");
-		deleteButton.setBackground(Color.WHITE);
+		deleteBtn = new JButton("Delete data");
+		deleteBtn.setBackground(Color.WHITE);
 		Icon iconD = UIManager.getIcon("FileView.floppyDriveIcon");
-		deleteButton.setIcon(iconD);
+		deleteBtn.setIcon(iconD);
 		
-		JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout());	
+		clearBtn = new JButton("Clear Selected");
+		clearBtn.setBackground(Color.WHITE);
+		Icon iconC = UIManager.getIcon("Tree.collapsedIcon");
+		clearBtn.setIcon(iconC);
 
+
+		JPanel panel = new JPanel();
+		panel.setLayout( new FlowLayout(FlowLayout.LEFT) );
 		JLabel searchLabel = new JLabel("Search: ");
 		SearchField = new JTextField();
 		SearchField.setPreferredSize(new Dimension(300, 30));
@@ -149,11 +158,12 @@ public class DeleteFromDB {
 				UpdateTable(TableList.getSelectedItem().toString());
 			}
 		});
-		
+	    	    
+	    panel.add(clearBtn);
 		panel.add(searchLabel);
 		panel.add(SearchField);
 		panel.add(TableList);
-		panel.add(deleteButton);
+		panel.add(deleteBtn);
 
 		return panel;
 	}
@@ -162,7 +172,7 @@ public class DeleteFromDB {
 	void UpdateTable(String tableName) {
 		
 		columns = DBConnection.getColumnNames(tableName);
-		String[][] rows = GetRows(tableName, columns);
+		Object[][] rows = GetRows(tableName, columns);
 		model = new DefaultTableModel(rows, columns) {
 		
 			//an override needed to stop the table from being editable
