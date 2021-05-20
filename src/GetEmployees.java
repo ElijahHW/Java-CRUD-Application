@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.PatternSyntaxException;
 
-public class getEmployees {
+public class GetEmployees {
 	
 	private String SearchString = "";
 	private JPanel panel;
@@ -29,7 +29,7 @@ public class getEmployees {
 	private JButton ExportButton;
 	private JFileChooser PathChooser;
 	private JLabel headerLabel, filterLabel;
-	public getEmployees() {
+	public GetEmployees() {
 		panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
 		
@@ -63,7 +63,7 @@ public class getEmployees {
 	//A function to convert the list list from the database into a 2d object array with date value types in the correct places
 	Object[][] GetEmployees() {
 
-		List<List<String>> ListTable = dbConnection.getTable("employees");
+		List<List<String>> ListTable = DBConnection.getTable("employees");
 		Object[][] data = new Object[ListTable.size()][7];
 		for (int i = 0; i < ListTable.size(); i++) {
 			Object[] row = new Object[ListTable.get(i).size()];

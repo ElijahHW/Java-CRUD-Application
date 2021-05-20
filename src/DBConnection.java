@@ -2,7 +2,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class dbConnection {
+public class DBConnection {
 	private static Statement statement;
     private static Connection conn;
     private ResultSet rs;

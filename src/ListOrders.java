@@ -62,7 +62,7 @@ public class ListOrders {
 	//A function to convert the list list from the database into a 2d object array with date value types in the correct places
 	Object[][] GetOrders() {
 		
-		List<List<String>> ListTable = dbConnection.getTable("orders");
+		List<List<String>> ListTable = DBConnection.getTable("orders");
 		Object[][] data = new Object[ListTable.size()][7];
 		
 		for (int i = 0; i < ListTable.size(); i++) {
