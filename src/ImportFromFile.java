@@ -126,7 +126,6 @@ public class ImportFromFile implements ActionListener {
 		for(int i = 0;i<data.size();i++) {
 			if(columns.length != data.get(i).size()) {
 				lineError.add(i+1); //Stores which line the error(s) is on
-				tableComboBox.setSelectedIndex(comboBoxIndex); //resets the combobox value to the working table
 			}else {
 				comboBoxIndex = tableComboBox.getSelectedIndex(); //Stores the index of the table
 			}
@@ -268,8 +267,10 @@ public class ImportFromFile implements ActionListener {
 				}
 				else { // 10 or more errors, displays a more generic error message
 					UIManager.put("Button.background", Color.white);
-					JOptionPane.showMessageDialog(panel, "You have " + errors.size() + " errors. Are you sure you are choosing the right table?");
+					JOptionPane.showMessageDialog(panel, "The expected number of columns for the " + tableComboBox.getSelectedItem() + " table is " + columnNames.length + " You have " + errors.size() + " rows where this doesn't match. Are you sure you are choosing the right table?"
+							+ "Each column value in the text file should be seperated by ~ and rows by a new line");
 				}
+				tableComboBox.setSelectedIndex(comboBoxIndex); //resets the combobox value to the working table
 			}
 		}
 		
