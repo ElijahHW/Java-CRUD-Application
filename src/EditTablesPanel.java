@@ -68,10 +68,16 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		for (int i = 0; i < dataList.size(); i++) { //Transforms the 2d arraylist into a 2d array to use with JTable
 			for(int j = 0;j< dataList.get(i).size();j++) {
 				dataArray [i][j] = dataList.get(i).get(j);
-			}		
-
+			}	
 		}
-		table = new JTable(dataArray, columnNames);
+		
+		table = new JTable(dataArray, columnNames){
+			   public boolean isCellEditable(int row, int column){ 
+			        return column != 0; // Disables editing on column with index 0, as this should be the primary key
+			   }
+		};
+		
+		table.getTableHeader().setReorderingAllowed(false);
 		table.getModel().addTableModelListener(this);
 		JScrollPane scrollPane = new JScrollPane(table);
 		
@@ -88,8 +94,8 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		JPanel submitButton = new JPanel();
 		submitButton.setLayout(new BoxLayout(submitButton, BoxLayout.PAGE_AXIS));
 		
-		validation = new JLabel("123");
-		//validation.setAlignmentX(validation.CENTER_ALIGNMENT);
+		validation = new JLabel("",SwingConstants.CENTER);
+		validation.setAlignmentX(validation.CENTER_ALIGNMENT);
 		submit = new JButton("Save changes");
 		submit.setFocusable(false);
 		submit.setBackground(Color.WHITE);
@@ -105,11 +111,12 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 	//Gets the data from a row that has been changed
 	private String[] getDataFromTable(int index) {
 		String[] data = new String[table.getColumnCount()];
+		
 		for(int i = 0;i<table.getColumnCount();i++) {
 			try {
 				String temp = table.getValueAt(index, i).toString();
 				data[i] = temp;
-			}catch(Exception e) {
+			}catch(Exception e) { //Cell in table is null so we set it to null in the array
 				data[i] = null;
 			}
 		}
@@ -123,7 +130,6 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		String error = "";
 		String data;
 		String[] dataTypes = DBConnection.getColumnDataType(selectTable.getSelectedItem().toString()); //Gets the datatypes for each column in the table
-		
 		
 		outerloop:
 		for(int i=0;i<dataTypes.length;i++) {
@@ -152,6 +158,7 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		return isValid;
 	}
 	
+	
 	//Method to loop through all the changed row and send it to the database method for insertion in dbConnection class
 	public String callDb() { 
 		String result = "Data updated";
@@ -175,7 +182,6 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 					break outerloop;
 				}
 			}
-		
 		return result;
 	}
 	
@@ -188,8 +194,10 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		if (e.getSource() == selectTable) { //User has selected a table in the combobox
-			if(displayTable != null) {
+		
+		//execeutes when the user has selected a table
+		if (e.getSource() == selectTable) { 
+			if(displayTable != null) { //Removes old table when a new is selected
 				panel.remove(displayTable);
 			}
 			
@@ -198,6 +206,7 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 			panel.repaint();
 		}
 		
+		//Executes when the submit button is clicked
 		if (e.getSource() == submit) {
 			boolean validData = validateData(); //Datatype validation
 			if(validData) {

@@ -70,7 +70,7 @@ public class MainFrame extends JFrame implements ActionListener {
         addItem = new JMenuItem("Add Customer");
         addItem.setBackground(Color.WHITE);
 
-        listItem = new JMenuItem("Export Table Data");
+        listItem = new JMenuItem("Display Tables / Export");
         listItem.setBackground(Color.WHITE);
 
         deleteItem = new JMenuItem("Delete Data from Database");

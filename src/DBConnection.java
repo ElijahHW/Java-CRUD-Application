@@ -5,7 +5,7 @@ import java.util.List;
 public class DBConnection {
 	private static Statement statement;
     private static Connection conn;
-    private ResultSet rs;
+    private static ResultSet rs;
     private String iq;
     private static String connection= "jdbc:mysql://localhost:3306/classicmodels";
     private static String username = "root";
@@ -180,14 +180,15 @@ public class DBConnection {
     	for(int i = 0;i<parameterCount;i++) { //Creates a string with the correct amount of parameters
     		parameters += "?,";
     	}	
-    	parameters = parameters.substring(0, parameters.length() - 1);
+    	
+    	parameters = parameters.substring(0, parameters.length() - 1); // an extra comma is removed here
     	
     	try {	
     		Connection con = DriverManager.getConnection(connection, username, password);
     		String query = "INSERT INTO " + table + " VALUES ( " + parameters + ")";
     		PreparedStatement sql = con.prepareStatement(query);
         
-    		for(int i=0;i<input.length;i++) {
+    		for(int i=0;i<input.length;i++) { // Sets the parameters
     			if(input[i].length() == 0) {
     				sql.setString((1+i), null);
     			}else {
@@ -217,19 +218,20 @@ public class DBConnection {
     */   
     public static String updateTable(String table, String[] input) {
     	String[] columns = getColumnNames(table);
-    	String primarykey = columns[0];
+    	String primarykey = columns[0]; // Gets the name of the first column
 		String changes = " SET";
     	
-		for(int i = 1;i<columns.length;i++) { //Creates a string with the correct amount of parameters and skips over the primary key
+		for(int i = 1;i<columns.length;i++) { //Creates a string with the correct amount of parameters, skips over the first index, as this should be the primary key
     		changes += " " + columns[i] + "=?,"; 
     	}	
-		changes = changes.substring(0, changes.length() - 1);  	
+		changes = changes.substring(0, changes.length() - 1);  
+		
     	try {	
     		Connection con = DriverManager.getConnection(connection, username, password);
     		String query = "UPDATE " + table + changes + " WHERE " + primarykey + "=" + input[0];
     		PreparedStatement sql = con.prepareStatement(query);
         
-    		for(int i=1;i<input.length;i++) { // Skips over the first index, as this should be the primary key
+    		for(int i=1;i<input.length;i++) { // Sets the parameters, Skips over the first index
     			if(input[i] == null || input[i].isEmpty()) {
     				sql.setString((i), null);
     			}else {
@@ -240,6 +242,7 @@ public class DBConnection {
     		sql.executeUpdate();
             con.close();
             return "Data updated";
+            
     	}catch(Exception e) {
     		System.out.println(e);
     		if(e.getMessage().contains("foreign key")) {
@@ -248,7 +251,26 @@ public class DBConnection {
     		return e.getMessage().toString(); 
     	}        		
    }
-    
+    public Boolean delete(String id)
+    {
+        //SQL STMT
+        String sql="DELETE FROM customer WHERE customerNumber ='"+id+"'";
+        try
+        {
+            //GET COONECTION
+            Connection con=DriverManager.getConnection(connection, username, password);
+            //STATEMENT
+            Statement s=con.prepareStatement(sql);
+            //EXECUTE
+            s.execute(sql);
+            return true;
+
+        }catch(Exception ex)
+        {
+            ex.printStackTrace();
+            return false;
+        }
+    }
         
     
 }
