@@ -251,7 +251,7 @@ public class DBConnection {
     		return e.getMessage().toString(); 
     	}        		
    }
-    public static Boolean delete(String table, String id)
+    public static String delete(String table, String id)
     {
         //SQL STMT
         String sql="DELETE FROM " + table + " WHERE customerNumber ='"+id+"'";
@@ -263,12 +263,17 @@ public class DBConnection {
             Statement s=con.prepareStatement(sql);
             //EXECUTE
             s.execute(sql);
-            return true;
+            return "";
 
         }catch(Exception ex)
         {
             ex.printStackTrace();
-            return false;
+    		if(ex.getMessage().contains("foreign key")) {
+    			return ("Can't delete one of the selected because of a foreign key constraint");
+    		} else {
+    			
+                return "Something went wrong";
+    		}
         }
     }
         
