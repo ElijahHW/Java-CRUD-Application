@@ -12,6 +12,26 @@ public class DBConnection {
     private static String password = "";
 
   
+    //Method to test connection to database
+    
+    public static boolean tryConnection() {
+    	boolean status = true;
+    	try {
+    		Connection con = DriverManager.getConnection(connection, username, password);
+    		Statement stm = con.createStatement();
+    		stm.executeQuery("SELECT now()");
+    		stm.close();
+    	}
+    	catch(Exception e){
+    		status = false;
+    		System.out.println(e);
+    	}
+    	System.out.println(status);
+    	return status;
+    }
+        
+    
+    
     //
     // Get data from a table
     //

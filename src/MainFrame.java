@@ -29,6 +29,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	    JPanel PreviousPanel, StartPanel;
 	    
     MainFrame() {
+    	boolean status = DBConnection.tryConnection(); // Checks the connection with the database
+    	
 		// Defining application size, layout and close operation.
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(800, 550);
@@ -161,6 +163,11 @@ public class MainFrame extends JFrame implements ActionListener {
         menuBar.add(actionMenu);
         menuBar.add(dateMenu);
         menuBar.add(backBtn);
+        if(!status) {
+        	JLabel statusLabel  = new JLabel("No connection to database", SwingConstants.RIGHT);
+        	statusLabel.setForeground(Color.RED);	
+        	menuBar.add(statusLabel);
+        }
         menuBar.setFocusable(false);
         
         
