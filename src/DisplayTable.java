@@ -220,14 +220,6 @@ public class DisplayTable {
 		
 		sorter = new TableRowSorter<TableModel>(model);
 		
-		sorter.setComparator(0, new Comparator<Object>() {
-			
-			@Override
-			public int compare(Object o1, Object o2) {
-				
-				return 0;
-			}
-		});
 		DataTable.setRowSorter(sorter);
 	}
 	
@@ -284,6 +276,7 @@ public class DisplayTable {
 		};;
 		DataTable.setModel(model);
 		SearchField.setText(null);
+
 		UpdateFilterBox();
 	}
 	
