@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -8,7 +7,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -129,8 +127,15 @@ public class DeleteFromDB {
 					if (cell) {
 						
 						String key = (String)DataTable.getValueAt(i, 1);
+						int response = 0;
 						
-						int response = DBConnection.delete(table, (String)columns[1], key);
+						if (table.equals("orderdetails")) {
+							response = DBConnection.delete(table, (String)columns[1], key + "' AND productCode = '" + (String)DataTable.getValueAt(i, 2));
+						} else {
+							
+							response = DBConnection.delete(table, (String)columns[1], key);
+						}
+						
 						String responseText = "";
 						switch(response) {
 							case 0:
@@ -282,6 +287,8 @@ public class DeleteFromDB {
 		UpdateSorter();
 
 	}
+	
+	//Again, the warning should go away during compilation
 	class model extends AbstractTableModel {
 		
         String[] columnNames = columns;
