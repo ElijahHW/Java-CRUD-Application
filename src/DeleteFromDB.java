@@ -1,8 +1,10 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -66,7 +68,6 @@ public class DeleteFromDB {
 			String[] row = new String[ListTable.get(i).size()];
 			for (int r = 0; r < row.length; r++) {
 				row[r] = ListTable.get(i).get(r);
-				
 			}
 			
 			data[i] = row;
@@ -179,5 +180,6 @@ public class DeleteFromDB {
 	public JPanel getPanel() {
 		return panel;
 	}
-
+	
 }
+

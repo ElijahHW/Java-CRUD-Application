@@ -244,6 +244,7 @@ public class ImportFromFile implements ActionListener {
 				panel.revalidate();
 				panel.repaint();
 			}else { //Tells the user about the errors
+				UIManager.put("Button.background", Color.white);
 				JOptionPane.showMessageDialog(panel, "The expected number of columns for the " + tableComboBox.getSelectedItem() + " table is " + columnNames.length + ". Your text file is not matching this on line " + errors.toString()
 				+ "\n\n Each column value in the text file should be seperated by ; and rows by a newline");
 			}
