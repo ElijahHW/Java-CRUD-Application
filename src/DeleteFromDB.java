@@ -26,7 +26,7 @@ public class DeleteFromDB {
 	private String[] columns = {""};
 	private JButton deleteBtn, clearBtn;
 	private JCheckBox checkBox;
-	
+	private JLabel searchLabel;
 	public DeleteFromDB() {
 		
 		panel = new JPanel();
@@ -137,7 +137,7 @@ public class DeleteFromDB {
 
 		JPanel panel = new JPanel();
 		panel.setLayout( new FlowLayout(FlowLayout.LEFT) );
-		JLabel searchLabel = new JLabel("Search: ");
+		searchLabel = new JLabel("Search: ");
 		SearchField = new JTextField();
 		SearchField.setPreferredSize(new Dimension(300, 30));
 		SearchField.setBackground(Color.WHITE);
