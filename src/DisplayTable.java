@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -30,24 +32,18 @@ public class DisplayTable {
 	public DisplayTable() {
 		
 		panel = new JPanel();
-		panel.setLayout(new GridBagLayout());
+		//panel.setLayout(new GridBagLayout());
+		panel.setLayout(new BoxLayout(panel, 1));
+		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
 		
-		GridBagConstraints c = new GridBagConstraints();
+		/*GridBagConstraints c = new GridBagConstraints();
 		
 		c.gridx = 0;
 		c.gridy = 0;
-		c.weightx = 0.2;
-		c.weighty = 0.2;
+		c.weightx = 0.75;
+		c.weighty = 0.75;
 		c.fill = GridBagConstraints.BOTH;
 		panel.add(FilterSearchPanel(), c);
-		
-		c.gridx = 90;
-		c.gridy = 0;
-		c.gridheight = 100;
-		c.weightx = 0; 
-		c.weighty = 0;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		panel.add(SorterChoicePanel(), c);
 		
 		c.gridx = 0;
 		c.gridy = 10;
@@ -57,6 +53,18 @@ public class DisplayTable {
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
 		panel.add(ScrollPanel(), c); 
+		
+		c.gridx = 0;
+		c.gridy = 90;
+		c.gridwidth = 100;
+		c.weightx = 0; 
+		c.weighty = 0;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		panel.add(SorterChoicePanel(), c);*/
+		
+		panel.add(FilterSearchPanel());
+		panel.add(ScrollPanel()); 
+		panel.add(SorterChoicePanel());
 	}
 	
 	
@@ -142,26 +150,13 @@ public class DisplayTable {
 	//Creates the right panel with the choice of column to sort by
 	JPanel SorterChoicePanel() {
 		
-		JLabel FilterButtonLabel = new JLabel("Filter by: ");
-				
-		SearchFilterColumns = new JComboBox<String>();
-		SearchFilterColumns.setModel(new DefaultComboBoxModel<String>(DBConnection.getColumnNames("customers")));
-		SearchFilterColumns.setPreferredSize(new Dimension(100, 50));
-		SearchFilterColumns.setMaximumSize(new Dimension(200, 50));
-		SearchFilterColumns.setBackground(Color.WHITE);
-
-		
 		JButton ExportButton = new JButton("Export to File");
 		ExportButton.setBackground(Color.WHITE);
 		Icon iconD = UIManager.getIcon("FileView.floppyDriveIcon");
 		ExportButton.setIcon(iconD);
 		
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(9, 1));
 		
-		//adds all the buttons to a panel as well to display them
-		panel.add(FilterButtonLabel);
-		panel.add(SearchFilterColumns);
 		panel.add(ExportButton);
 		
 		
@@ -183,6 +178,55 @@ public class DisplayTable {
 					
 					ExportTable(DataTable, PathChooser.getSelectedFile().getAbsolutePath() + "//" + TableList.getSelectedItem().toString() + ".txt");
 				}
+			}
+		});
+		
+		return panel;
+	}
+	
+	//a function to update the sorter when the displayed table changes
+	void UpdateSorter() {
+		
+		sorter = new TableRowSorter<TableModel>(model);
+		
+		DataTable.setRowSorter(sorter);
+	}
+	
+	//Generates the top panel
+	JPanel FilterSearchPanel() {
+		
+		JLabel FilterButtonLabel = new JLabel("Filter by: ", SwingConstants.RIGHT);
+		
+		SearchFilterColumns = new JComboBox<String>();
+		SearchFilterColumns.setModel(new DefaultComboBoxModel<String>(DBConnection.getColumnNames("customers")));
+		SearchFilterColumns.setPreferredSize(new Dimension(500, 20));
+		SearchFilterColumns.setBackground(Color.WHITE);
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridBagLayout());
+		
+		SearchField = new JTextField();
+		SearchField.setPreferredSize(new Dimension(500, 20));
+		SearchField.setBackground(Color.WHITE);
+
+		JLabel FilterLabel = new JLabel("Search: ", SwingConstants.RIGHT);
+		
+		String[] TableArray = {"customers", 
+				"employees",
+				"offices",
+				"orderdetails",
+				"orders",
+				"payments",
+				"productlines",
+				"products"};
+		TableList = new JComboBox<String>(TableArray);
+		TableList.setPreferredSize(new Dimension(300, 20));
+		TableList.setBackground(Color.WHITE);
+		TableList.addActionListener(new ActionListener () {
+			
+			public void actionPerformed(ActionEvent e) {
+				
+				UpdateTable(TableList.getSelectedItem().toString());
 			}
 		});
 		
@@ -212,62 +256,32 @@ public class DisplayTable {
             }
         });
 		
-		return panel;
-	}
-	
-	//a function to update the sorter when the displayed table changes
-	void UpdateSorter() {
-		
-		sorter = new TableRowSorter<TableModel>(model);
-		
-		DataTable.setRowSorter(sorter);
-	}
-	
-	//Generates the top panel
-	JPanel FilterSearchPanel() {
-		
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridBagLayout());
-		
-		SearchField = new JTextField();
-		SearchField.setPreferredSize(new Dimension(200, 20));
-		SearchField.setBackground(Color.WHITE);
-
-		JLabel FilterLabel = new JLabel("Search: ", SwingConstants.RIGHT);
-		
-		String[] TableArray = {"customers", 
-				"employees",
-				"offices",
-				"orderdetails",
-				"orders",
-				"payments",
-				"productlines",
-				"products"};
-		TableList = new JComboBox<String>(TableArray);
-		TableList.setPreferredSize(new Dimension(300, 20));
-		TableList.addActionListener(new ActionListener () {
-			
-			public void actionPerformed(ActionEvent e) {
-				
-				UpdateTable(TableList.getSelectedItem().toString());
-			}
-		});
-		
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1.0;
 		
-		c.gridx = 2;
+		c.gridx = 0;
 		c.gridy = 0;
-		c.gridwidth = 8;
+		c.gridwidth = 5;
 		panel.add(TableList, c);
 		
-		c.gridx = 2;
+		c.gridx = 0;
 		c.gridy = 1;
-		panel.add(SearchField, c);
+		c.gridwidth = 1;
+		panel.add(FilterButtonLabel, c);
 		
 		c.gridx = 1;
 		c.gridy = 1;
+		c.gridwidth = 4;
+		panel.add(SearchFilterColumns, c);
+		
+		c.gridx = 1;
+		c.gridy = 2;
+		c.gridwidth = 4;
+		panel.add(SearchField, c);
+		
+		c.gridx = 0;
+		c.gridy = 2;
 		c.gridwidth = 1;
 		panel.add(FilterLabel, c);
 		
