@@ -129,8 +129,15 @@ public class DeleteFromDB {
 					if (cell) {
 						
 						String key = (String)DataTable.getValueAt(i, 1);
+						int response = 0;
 						
-						int response = DBConnection.delete(table, (String)columns[1], key);
+						if (table.equals("orderdetails")) {
+							response = DBConnection.delete(table, (String)columns[1], key + "' AND productCode = '" + (String)DataTable.getValueAt(i, 2));
+						} else {
+							
+							response = DBConnection.delete(table, (String)columns[1], key);
+						}
+						
 						String responseText = "";
 						switch(response) {
 							case 0:
