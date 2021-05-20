@@ -94,6 +94,7 @@ public class MainFrame extends JFrame implements ActionListener {
         backBtn.setForeground(new Color(0x203c56));
         backBtn.setBorder(null);
         backBtn.setBorder(new EmptyBorder(0, 10, 0, 10));
+		backBtn.setVisible(false);
 
         
         //Adding shortcuts to each JMenu for accessibility.
@@ -232,6 +233,7 @@ public class MainFrame extends JFrame implements ActionListener {
             this.repaint();
 			this.revalidate();
 			this.pack();
+			backBtn.setVisible(true);
 		}
 		if(e.getSource() == addItem || e.getSource() == addBtn) {
 			PreviousPanel = (JPanel)this.getContentPane();
@@ -241,7 +243,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.revalidate();
 			this.repaint();
 			this.pack();
-			
+			backBtn.setVisible(true);
 		} 
 		if(e.getSource() == listItem || e.getSource() == listBtn) {
 			PreviousPanel = (JPanel)this.getContentPane();
@@ -251,7 +253,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.revalidate();
 			this.repaint();
 	        this.pack();
-
+	        backBtn.setVisible(true);
 		} 
 		
 		 if(e.getSource() == retrieveItem || e.getSource() == retrieveBtn) {
@@ -262,6 +264,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.revalidate();
 			this.repaint();
 	        this.pack();
+	        backBtn.setVisible(true);
 
 		}
 		 if(e.getSource() == editItem || e.getSource() == editBtn) {
@@ -272,8 +275,9 @@ public class MainFrame extends JFrame implements ActionListener {
 				this.revalidate();
 				this.repaint();
 		        this.pack();
-
+				backBtn.setVisible(true);
 			}
+		 
 		if(e.getSource() == importItem || e.getSource() == importBtn) {
 			PreviousPanel = (JPanel)this.getContentPane();
 	        this.setTitle("Management Application - Import from File");
@@ -282,6 +286,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.revalidate();
 			this.repaint();
 	        this.pack();
+			backBtn.setVisible(true);
 		} 
 	
 		if(e.getSource() == copyItem ) {
@@ -294,6 +299,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.revalidate();
 			this.repaint();
 			this.pack();
+			backBtn.setVisible(false);
 		}
 	
 		//Defining what the Exit button should do.
