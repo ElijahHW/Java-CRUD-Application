@@ -45,6 +45,7 @@ public class MainFrame extends JFrame implements ActionListener {
         menuBar.setBackground(Color.WHITE);
         
         homeBtn = new JButton("Home");
+        homeBtn.setToolTipText("Click this button to disable the middle button.");
         homeBtn.setFocusable(false);
         homeBtn.setBackground(Color.WHITE);
         homeBtn.setFont(new Font(null, Font.BOLD,15));
@@ -174,6 +175,7 @@ public class MainFrame extends JFrame implements ActionListener {
         welcomeLabel.setForeground(new Color(0x203c56));
 
         addBtn = new JButton("Add Customer");
+		addBtn.setToolTipText("Add a customer to the database.");
         addBtn.setFocusable(false);
         addBtn.setBackground(Color.WHITE);
         addBtn.setFont(new Font(null, Font.BOLD,15));
@@ -181,24 +183,28 @@ public class MainFrame extends JFrame implements ActionListener {
         addBtn.addActionListener(this);
         
         listBtn = new JButton("Display Tables / Export");
+		listBtn.setToolTipText("Display all tables and exports to a file");
         listBtn.setFocusable(false);
         listBtn.setBackground(Color.WHITE);
         listBtn.setFont(new Font(null, Font.BOLD,15));
         listBtn.addActionListener(this);
 
-        retrieveBtn = new JButton("Retrieve Employees");        
+        retrieveBtn = new JButton("Retrieve Employees");
+		retrieveBtn.setToolTipText("Displays all employees and exports to a file");
         retrieveBtn.setFocusable(false);
         retrieveBtn.setBackground(Color.WHITE);
         retrieveBtn.setFont(new Font(null, Font.BOLD,15));
         retrieveBtn.addActionListener(this);
         
         editBtn = new JButton("Update data in Database DB");        
+		editBtn.setToolTipText("Updates data and saves to database  ");
         editBtn.setFocusable(false);
         editBtn.setBackground(Color.WHITE);
         editBtn.setFont(new Font(null, Font.BOLD,15));
         editBtn.addActionListener(this);
         
         importBtn = new JButton("Bulk Import from file");
+        importBtn.setToolTipText("Imports data from a file and - to a table");
         importBtn.setFocusable(false);
         importBtn.setBackground(Color.WHITE);
         importBtn.setFont(new Font(null, Font.BOLD,15));
