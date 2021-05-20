@@ -2,11 +2,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -71,6 +69,7 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 			}	
 		}
 		
+		//Another potential warning that should be gone on compilation
 		table = new JTable(dataArray, columnNames){
 			   public boolean isCellEditable(int row, int column){ 
 			        return column != 0; // Disables editing on column with index 0, as this should be the primary key
