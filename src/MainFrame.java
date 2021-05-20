@@ -13,13 +13,13 @@ public class MainFrame extends JFrame implements ActionListener {
 	//Header Elements
 		private JMenuBar menuBar;
 	    private JMenu fileMenu, actionMenu, dateMenu;
-	    private JMenuItem addItem, listItem, retrieveItem, editItem, importItem, copyItem, exitItem, backBtn2;
+	    private JMenuItem addItem, listItem, deleteItem, editItem, importItem, copyItem, exitItem, backBtn2;
 	    private JButton homeBtn, backBtn;
 	    
 	  //Body Elements
 	    private JPanel panel = new JPanel();
 	    private JLabel welcomeLabel = new JLabel("Welcome to the Management Application");
-	    private JButton addBtn, listBtn, retrieveBtn, editBtn, importBtn;
+	    private JButton addBtn, listBtn, deleteBtn, editBtn, importBtn;
 	    
 	  //Extra Elements for Body
 	    DateTimeFormatter date = DateTimeFormatter.ofPattern("MM/dd : HH:mm");  
@@ -45,6 +45,7 @@ public class MainFrame extends JFrame implements ActionListener {
         menuBar.setBackground(Color.WHITE);
         
         homeBtn = new JButton("Home");
+        homeBtn.setToolTipText("Click this button to disable the middle button.");
         homeBtn.setFocusable(false);
         homeBtn.setBackground(Color.WHITE);
         homeBtn.setFont(new Font(null, Font.BOLD,15));
@@ -69,11 +70,11 @@ public class MainFrame extends JFrame implements ActionListener {
         addItem = new JMenuItem("Add Customer");
         addItem.setBackground(Color.WHITE);
 
-        listItem = new JMenuItem("Display Tables / Export");
+        listItem = new JMenuItem("Export Table Data");
         listItem.setBackground(Color.WHITE);
 
-        retrieveItem = new JMenuItem("Retrieve Employees");
-        retrieveItem.setBackground(Color.WHITE);
+        deleteItem = new JMenuItem("Delete Data from Database");
+        deleteItem.setBackground(Color.WHITE);
         
         editItem = new JMenuItem("Update Data in Database");
         editItem.setBackground(Color.WHITE);
@@ -99,7 +100,7 @@ public class MainFrame extends JFrame implements ActionListener {
         
         //Adding shortcuts to each JMenu for accessibility.
         //These can be used by pressing 'alt + key', the key will be underlined.
-        KeyStroke keyStrokeHomeBtn = KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke keyStrokeHomeBtn = KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.ALT_DOWN_MASK);
         homeBtn.setMnemonic(KeyEvent.VK_H); 
         fileMenu.setMnemonic(KeyEvent.VK_F); 
         actionMenu.setMnemonic(KeyEvent.VK_A); 
@@ -108,7 +109,7 @@ public class MainFrame extends JFrame implements ActionListener {
         //These can be used by pressing 'ctrl + key', the key will be underlined in the application.
         KeyStroke keyStrokeAddItem = KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK);
         KeyStroke keyStrokeListItem = KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK);
-        KeyStroke keyStrokeRetrieveItem = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke keyStrokedeleteItem = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
         KeyStroke keyStrokeEditItem = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK);
         KeyStroke keyStrokeImportItem = KeyStroke.getKeyStroke(KeyEvent.VK_I, KeyEvent.CTRL_DOWN_MASK);
         KeyStroke keyStrokeCopyItem = KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK);
@@ -120,8 +121,8 @@ public class MainFrame extends JFrame implements ActionListener {
         listItem.setMnemonic(KeyEvent.VK_L); //key
         listItem.setAccelerator(keyStrokeListItem);
         
-        retrieveItem.setMnemonic(KeyEvent.VK_R); //key
-        retrieveItem.setAccelerator(keyStrokeRetrieveItem);
+        deleteItem.setMnemonic(KeyEvent.VK_D); //key
+        deleteItem.setAccelerator(keyStrokedeleteItem);
 
         editItem.setMnemonic(KeyEvent.VK_E); //key
         editItem.setAccelerator(keyStrokeEditItem);
@@ -129,7 +130,7 @@ public class MainFrame extends JFrame implements ActionListener {
         importItem.setMnemonic(KeyEvent.VK_I); //key 
         importItem.setAccelerator(keyStrokeImportItem);
 
-        copyItem.setMnemonic(KeyEvent.VK_W); //key
+        copyItem.setMnemonic(KeyEvent.VK_C); //key
         copyItem.setAccelerator(keyStrokeCopyItem);
         
         exitItem.setMnemonic(KeyEvent.VK_W); //key
@@ -138,7 +139,7 @@ public class MainFrame extends JFrame implements ActionListener {
         //Adding each Item to its JMenu Parent
         actionMenu.add(addItem);
         actionMenu.add(listItem);
-        actionMenu.add(retrieveItem);
+        actionMenu.add(deleteItem);
         actionMenu.add(editItem);
         actionMenu.add(importItem);
         fileMenu.add(copyItem);
@@ -148,7 +149,7 @@ public class MainFrame extends JFrame implements ActionListener {
         homeBtn.addActionListener(this);
         addItem.addActionListener(this);
         listItem.addActionListener(this);
-        retrieveItem.addActionListener(this);
+        deleteItem.addActionListener(this);
         editItem.addActionListener(this);
         importItem.addActionListener(this);
         copyItem.addActionListener(this);
@@ -174,6 +175,7 @@ public class MainFrame extends JFrame implements ActionListener {
         welcomeLabel.setForeground(new Color(0x203c56));
 
         addBtn = new JButton("Add Customer");
+		addBtn.setToolTipText("Add a customer to the database.");
         addBtn.setFocusable(false);
         addBtn.setBackground(Color.WHITE);
         addBtn.setFont(new Font(null, Font.BOLD,15));
@@ -181,24 +183,27 @@ public class MainFrame extends JFrame implements ActionListener {
         addBtn.addActionListener(this);
         
         listBtn = new JButton("Display Tables / Export");
+		listBtn.setToolTipText("Display all tables and exports to a file");
         listBtn.setFocusable(false);
         listBtn.setBackground(Color.WHITE);
         listBtn.setFont(new Font(null, Font.BOLD,15));
         listBtn.addActionListener(this);
 
-        retrieveBtn = new JButton("Retrieve Employees");        
-        retrieveBtn.setFocusable(false);
-        retrieveBtn.setBackground(Color.WHITE);
-        retrieveBtn.setFont(new Font(null, Font.BOLD,15));
-        retrieveBtn.addActionListener(this);
+        deleteBtn = new JButton("Delete Data from Database");        
+        deleteBtn.setFocusable(false);
+        deleteBtn.setBackground(Color.WHITE);
+        deleteBtn.setFont(new Font(null, Font.BOLD,15));
+        deleteBtn.addActionListener(this);
         
         editBtn = new JButton("Update data in Database DB");        
+		editBtn.setToolTipText("Updates data and saves to database  ");
         editBtn.setFocusable(false);
         editBtn.setBackground(Color.WHITE);
         editBtn.setFont(new Font(null, Font.BOLD,15));
         editBtn.addActionListener(this);
         
         importBtn = new JButton("Bulk Import from file");
+        importBtn.setToolTipText("Imports data from a file and - to a table");
         importBtn.setFocusable(false);
         importBtn.setBackground(Color.WHITE);
         importBtn.setFont(new Font(null, Font.BOLD,15));
@@ -207,7 +212,7 @@ public class MainFrame extends JFrame implements ActionListener {
         panel.add(welcomeLabel);
         panel.add(addBtn);
         panel.add(listBtn);
-        panel.add(retrieveBtn);
+        panel.add(deleteBtn);
         panel.add(editBtn);
         panel.add(importBtn);
         
@@ -248,7 +253,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		} 
 		if(e.getSource() == listItem || e.getSource() == listBtn) {
 			PreviousPanel = (JPanel)this.getContentPane();
-	        this.setTitle("Management Application - Display Tables / Export");
+	        this.setTitle("Management Application - Export Table Data");
 			DisplayTable panel = new DisplayTable();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
@@ -257,10 +262,10 @@ public class MainFrame extends JFrame implements ActionListener {
 	        backBtn.setVisible(true);
 		} 
 		
-		 if(e.getSource() == retrieveItem || e.getSource() == retrieveBtn) {
+		 if(e.getSource() == deleteItem || e.getSource() == deleteBtn) {
 			PreviousPanel = (JPanel)this.getContentPane();
-	        this.setTitle("Management Application - Retrieve Employees");
-			GetEmployees panel = new GetEmployees();
+	        this.setTitle("Management Application - Delete Data from DB");
+			DeleteFromDB panel = new DeleteFromDB();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();

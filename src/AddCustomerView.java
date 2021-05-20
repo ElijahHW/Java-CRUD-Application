@@ -222,6 +222,7 @@ public class AddCustomerView implements ActionListener {
 		JLabel label = new JLabel("Customer number");
 		label.setPreferredSize(PreferedDimension);
 		customerNumberInput = new JTextField(20);
+		customerNumberInput.setToolTipText("Insert customer number, must insert numbers.");
 		customerNumberInput.addKeyListener(new KeyAdapter() {
 			
 			//If a key is pressed in the customer number input
@@ -285,6 +286,7 @@ public class AddCustomerView implements ActionListener {
 		JLabel label = new JLabel("Customer name");
 		label.setPreferredSize(PreferedDimension);
 		customerNameInput = new JTextField(20);
+		customerNameInput.setToolTipText("Insert customer name");
 		
 		pane.setLayout(new GridBagLayout());
 		
@@ -301,6 +303,7 @@ public class AddCustomerView implements ActionListener {
 		JLabel label = new JLabel("Contacts first name");
 		label.setPreferredSize(PreferedDimension);
 		contactFirstNameInput = new JTextField(20);
+		contactFirstNameInput.setToolTipText("Insert first name");
 		
 		pane.setLayout(new GridBagLayout());
 		
@@ -316,6 +319,7 @@ public class AddCustomerView implements ActionListener {
 		JLabel label = new JLabel("Contacts last name");
 		label.setPreferredSize(PreferedDimension);
 		contactLastNameInput = new JTextField(20);
+		contactLastNameInput.setToolTipText("Insert last name");
 		
 		pane.setLayout(new GridBagLayout());
 		
@@ -331,6 +335,7 @@ public class AddCustomerView implements ActionListener {
 		JLabel label = new JLabel("Phone");
 		label.setPreferredSize(PreferedDimension);
 		phoneInput = new JTextField(20);
+		phoneInput.setToolTipText("Insert telephone number");
 		
 		pane.setLayout(new GridBagLayout());
 		
@@ -346,6 +351,7 @@ public class AddCustomerView implements ActionListener {
 		JLabel label = new JLabel("Address line 1");	
 		label.setPreferredSize(PreferedDimension);
 		addressLine1Input = new JTextField(20);
+		addressLine1Input.setToolTipText("Insert first address line");
 		
 		pane.setLayout(new GridBagLayout());
 		
@@ -361,6 +367,7 @@ public class AddCustomerView implements ActionListener {
 		JLabel label = new JLabel("Address line 2");
 		label.setPreferredSize(PreferedDimension);
 		addressLine2Input = new JTextField(20);
+		addressLine2Input.setToolTipText("Insert second adress line");
 		
 		pane.setLayout(new GridBagLayout());
 		
@@ -376,6 +383,7 @@ public class AddCustomerView implements ActionListener {
 		JLabel label = new JLabel("City");
 		label.setPreferredSize(PreferedDimension);
 		cityInput = new JTextField(20);
+		cityInput.setToolTipText("Insert city");
 		
 		pane.setLayout(new GridBagLayout());
 		
@@ -391,6 +399,7 @@ public class AddCustomerView implements ActionListener {
 		JLabel label = new JLabel("State");
 		label.setPreferredSize(PreferedDimension);
 		stateInput = new JTextField(20);
+		stateInput.setToolTipText("Insert state");
 		
 		pane.setLayout(new GridBagLayout());
 		
@@ -406,6 +415,7 @@ public class AddCustomerView implements ActionListener {
 		JLabel label = new JLabel("Postcode");	
 		label.setPreferredSize(PreferedDimension);
 		postalCodeInput = new JTextField(20);
+		postalCodeInput.setToolTipText("Insert postal code ");
 		
 		pane.setLayout(new GridBagLayout());
 		
@@ -421,6 +431,7 @@ public class AddCustomerView implements ActionListener {
 		JLabel label = new JLabel("Country");	
 		label.setPreferredSize(PreferedDimension);
 		countryInput = new JTextField(20);
+		countryInput.setToolTipText("Insert country");
 		
 		pane.setLayout(new GridBagLayout());
 		
@@ -451,6 +462,7 @@ public class AddCustomerView implements ActionListener {
 		JLabel label = new JLabel("Credit limit");
 		label.setPreferredSize(PreferedDimension);
 		creditLimitInput = new JTextField(20);
+		creditLimitInput.setToolTipText("Insert credit limit");
 		creditLimitInput.addKeyListener(new KeyAdapter() {
 			
 			//Checks that the credits field only has 10 digits and 2 decimals
