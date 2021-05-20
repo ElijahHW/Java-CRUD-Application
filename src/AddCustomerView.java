@@ -42,6 +42,7 @@ public class AddCustomerView implements ActionListener {
 		label.setText("Add a customer to the Database");
 		
 		responseText = new JLabel("");
+		responseText.setFont(new Font(null, Font.BOLD,15));
 		
 		gbc.fill = GridBagConstraints.BOTH; 
 		gbc.weightx = 55;
@@ -150,19 +151,33 @@ public class AddCustomerView implements ActionListener {
 								salesRepNumberList.getSelectedItem().toString(),
 								CreditNumber + "");
 						
+					
 						responseText.setText(respons);
+						
+						if(respons.equals("Something went wrong.")) {
+							
+							responseText.setForeground(Color.RED);
+							responseText.setText(respons);
+							
+						}else {
+							
+							responseText.setForeground(new Color(0x11780f));
+							responseText.setText(respons);
+							
+						}
 								
 					} catch (Exception e1) {
 						System.out.println(e1);
+						responseText.setForeground(Color.RED);
 						responseText.setText("Something went wrong");
 					}
 				} else {
-					
+					responseText.setForeground(Color.RED);
 					responseText.setText("Credit number not valid");
 				}
 				
 			} else {
-				
+				responseText.setForeground(Color.RED);
 				responseText.setText("Customer number not valid");
 			}
 		
@@ -246,6 +261,7 @@ public class AddCustomerView implements ActionListener {
                 	
                 	if (!UniqueName) {
                 		
+                		responseText.setForeground(Color.RED);
                 		responseText.setText("Customer Number already exists");
                 	} else {
                 		
@@ -452,6 +468,7 @@ public class AddCustomerView implements ActionListener {
                     
                     //checks if the rounded number is longer than 10 digits
                     if (String.valueOf(Math.round(tempNumber)).length() > 10) {
+                    	responseText.setForeground(Color.RED);
                     	responseText.setText("The credit number must be less than 10000000000");
                     	ValidCredit = false;
                     } else {

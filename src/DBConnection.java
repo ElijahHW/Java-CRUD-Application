@@ -7,7 +7,7 @@ public class DBConnection {
     private static Connection conn;
     private ResultSet rs;
     private String iq;
-    private static String connection= "jdbc:mysql://localhost:3306/classicmodels";
+    private static String connection= "jdbc:mysql://localhost:3311/classicmodels";
     private static String username = "root";
     private static String password = "";
 
@@ -174,7 +174,6 @@ public class DBConnection {
     parameterCount = amount of parameters needed
     input = array of all values that is to be inserted
     */
-    
     public static String insertIntoTable(String table, int parameterCount, String[] input) {
     	String parameters = "";
     	
@@ -215,10 +214,9 @@ public class DBConnection {
     table = name of table to insert into
     input = array of all values that is to be inserted
     columns = array of column names
-    */
-    
-    
-    public static String updateTable(String table, String[] input, String[] columns) {
+    */   
+    public static String updateTable(String table, String[] input) {
+    	String[] columns = getColumnNames(table);
     	String primarykey = columns[0];
 		String changes = " SET";
     	
@@ -232,12 +230,11 @@ public class DBConnection {
     		PreparedStatement sql = con.prepareStatement(query);
         
     		for(int i=1;i<input.length;i++) { // Skips over the first index, as this should be the primary key
-    			if(input[i] == null) {
+    			if(input[i] == null || input[i].isEmpty()) {
     				sql.setString((i), null);
     			}else {
     				sql.setString((i), input[i]);
     			}
-    			System.out.println(input[i]);
     		}
     		
     		sql.executeUpdate();
