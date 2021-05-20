@@ -8,7 +8,6 @@ import javax.swing.border.EmptyBorder;
 import java.time.format.DateTimeFormatter;  
 import java.time.LocalDateTime;    
 public class MainFrame extends JFrame implements ActionListener {
-	 	
 	
 	//Header Elements
 		private JMenuBar menuBar;
@@ -22,11 +21,11 @@ public class MainFrame extends JFrame implements ActionListener {
 	    private JButton addBtn, listBtn, deleteBtn, editBtn, importBtn;
 	    
 	  //Extra Elements for Body
-	    DateTimeFormatter date = DateTimeFormatter.ofPattern("MM/dd : HH:mm");  
-	    LocalDateTime now = LocalDateTime.now();  
+	    private DateTimeFormatter date = DateTimeFormatter.ofPattern("MM/dd : HH:mm");  
+	    private LocalDateTime now = LocalDateTime.now();  
 	    
 	  //Previous panel
-	    JPanel PreviousPanel, StartPanel;
+	    private JPanel PreviousPanel, StartPanel;
 	    
     MainFrame() {
     	boolean status = DBConnection.tryConnection(); // Checks the connection with the database
@@ -196,7 +195,8 @@ public class MainFrame extends JFrame implements ActionListener {
         listBtn.setFont(new Font(null, Font.BOLD,15));
         listBtn.addActionListener(this);
 
-        deleteBtn = new JButton("Delete Data from Database");        
+        deleteBtn = new JButton("Delete Data from Database");
+        deleteBtn.setToolTipText("Delete data from selected table");
         deleteBtn.setFocusable(false);
         deleteBtn.setBackground(Color.WHITE);
         deleteBtn.setFont(new Font(null, Font.BOLD,15));
@@ -303,7 +303,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		} 
 			
 		if (e.getSource() == backBtn) {
-			
+			this.setTitle("Management Application");
 			this.setContentPane(PreviousPanel);
 			this.revalidate();
 			this.repaint();

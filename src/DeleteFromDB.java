@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -17,23 +18,22 @@ import java.util.regex.PatternSyntaxException;
 
 public class DeleteFromDB {
 	
-	private JPanel panel;
+	private JPanel panel, DeletePanel, SearchPanel;
 	private JTable DataTable;
 	private TableRowSorter<TableModel> sorter;
 	private JTextField SearchField;
 	private JComboBox<String> TableList;
-	private TableModel   model;
+	private TableModel model;
 	private String[] columns = {""};
 	private Object[][] Rows;
 	private JButton deleteButton;
 	private String table, SearchString = "";
-	private JLabel ResponseText;
-	
+	private JLabel ResponseText, searchLabel;
+	private JScrollPane ScrollPanel;
 	public DeleteFromDB() {
-		
 		panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
-		
+	    
 		GridBagConstraints c = new GridBagConstraints();
         
 		c.gridx = 0;
@@ -43,9 +43,7 @@ public class DeleteFromDB {
 		c.fill = GridBagConstraints.BOTH;
 		panel.add(SearchPanel());
 	
-		c.gridx = 90;
 		c.gridy = 0;
-		c.gridheight = 100;
 		c.weightx = 0; 
 		c.weighty = 0;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -107,7 +105,7 @@ public class DeleteFromDB {
 		DataTable.setRowSorter(sorter);
 		
 		//puts the entire table in a scrollPane to allow for the scrollBar as the table itself is rather large
-		JScrollPane ScrollPanel = new JScrollPane(DataTable); 
+		ScrollPanel = new JScrollPane(DataTable); 
 		ScrollPanel.getVerticalScrollBar().setBackground(Color.WHITE);
 
 		return ScrollPanel;
@@ -115,8 +113,8 @@ public class DeleteFromDB {
 	
 	//Creates the right panel with the choice of column to sort by
 	JPanel DeletePanel() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(9, 1));
+		DeletePanel = new JPanel();
+		DeletePanel.setLayout(new FlowLayout(FlowLayout.LEADING) );
 				
 		//A listener to initiate deleting the table. It gets the path from the fileChooser and adds a filename 
 		deleteButton.addActionListener(new ActionListener() {
@@ -183,9 +181,9 @@ public class DeleteFromDB {
 		
 		ResponseText = new JLabel();
 		
-		panel.add(ResponseText);
+		DeletePanel.add(ResponseText);
 		
-		return panel;
+		return DeletePanel;
 	}
 	
 	//a function to update the sorter when the displayed table changes
@@ -196,18 +194,22 @@ public class DeleteFromDB {
 	
 	//Generates the top panel
 	JPanel SearchPanel() {
+		SearchPanel = new JPanel();
+		SearchPanel.setLayout(new FlowLayout(FlowLayout.LEADING) );
+		
+		
 		deleteButton = new JButton("Delete data");
 		deleteButton.setBackground(Color.WHITE);
 		Icon iconD = UIManager.getIcon("FileView.floppyDriveIcon");
 		deleteButton.setIcon(iconD);
 		
-		JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout());	
+		
 
-		JLabel searchLabel = new JLabel("Search: ");
+		searchLabel = new JLabel("Search: ");
 		SearchField = new JTextField();
-		SearchField.setPreferredSize(new Dimension(300, 30));
+		SearchField.setPreferredSize(new Dimension(100, 25));
 		SearchField.setBackground(Color.WHITE);
+		SearchField.setToolTipText("Search in the first column of all tables");
 		
 		String[] TableArray = {"customers", 
 				"employees",
@@ -251,12 +253,12 @@ public class DeleteFromDB {
             }
         });
 		
-		panel.add(searchLabel);
-		panel.add(SearchField);
-		panel.add(TableList);
-		panel.add(deleteButton);
+		SearchPanel.add(searchLabel);
+		SearchPanel.add(SearchField);
+		SearchPanel.add(TableList);
+		SearchPanel.add(deleteButton);
 
-		return panel;
+		return SearchPanel;
 	}
 	
 	//function to update the table based on a table name
