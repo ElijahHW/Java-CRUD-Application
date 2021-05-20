@@ -124,7 +124,7 @@ public class DeleteFromDB {
 					boolean cell = (boolean)DataTable.getValueAt(i, 0);
 					if (cell) {
 						
-						//Delete
+						DBConnection.delete(table, (String)DataTable.getValueAt(i, 1));
 					}
 				}
 			}

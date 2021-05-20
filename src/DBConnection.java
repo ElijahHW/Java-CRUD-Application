@@ -251,10 +251,10 @@ public class DBConnection {
     		return e.getMessage().toString(); 
     	}        		
    }
-    public Boolean delete(String id)
+    public static Boolean delete(String table, String id)
     {
         //SQL STMT
-        String sql="DELETE FROM customer WHERE customerNumber ='"+id+"'";
+        String sql="DELETE FROM " + table + " WHERE customerNumber ='"+id+"'";
         try
         {
             //GET COONECTION
