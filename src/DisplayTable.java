@@ -253,6 +253,7 @@ public class DisplayTable {
 		columns = DBConnection.getColumnNames(tableName);
 		String[][] rows = GetRows(tableName, columns);
 		
+		//This potential warning should be removed during compilation
 		model = new DefaultTableModel(rows, columns) {
 			
 			//an override needed to stop the table from being editable
