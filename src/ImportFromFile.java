@@ -94,7 +94,8 @@ public class ImportFromFile implements ActionListener {
 		}
 			
 		preview = new JTable(tableArray, columns);
-		preview.setEnabled(false);
+		preview.setEnabled(false); //disable editing
+		preview.getTableHeader().setReorderingAllowed(false);
 		JScrollPane scrollPane = new JScrollPane(preview);
 		
 		validationMessage = new JLabel("");

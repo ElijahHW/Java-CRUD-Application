@@ -71,9 +71,18 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 			}		
 
 		}
-		table = new JTable(dataArray, columnNames);
+		
+		table = new JTable(dataArray, columnNames){
+			   public boolean isCellEditable(int row, int column){ 
+			        return column != 0; // Disables editing on column with index 0, as this should be the primary key
+			   }
+		};
+		table.getTableHeader().setReorderingAllowed(false);
 		table.getModel().addTableModelListener(this);
 		JScrollPane scrollPane = new JScrollPane(table);
+		
+		
+		
 		
 		displayTable.setLayout(new BorderLayout());
 		displayTable.add(scrollPane);
@@ -88,8 +97,8 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		JPanel submitButton = new JPanel();
 		submitButton.setLayout(new BoxLayout(submitButton, BoxLayout.PAGE_AXIS));
 		
-		validation = new JLabel("123");
-		//validation.setAlignmentX(validation.CENTER_ALIGNMENT);
+		validation = new JLabel("",SwingConstants.CENTER);
+		validation.setAlignmentX(validation.CENTER_ALIGNMENT);
 		submit = new JButton("Save changes");
 		submit.setFocusable(false);
 		submit.setBackground(Color.WHITE);
