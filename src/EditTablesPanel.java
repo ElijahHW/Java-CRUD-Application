@@ -26,6 +26,7 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 	private GridBagConstraints gbc = new GridBagConstraints();
 	ArrayList<Integer> row = new ArrayList<Integer>();
 	ArrayList<Integer> linesDone = new ArrayList<Integer>();
+	ArrayList<Integer> linesNotDone = new ArrayList<Integer>();
 	
 	public EditTablesPanel() {
 		panel = new JPanel();
@@ -128,15 +129,15 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		for(int i=0;i<dataTypes.length;i++) {
 			innerloop:
 			for(int j=0;j<row.size();j++) {
-					data = table.getValueAt(j, i).toString();
-					if(data.isEmpty()) {break innerloop;} // Skip iteration if the cell is empty
+					if(table.getValueAt(j, i) == null || table.getValueAt(j, i).toString().isEmpty()) {break innerloop;} // Skip iteration if the cell is empty
 					try {
-					switch(dataTypes[i]) {	//Checks for different data types
-						case "decimal":
-							Double.parseDouble(data);
+						data = table.getValueAt(j, i).toString();
+						switch(dataTypes[i]) {	//Checks for different data types
+							case "decimal":
+								Double.parseDouble(data);
 							break;
-						case "int":
-							Integer.parseInt(data);
+							case "int":
+								Integer.parseInt(data);
 							break;								
 					}	
 				}catch(Exception e) {	
@@ -168,6 +169,9 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 					row.remove(i);
 					i--;
 				}else { //an error happened, STOP!
+					for(int j = 0;j<row.size();j++) {
+						linesNotDone.add(row.get(j)+1); // Gets the lines that was not executed
+					}
 					break outerloop;
 				}
 			}
@@ -208,11 +212,11 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 					validation.setText(message);
 					validation.setForeground(Color.green); 			
 				}else { //Display error message
-					validation.setText("<html>Error: " + message + "<br/> row " + linesDone.toString() + " got executed. row was not executed " + row.toString() + "</html>");
+					validation.setText("<html>Error: " + message + "<br/> row " + linesDone.toString() + " got executed. row " + linesNotDone.toString() + " was not executed</html>");
 					validation.setForeground(Color.red);	
 				}
-			}
-			
+				linesDone.clear();			}
+				linesNotDone.clear();
 		}
 		
 	}
@@ -222,5 +226,8 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 	public void tableChanged(TableModelEvent e) {
 		row.add(e.getFirstRow()); // Stores which rows has been changed	
 	}
+	
+	
+	
 
 }
