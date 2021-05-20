@@ -230,12 +230,12 @@ public class DisplayTable {
 		panel.setLayout(new GridBagLayout());
 		
 		SearchField = new JTextField();
-<<<<<<< Updated upstream
+
 		SearchField.setPreferredSize(new Dimension(200, 20));
-=======
+
 		SearchField.setToolTipText("Search for data in a spesific column, choose column by using the filter on the right ");
 		SearchField.setPreferredSize(new Dimension(300, 30));
->>>>>>> Stashed changes
+
 		SearchField.setBackground(Color.WHITE);
 
 		JLabel FilterLabel = new JLabel("Search: ", SwingConstants.RIGHT);

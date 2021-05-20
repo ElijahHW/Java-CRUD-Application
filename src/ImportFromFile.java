@@ -23,9 +23,7 @@ public class ImportFromFile implements ActionListener {
 	private ArrayList<ArrayList<String>> dataFromFile;
 	private GridBagConstraints gbc = new GridBagConstraints();
 	private JTable preview;
-	
-	
-	
+		
 	public ImportFromFile() {
 		panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
