@@ -214,7 +214,6 @@ public class DBConnection {
     Dynamical method to update a row in the database
     table = name of table to insert into
     input = array of all values that is to be inserted
-    columns = array of column names
     */   
     public static String updateTable(String table, String[] input) {
     	String[] columns = getColumnNames(table);
