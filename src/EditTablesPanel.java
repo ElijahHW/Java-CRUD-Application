@@ -2,11 +2,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -20,7 +25,7 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 	JTable table;
 	private GridBagConstraints gbc = new GridBagConstraints();
 	ArrayList<Integer> row = new ArrayList<Integer>();
-	
+	ArrayList<Integer> linesDone = new ArrayList<Integer>();
 	
 	public EditTablesPanel() {
 		panel = new JPanel();
@@ -82,8 +87,8 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		JPanel submitButton = new JPanel();
 		submitButton.setLayout(new BoxLayout(submitButton, BoxLayout.PAGE_AXIS));
 		
-		validation = new JLabel("");
-		validation.setAlignmentX(validation.CENTER_ALIGNMENT);
+		validation = new JLabel("123");
+		//validation.setAlignmentX(validation.CENTER_ALIGNMENT);
 		submit = new JButton("Save changes");
 		submit.setFocusable(false);
 		submit.setBackground(Color.WHITE);
@@ -111,6 +116,66 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 	}
 	
 	
+	//Loops through all the changed rows and checks for correct datatype int/double/string
+	private boolean validateData() { 
+		boolean isValid = true;
+		String error = "";
+		String data;
+		String[] dataTypes = dbConnection.getColumnDataType(selectTable.getSelectedItem().toString()); //Gets the datatypes for each column in the table
+		
+		
+		outerloop:
+		for(int i=0;i<dataTypes.length;i++) {
+			innerloop:
+			for(int j=0;j<row.size();j++) {
+					data = table.getValueAt(j, i).toString();
+					if(data.isEmpty()) {break innerloop;} // Skip iteration if the cell is empty
+					try {
+					switch(dataTypes[i]) {	//Checks for different data types
+						case "decimal":
+							Double.parseDouble(data);
+							break;
+						case "int":
+							Integer.parseInt(data);
+							break;								
+					}	
+				}catch(Exception e) {	
+					isValid = false; //Data is not valid and cant be entered to database
+					error = "Error: Expected " + dataTypes[i] + " at row " + (j+1) + " column " + (i+1);
+					validation.setText(error);
+					validation.setForeground(Color.red);
+					break outerloop; //Break loops after exception so the error message can be displayed to the user
+				}
+			}
+		}
+		return isValid;
+	}
+	
+	//Method to loop through all the changed row and send it to the database method for insertion in dbConnection class
+	public String callDb() { 
+		String result = "Data updated";
+		
+		outerloop:
+			for(int i = 0;i<row.size();i++) {
+				int index = row.get(i);
+				String[] data = getDataFromTable(index);
+				
+				result = dbConnection.updateTable(selectTable.getSelectedItem().toString(), data);
+					
+				if(result.equals("Data updated")) {
+					linesDone.add(row.get(i)+1); // The row got executed to the database so we add that row number to our linesDone list
+					System.out.println(row.get(i)+1);
+					row.remove(i);
+					i--;
+				}else { //an error happened, STOP!
+					break outerloop;
+				}
+			}
+		
+		return result;
+	}
+	
+	
 	public JPanel getPanel() {
 		return panel;
 	}
@@ -130,14 +195,24 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		}
 		
 		if (e.getSource() == submit) {
-			String message = "";
+			boolean validData = validateData(); //Datatype validation
+			if(validData) {
+				Collections.sort(row); //Sorts the arraylist and remove duplicate rows
+				Set<Integer> set = new HashSet<Integer>(row); 
+				row.clear();
+				row.addAll(set);
 			
-			for(int i = 0;i<row.size();i++) {
-				int index = row.get(i);
-				String[] data = getDataFromTable(index);
-				message = dbConnection.updateTable(selectTable.getSelectedItem().toString(), data, dbConnection.getColumnNames(selectTable.getSelectedItem().toString()));
+				String message = callDb();
+						
+				if(message.equals("Data updated")) {
+					validation.setText(message);
+					validation.setForeground(Color.green); 			
+				}else { //Display error message
+					validation.setText("<html>Error: " + message + "<br/> row " + linesDone.toString() + " got executed. row was not executed " + row.toString() + "</html>");
+					validation.setForeground(Color.red);	
+				}
 			}
-			validation.setText(message);
+			
 		}
 		
 	}
