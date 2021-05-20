@@ -270,7 +270,7 @@ public class DBConnection {
     		return e.getMessage().toString(); 
     	}        		
    }
-    public static String delete(String table, String PrimaryColumn, String id)
+    public static int delete(String table, String PrimaryColumn, String id)
     {
         //SQL STMT
         String sql="DELETE FROM " + table + " WHERE " + PrimaryColumn +" ='"+id+"'";
@@ -282,16 +282,16 @@ public class DBConnection {
             Statement s=con.prepareStatement(sql);
             //EXECUTE
             s.execute(sql);
-            return "";
+            return 0;
 
         }catch(Exception ex)
         {
             //ex.printStackTrace();
     		if(ex.getMessage().contains("foreign key")) {
-    			return ("Can't delete one of the selected because of a foreign key constraint");
+    			return 1;
     		} else {
     			
-                return "Something went wrong";
+                return 2;
     		}
         }
     }
