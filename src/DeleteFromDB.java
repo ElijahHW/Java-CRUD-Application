@@ -209,6 +209,7 @@ public class DeleteFromDB {
 		SearchField = new JTextField();
 		SearchField.setPreferredSize(new Dimension(100, 25));
 		SearchField.setBackground(Color.WHITE);
+		SearchField.setToolTipText("Search in the first column of all tables");
 		
 		String[] TableArray = {"customers", 
 				"employees",
