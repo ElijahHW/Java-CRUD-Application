@@ -4,9 +4,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
-
 import javax.swing.*;
-import javax.swing.border.Border;
 
 public class AddCustomerView implements ActionListener {
 	
@@ -134,67 +132,93 @@ public class AddCustomerView implements ActionListener {
 				//makes sure that the credit input is valid
 				if (ValidCredit) {
 					
-					//tries to insert the values added to the database
-					try {
-						String respons = DBConnection.addCustomer(
-								customerNumberInput.getText(), 
-								customerNameInput.getText(),
-								contactLastNameInput.getText(), 
-								contactFirstNameInput.getText(), 
-								phoneInput.getText(), 
-								addressLine1Input.getText(), 
-								addressLine2Input.getText(), 
-								cityInput.getText(), 
-								stateInput.getText(), 
-								postalCodeInput.getText(), 
-								countryInput.getText(),
-								salesRepNumberList.getSelectedItem().toString(),
-								CreditNumber + "");
-						if(customerNumberInput.getText().equals("") || customerNumberInput.getText()== null) {
-							JOptionPane.showMessageDialog(null, "Customer number is empty");
-						}
+					//Makes sure that everything important is filled in
+					if (customerNameInput.getText().equals("") || customerNameInput.getText()== null) {
 						
-						if(customerNameInput.getText().equals("") || customerNameInput.getText()== null) {
-							JOptionPane.showMessageDialog(null, "Customer name is empty");
-						}
+						responseText.setForeground(Color.RED);
+						responseText.setText("Customer name is empty");
+					} else {
+						
 						if(contactLastNameInput.getText().equals("") || contactLastNameInput.getText()== null) {
-							JOptionPane.showMessageDialog(null, "Lastname is empty");
-						}
-						if(contactFirstNameInput.getText().equals("") || contactFirstNameInput.getText()== null) {
-							JOptionPane.showMessageDialog(null, "First name is empty");
-						}
-						if(phoneInput.getText().equals("") || phoneInput.getText()== null) {
-							JOptionPane.showMessageDialog(null, "You have not entered a phonenumber");
-						}
-						if(addressLine1Input.getText().equals("") || addressLine1Input.getText()== null) {
-							JOptionPane.showMessageDialog(null, "first adress is empty");
-						}
-						if(addressLine2Input.getText().equals("") || addressLine2Input.getText()== null) {
-							JOptionPane.showMessageDialog(null, "Second address is empty");
-						}
-						if(cityInput.getText().equals("") || cityInput.getText()== null) {
-							JOptionPane.showMessageDialog(null, "You have not entered a city");
-						}
-					
-						responseText.setText(respons);
-						
-						if(respons.equals("Something went wrong.")) {
 							
 							responseText.setForeground(Color.RED);
-							responseText.setText(respons);
+							responseText.setText("Lastname is empty");
+						} else {
 							
-						}else {
-							
-							responseText.setForeground(new Color(0x11780f));
-							responseText.setText(respons);
-							
-						}
+							if(contactFirstNameInput.getText().equals("") || contactFirstNameInput.getText()== null) {
 								
-					} catch (Exception e1) {
-						System.out.println(e1);
-						responseText.setForeground(Color.RED);
-						responseText.setText("Something went wrong");
+								responseText.setForeground(Color.RED);
+								responseText.setText("First name is empty");
+							} else {
+								
+								if(phoneInput.getText().equals("") || phoneInput.getText()== null) {
+									
+									responseText.setForeground(Color.RED);
+									responseText.setText("You have not entered a phonenumber");
+								} else {
+									
+									if(addressLine1Input.getText().equals("") || addressLine1Input.getText()== null) {
+										
+										responseText.setForeground(Color.RED);
+										responseText.setText("first adress is empty");
+									}  else {
+											
+										if(cityInput.getText().equals("") || cityInput.getText()== null) {
+												
+											responseText.setForeground(Color.RED);
+											responseText.setText("You have not entered a city");
+										} else {
+												
+												if (countryInput.getText().equals("") || countryInput.getText() == null) {
+													
+													responseText.setForeground(Color.RED);
+													responseText.setText("You have not entered a country");
+												} else {
+													
+													//tries to insert the values added to the database
+													try {
+														String respons = DBConnection.addCustomer(
+																customerNumberInput.getText(), 
+																customerNameInput.getText(),
+																contactLastNameInput.getText(), 
+																contactFirstNameInput.getText(), 
+																phoneInput.getText(), 
+																addressLine1Input.getText(), 
+																addressLine2Input.getText(), 
+																cityInput.getText(), 
+																stateInput.getText(), 
+																postalCodeInput.getText(), 
+																countryInput.getText(),
+																salesRepNumberList.getSelectedItem().toString(),
+																CreditNumber + "");
+
+														responseText.setText(respons);
+														
+														if(respons.equals("Something went wrong.")) {
+															
+															responseText.setForeground(Color.RED);
+															responseText.setText(respons);
+															
+														}else {
+															
+															responseText.setForeground(new Color(0x11780f));
+															responseText.setText(respons);
+															
+														}
+																
+													} catch (Exception e1) {
+														System.out.println(e1);
+														responseText.setForeground(Color.RED);
+														responseText.setText("Something went wrong");
+													}
+											}	
+										}
+									}
+								}
+							}
+						}
 					}
+
 				} else {
 					responseText.setForeground(Color.RED);
 					responseText.setText("Credit number not valid");
@@ -499,20 +523,26 @@ public class AddCustomerView implements ActionListener {
                 if (SearchString.length() > 0) {
                 	
                     textField.setText(SearchString.replaceAll("[^\\d.]", ""));
-                    double tempNumber = Double.parseDouble(SearchString);
-                    tempNumber = Math.round(tempNumber * 100d)/100d;
-                    
-                    //checks if the rounded number is longer than 10 digits
-                    if (String.valueOf(Math.round(tempNumber)).length() > 10) {
+                    try {
+                    	
+                        double tempNumber = Double.parseDouble(SearchString);
+                        tempNumber = Math.round(tempNumber * 100d)/100d;
+                        
+                        //checks if the rounded number is longer than 10 digits
+                        if (String.valueOf(Math.round(tempNumber)).length() > 10) {
+                        	responseText.setForeground(Color.RED);
+                        	responseText.setText("The credit number must be less than 10000000000");
+                        	ValidCredit = false;
+                        } else {
+                        	responseText.setText(null);
+                        	CreditNumber = tempNumber;
+                        	ValidCredit = true;
+                        }
+                    } catch (NumberFormatException  nfe) {
+                    	
+                    	responseText.setText("Only Numbers permitted in the credits field");
                     	responseText.setForeground(Color.RED);
-                    	responseText.setText("The credit number must be less than 10000000000");
-                    	ValidCredit = false;
-                    } else {
-                    	responseText.setText(null);
-                    	CreditNumber = tempNumber;
-                    	ValidCredit = true;
                     }
-                                      
                 } else {
                 	CreditNumber = 0f;
                 	ValidCredit = true;
