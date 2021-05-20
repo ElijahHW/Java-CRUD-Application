@@ -122,18 +122,61 @@ public class DeleteFromDB {
 		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				 //JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected data?", "Warning Message",  JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE); 
+				boolean failed = false;
+				List<String> passed = new ArrayList<String>();
 				
 				for (int i = 0; i < DataTable.getRowCount(); i++) {
 					
 					boolean cell = (boolean)DataTable.getValueAt(i, 0);
 					if (cell) {
 						
-						String response = DBConnection.delete(table, (String)columns[1], (String)DataTable.getValueAt(i, 1));
+						String key = (String)DataTable.getValueAt(i, 1);
 						
-						ResponseText.setText(response);
+						int response = DBConnection.delete(table, (String)columns[1], key);
+						String responseText = "";
+						switch(response) {
+							case 0:
+								passed.add(key);
+								break;
+							case 1:
+								
+								responseText = "Foreign key constraint error at id: " + key;
+								failed = true;
+								break;
+							case 2:
+								
+								responseText = "Something went wrong";
+								failed = true;
+								break;
+						}
 						
-						UpdateTable();
+						if (failed && passed.size() > 0) {
+							
+							String outPut = "";
+							
+							for(String n : passed) {
+								
+								outPut += n + ", ";
+							}
+							outPut += "were deleted successfully. ";
+							
+							ResponseText.setText(outPut + responseText);
+							UpdateTable();
+							break;
+						} else if (failed && passed.size() == 0) {
+							
+							ResponseText.setText(responseText);
+							UpdateTable();
+							break;
+						}
+						
 					}
+				}
+				
+				if (!failed) {
+					
+					ResponseText.setText("All rows deleted");
+					UpdateTable();
 				}
 			}
 		});
