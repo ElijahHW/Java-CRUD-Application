@@ -180,7 +180,7 @@ public class DisplayTable {
 			BufferedWriter WriterBuffer = new BufferedWriter(TableExport);
 			String line = "";
 			for (int i = 0; i < table.getRowCount(); i++) {
-				//line = "";
+				line = "";
 				for (int r = 0; r < table.getColumnCount(); r++) {
 					if (table.getValueAt(i, r) != null && !table.getValueAt(i, r).equals("")) {
 						//WriterBuffer.write(table.getValueAt(i, r).toString() + "~");
