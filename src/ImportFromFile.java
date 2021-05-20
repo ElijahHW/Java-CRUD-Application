@@ -18,7 +18,8 @@ public class ImportFromFile implements ActionListener {
 	private JButton openFile, addToTable;
 	private JFileChooser fc;
 	private String filePath;
-	private JLabel currentFile, validationMessage;
+	private JLabel currentFile;
+	private JLabel validationMessage = new JLabel("");
 	private JComboBox<String> tableComboBox;
 	private ArrayList<ArrayList<String>> dataFromFile;
 	private GridBagConstraints gbc = new GridBagConstraints();
@@ -98,8 +99,7 @@ public class ImportFromFile implements ActionListener {
 		preview.setEnabled(false); //disable editing
 		preview.getTableHeader().setReorderingAllowed(false);
 		JScrollPane scrollPane = new JScrollPane(preview);
-		
-		validationMessage = new JLabel("");
+	
 		validationMessage.setFont(new Font(null, Font.BOLD,15));
 		validationMessage.setAlignmentX(addToTable.CENTER_ALIGNMENT);
 		
@@ -209,37 +209,42 @@ public class ImportFromFile implements ActionListener {
 
 				File file = fc.getSelectedFile();
 				filePath = file.getPath();
-
+				
 				dataFromFile = new ArrayList<ArrayList<String>>(); // Array to store all the data in the file
 				int index = 0; // Used to track the row in the textfile
 				
 				try {
 					File myObj = new File(filePath);
 					Scanner myReader = new Scanner(myObj);
-					while (myReader.hasNextLine()) {
-						dataFromFile.add(new ArrayList<String>());
-						String textFromLine = myReader.nextLine(); 
-					    String[] parts = textFromLine.split(";"); //Splits the row into an array based on the delimeter
+			
+					System.out.println(file.length());
+					if(file.length() == 0) { //File is empty
+						JOptionPane.showMessageDialog(panel, "File is empty, please choose another file");
+					}else {
+						while (myReader.hasNextLine()) {
+							dataFromFile.add(new ArrayList<String>());
+							String textFromLine = myReader.nextLine(); 
+							String[] parts = textFromLine.split(";"); //Splits the row into an array based on the delimeter
 					    
-						for(int i = 0;i<parts.length;i++) {
-							dataFromFile.get(index).add(parts[i]);
-						}
+							for(int i = 0;i<parts.length;i++) {
+								dataFromFile.get(index).add(parts[i]);
+							}
 						
-						if(dataPreview != null) { //Remove old table when a new file is selected
-							panel.remove(dataPreview);
-							panel.revalidate();
-							panel.repaint();
+							if(dataPreview != null) { //Remove old table when a new file is selected
+								panel.remove(dataPreview);
+								panel.revalidate();
+								panel.repaint();
 							
+							}
+							index++;
 						}
-						index++;
-					}
-					myReader.close();
-					
+						myReader.close();
+						currentFile.setText("Current file: " + file.getName());	//Shows the user the name of the current open file
+				}
 				} catch (FileNotFoundException fe) {
-					System.out.println("An error occurred.");
 					fe.printStackTrace();
 				}
-				currentFile.setText("Current file: " + file.getName());	//Shows the user the name of the current open file	
+					
 			}
 		}	
 		
@@ -256,9 +261,15 @@ public class ImportFromFile implements ActionListener {
 				panel.repaint();
 			}else { //Tells the user about the errors
 				
-				UIManager.put("Button.background", Color.white);
-				JOptionPane.showMessageDialog(panel, "The expected number of columns for the " + tableComboBox.getSelectedItem() + " table is " + columnNames.length + ". Your text file is not matching this on line " + errors.toString()
-				+ "\n\n Each column value in the text file should be seperated by ; and rows by a newline");
+				if(errors.size() < 10) { // Under 10 errors, displays the row for the errors
+					UIManager.put("Button.background", Color.white);
+					JOptionPane.showMessageDialog(panel, "The expected number of columns for the " + tableComboBox.getSelectedItem() + " table is " + columnNames.length + ". Your text file is not matching this on line " + errors.toString()
+					+ "\n\n Each column value in the text file should be seperated by ; and rows by a newline");
+				}
+				else { // 10 or more errors, displays a more generic error message
+					UIManager.put("Button.background", Color.white);
+					JOptionPane.showMessageDialog(panel, "You have " + errors.size() + " errors. Are you sure you are choosing the right table?");
+				}
 			}
 		}
 		
