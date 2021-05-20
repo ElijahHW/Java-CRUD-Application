@@ -8,16 +8,16 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;    
 public class MainFrame extends JFrame implements ActionListener {
 	
-	//Header Elements
+	  //Header Elements
 		private JMenuBar menuBar;
-	    private JMenu fileMenu, actionMenu, dateMenu, statusLabel;
-	    private JMenuItem addItem, listItem, deleteItem, editItem, importItem, copyItem, exitItem, backBtn2;
+	    private JMenu systemMenu, actionMenu, dateMenu, statusMenu;
+	    private JMenuItem addItem, displayItem, deleteItem, updateItem, importItem, exitItem;
 	    private JButton homeBtn, backBtn;
-	    private JLabel f;
+	    
 	  //Body Elements
 	    private JPanel panel = new JPanel();
 	    private JLabel welcomeLabel = new JLabel("Welcome to the Management Application");
-	    private JButton addBtn, listBtn, deleteBtn, editBtn, importBtn;
+	    private JButton addBtn, displayBtn, deleteBtn, updateBtn, importBtn;
 
 	  //Extra Elements for Body
 	    private DateTimeFormatter date = DateTimeFormatter.ofPattern("MM/dd : HH:mm");  
@@ -25,9 +25,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	    
 	  //Previous panel
 	    private JPanel PreviousPanel, StartPanel;
-	    
+
     MainFrame() {
-    	boolean status = DBConnection.tryConnection(); // Checks the connection with the database
     	
 		// Defining application size, layout and close operation.
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,7 +44,7 @@ public class MainFrame extends JFrame implements ActionListener {
         menuBar.setBackground(Color.WHITE);
         
         homeBtn = new JButton("Home");
-        homeBtn.setToolTipText("Click this button to disable the middle button.");
+        homeBtn.setToolTipText("There is no place like 127.0.0.1");
         homeBtn.setFocusable(false);
         homeBtn.setBackground(Color.WHITE);
         homeBtn.setFont(new Font(null, Font.BOLD,15));
@@ -61,30 +60,29 @@ public class MainFrame extends JFrame implements ActionListener {
         dateMenu.setFont(new Font(null, Font.BOLD,15));
         dateMenu.setEnabled(false);
         
-        fileMenu = new JMenu("File");
-        fileMenu.setFont(new Font(null, Font.BOLD,15));
-        fileMenu.setForeground(new Color(0x203c56));
+        systemMenu = new JMenu("System");
+        systemMenu.setFont(new Font(null, Font.BOLD,15));
+        systemMenu.setForeground(new Color(0x203c56));
 
+    	statusMenu = new JMenu("Connecting to DB...");
+    	
 
 		// Defining the MenuItems under each JMenu.
         addItem = new JMenuItem("Add Customer");
         addItem.setBackground(Color.WHITE);
 
-        listItem = new JMenuItem("Display Tables / Export");
-        listItem.setBackground(Color.WHITE);
+        displayItem = new JMenuItem("Export / Display Tables");
+        displayItem.setBackground(Color.WHITE);
 
         deleteItem = new JMenuItem("Delete Data from Database");
         deleteItem.setBackground(Color.WHITE);
         
-        editItem = new JMenuItem("Update Data in Database");
-        editItem.setBackground(Color.WHITE);
+        updateItem = new JMenuItem("Update Data in Database");
+        updateItem.setBackground(Color.WHITE);
         
         importItem = new JMenuItem("Import from File");
         importItem.setBackground(Color.WHITE);
-
-        copyItem = new JMenuItem("Copy");
-        copyItem.setBackground(Color.WHITE);
-        
+       
         exitItem = new JMenuItem("Exit Application");
         exitItem.setBackground(Color.WHITE);
         
@@ -102,75 +100,62 @@ public class MainFrame extends JFrame implements ActionListener {
         //These can be used by pressing 'alt + key', the key will be underlined.
         KeyStroke keyStrokeHomeBtn = KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.ALT_DOWN_MASK);
         homeBtn.setMnemonic(KeyEvent.VK_H); 
-        fileMenu.setMnemonic(KeyEvent.VK_F); 
+        systemMenu.setMnemonic(KeyEvent.VK_S); 
         actionMenu.setMnemonic(KeyEvent.VK_A); 
         
         //Adding shortcuts/KeyStrokes to each JMenuItem for accessibility.
         //These can be used by pressing 'ctrl + key', the key will be underlined in the application.
         KeyStroke keyStrokeAddItem = KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK);
-        KeyStroke keyStrokeListItem = KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK);
-        KeyStroke keyStrokedeleteItem = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
-        KeyStroke keyStrokeEditItem = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke keyStrokedisplayItem = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke keyStrokedeleteItem = KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke keyStrokeupdateItem = KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_DOWN_MASK);
         KeyStroke keyStrokeImportItem = KeyStroke.getKeyStroke(KeyEvent.VK_I, KeyEvent.CTRL_DOWN_MASK);
-        KeyStroke keyStrokeCopyItem = KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK);
         KeyStroke keyStrokeExitItem = KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK);
 
         addItem.setMnemonic(KeyEvent.VK_A); //key
         addItem.setAccelerator(keyStrokeAddItem);
 
-        listItem.setMnemonic(KeyEvent.VK_L); //key
-        listItem.setAccelerator(keyStrokeListItem);
+        displayItem.setMnemonic(KeyEvent.VK_E); //key
+        displayItem.setAccelerator(keyStrokedisplayItem);
         
         deleteItem.setMnemonic(KeyEvent.VK_D); //key
         deleteItem.setAccelerator(keyStrokedeleteItem);
 
-        editItem.setMnemonic(KeyEvent.VK_E); //key
-        editItem.setAccelerator(keyStrokeEditItem);
+        updateItem.setMnemonic(KeyEvent.VK_U); //key
+        updateItem.setAccelerator(keyStrokeupdateItem);
 
         importItem.setMnemonic(KeyEvent.VK_I); //key 
         importItem.setAccelerator(keyStrokeImportItem);
-
-        copyItem.setMnemonic(KeyEvent.VK_C); //key
-        copyItem.setAccelerator(keyStrokeCopyItem);
         
         exitItem.setMnemonic(KeyEvent.VK_W); //key
         exitItem.setAccelerator(keyStrokeExitItem);
 
         //Adding each Item to its JMenu Parent
         actionMenu.add(addItem);
-        actionMenu.add(listItem);
+        actionMenu.add(displayItem);
         actionMenu.add(deleteItem);
-        actionMenu.add(editItem);
+        actionMenu.add(updateItem);
         actionMenu.add(importItem);
-        fileMenu.add(copyItem);
-        fileMenu.add(exitItem);
+        systemMenu.add(exitItem);
         
         
         homeBtn.addActionListener(this);
         addItem.addActionListener(this);
-        listItem.addActionListener(this);
+        displayItem.addActionListener(this);
         deleteItem.addActionListener(this);
-        editItem.addActionListener(this);
+        updateItem.addActionListener(this);
         importItem.addActionListener(this);
-        copyItem.addActionListener(this);
         exitItem.addActionListener(this);
         backBtn.addActionListener(this);
 
         menuBar.add(homeBtn);
-        menuBar.add(fileMenu);
+        menuBar.add(systemMenu);
         menuBar.add(actionMenu);
         menuBar.add(dateMenu);
         menuBar.add(backBtn);
-    	menuBar.add(Box.createHorizontalGlue()); 
-        if(!status) {
-        	statusLabel = new JMenu("No connection to database");
-        	statusLabel.setForeground(Color.RED);	
-        	menuBar.add(statusLabel);
-        } else {
-        	statusLabel = new JMenu("Connected to DB!");
-        	statusLabel.setForeground(new Color(0x11780f));
-        	menuBar.add(statusLabel);
-        }
+		menuBar.add(Box.createHorizontalGlue()); 
+    	menuBar.add(statusMenu);
+
         menuBar.setFocusable(false);
         
         
@@ -192,12 +177,12 @@ public class MainFrame extends JFrame implements ActionListener {
         addBtn.setForeground(new Color(0x102533));
         addBtn.addActionListener(this);
         
-        listBtn = new JButton("Display Tables / Export");
-		listBtn.setToolTipText("Display all tables and exports to a file");
-        listBtn.setFocusable(false);
-        listBtn.setBackground(Color.WHITE);
-        listBtn.setFont(new Font(null, Font.BOLD,15));
-        listBtn.addActionListener(this);
+        displayBtn = new JButton("Export / Display Tables");
+		displayBtn.setToolTipText("Display all tables and exports to a file");
+        displayBtn.setFocusable(false);
+        displayBtn.setBackground(Color.WHITE);
+        displayBtn.setFont(new Font(null, Font.BOLD,15));
+        displayBtn.addActionListener(this);
 
         deleteBtn = new JButton("Delete Data from Database");
         deleteBtn.setToolTipText("Delete data from selected table");
@@ -206,12 +191,12 @@ public class MainFrame extends JFrame implements ActionListener {
         deleteBtn.setFont(new Font(null, Font.BOLD,15));
         deleteBtn.addActionListener(this);
         
-        editBtn = new JButton("Update data in Database DB");        
-		editBtn.setToolTipText("Updates data and saves to database  ");
-        editBtn.setFocusable(false);
-        editBtn.setBackground(Color.WHITE);
-        editBtn.setFont(new Font(null, Font.BOLD,15));
-        editBtn.addActionListener(this);
+        updateBtn = new JButton("Update data in Database DB");        
+		updateBtn.setToolTipText("Updates data and saves to database  ");
+        updateBtn.setFocusable(false);
+        updateBtn.setBackground(Color.WHITE);
+        updateBtn.setFont(new Font(null, Font.BOLD,15));
+        updateBtn.addActionListener(this);
         
         importBtn = new JButton("Bulk Import from file");
         importBtn.setToolTipText("Imports data from a file and - to a table");
@@ -222,9 +207,9 @@ public class MainFrame extends JFrame implements ActionListener {
         
         panel.add(welcomeLabel);
         panel.add(addBtn);
-        panel.add(listBtn);
+        panel.add(displayBtn);
         panel.add(deleteBtn);
-        panel.add(editBtn);
+        panel.add(updateBtn);
         panel.add(importBtn);
         
         //Adding MenuBar to Application and setting it visible.
@@ -237,13 +222,14 @@ public class MainFrame extends JFrame implements ActionListener {
 		this.setLocationRelativeTo(null);
 		
 		StartPanel = (JPanel)this.getContentPane();
-
+		dbStatus();
         }
 
     
 	//Defining the actions of the MenuBar
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		dbStatus();
 		if(e.getSource() == homeBtn) {
 	        this.setTitle("Management Application - Home");
 			PreviousPanel = (JPanel)this.getContentPane();
@@ -263,7 +249,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.pack();
 			backBtn.setVisible(true);
 		} 
-		if(e.getSource() == listItem || e.getSource() == listBtn) {
+		if(e.getSource() == displayItem || e.getSource() == displayBtn) {
 			PreviousPanel = (JPanel)this.getContentPane();
 	        this.setTitle("Management Application - Export Table Data");
 			DisplayTable panel = new DisplayTable();
@@ -285,7 +271,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	        backBtn.setVisible(true);
 
 		}
-		 if(e.getSource() == editItem || e.getSource() == editBtn) {
+		 if(e.getSource() == updateItem || e.getSource() == updateBtn) {
 				PreviousPanel = (JPanel)this.getContentPane();
 		        this.setTitle("Management Application - Update Data");
 				EditTablesPanel panel = new EditTablesPanel();
@@ -318,7 +304,6 @@ public class MainFrame extends JFrame implements ActionListener {
 	
 		//Defining what the Exit button should do.
 		if(e.getSource()==exitItem) {
-			 String[] exitResponse = {"Yes", "No"};
 			 System.out.println("Closing Application...");
 			 try {
                  Thread.sleep(200);
@@ -334,7 +319,17 @@ public class MainFrame extends JFrame implements ActionListener {
              
          }
 	}
-	
+	public void dbStatus() {
+		boolean status = DBConnection.tryConnection();
+        if(!status) {
+        	statusMenu.setText("No connection to database");
+        	statusMenu.setForeground(Color.RED);
+
+        } else if (status) {
+        	statusMenu.setText("Connected to DB!");
+        	statusMenu.setForeground(new Color(0x11780f));
+        }
+	}
 	public JPanel getPanel() {
 		return panel;
 	}

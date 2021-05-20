@@ -113,12 +113,17 @@ public class DeleteFromDB {
 	JPanel DeletePanel() {
 		DeletePanel = new JPanel();
 		DeletePanel.setLayout(new FlowLayout(FlowLayout.LEADING) );
-				
+		
+		ResponseText = new JLabel();
+		
 		//A listener to initiate deleting the table. It gets the path from the fileChooser and adds a filename 
 		deleteButton.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent e) {
 				 //JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected data?", "Warning Message",  JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE); 
 				boolean failed = false;
+				JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected rows?",
+						"Warning Message",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				List<String> passed = new ArrayList<String>();
 				
 				for (int i = 0; i < DataTable.getRowCount(); i++) {
@@ -142,14 +147,15 @@ public class DeleteFromDB {
 								passed.add(key);
 								break;
 							case 1:
-								
 								responseText = "Foreign key constraint error at id: " + key;
 								failed = true;
 								break;
 							case 2:
-								
 								responseText = "Something went wrong";
 								failed = true;
+								break;
+							default:
+								JOptionPane.showMessageDialog(null, responseText, "System Message", JOptionPane.INFORMATION_MESSAGE);
 								break;
 						}
 						
@@ -164,6 +170,7 @@ public class DeleteFromDB {
 							outPut += "were deleted successfully. ";
 							
 							ResponseText.setText(outPut + responseText);
+
 							UpdateTable();
 							break;
 						} else if (failed && passed.size() == 0) {
@@ -172,20 +179,19 @@ public class DeleteFromDB {
 							UpdateTable();
 							break;
 						}
-						
+
 					}
 				}
 				
 				if (!failed) {
-					
-					ResponseText.setText("All rows deleted");
+					ResponseText.setText("All selected rows deleted :)");
 					UpdateTable();
 				}
+				JOptionPane.showMessageDialog(null, ResponseText, "System Message", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		
-		ResponseText = new JLabel();
-		
+
 		DeletePanel.add(ResponseText);
 		
 		return DeletePanel;
@@ -226,8 +232,9 @@ public class DeleteFromDB {
 				"products"};
 		
 		TableList = new JComboBox<String>(TableArray);
+		TableList.setBackground(Color.WHITE);
 		TableList.addActionListener(new ActionListener () {
-			
+
 			public void actionPerformed(ActionEvent e) {
 				table = TableList.getSelectedItem().toString();
 				UpdateTable();

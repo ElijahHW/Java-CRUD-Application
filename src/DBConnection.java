@@ -22,7 +22,6 @@ public class DBConnection {
     		status = false;
     		System.out.println(e);
     	}
-    	System.out.println(status);
     	return status;
     }
         

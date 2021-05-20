@@ -195,7 +195,6 @@ public class DisplayTable {
 				line = line.replaceAll("[\r\n]+", "");
 				WriterBuffer.write(line);
 				WriterBuffer.newLine();
-				System.out.println(line);
 			}
 			System.out.println("File Written");
 			JOptionPane.showMessageDialog(null, "File saved to your system.", "User Mangement - Export Data", JOptionPane.INFORMATION_MESSAGE);

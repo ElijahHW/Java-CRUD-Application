@@ -171,7 +171,6 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 					
 				if(result.equals("Data updated")) {
 					linesDone.add(row.get(i)+1); // The row got executed to the database so we add that row number to our linesDone list
-					System.out.println(row.get(i)+1);
 					row.remove(i);
 					i--;
 				}else { //an error happened, STOP!

@@ -216,7 +216,6 @@ public class ImportFromFile implements ActionListener {
 					File myObj = new File(filePath);
 					Scanner myReader = new Scanner(myObj);
 			
-					System.out.println(file.length());
 					if(file.length() == 0) { //File is empty
 						JOptionPane.showMessageDialog(panel, "File is empty, please choose another file");
 					}else {
