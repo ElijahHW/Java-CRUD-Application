@@ -1,5 +1,29 @@
+/AddCustomerView$1.class
+/AddCustomerView$2.class
+/AddCustomerView.class
+/App.class
 /DBConnection.class
+/DeleteFromDB$1.class
+/DeleteFromDB$2.class
+/DeleteFromDB$3.class
+/DeleteFromDB$model.class
+/DeleteFromDB.class
+/DisplayTable$1.class
+/DisplayTable$2.class
+/DisplayTable$3.class
 /DisplayTable$4.class
+/DisplayTable.class
 /EditTablesPanel$1.class
+<<<<<<< Updated upstream
 /DeleteFromDB$4.class
 /DeleteFromDB$model.class
+=======
+/EditTablesPanel.class
+/ImportFromFile.class
+/ListOrders$1.class
+/ListOrders$2.class
+/ListOrders$3.class
+/ListOrders.class
+/MainFrame.class
+/assets/
+>>>>>>> Stashed changes
