@@ -234,7 +234,6 @@ public class MainFrame extends JFrame implements ActionListener {
             this.repaint();
 			this.revalidate();
 			this.pack();
-			//Backbutton won't work on home as everything is reset
 			backBtn.setVisible(true);
 		}
 		if(e.getSource() == addItem || e.getSource() == addBtn) {
