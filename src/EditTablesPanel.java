@@ -141,7 +141,7 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		}
 		
 	}
-¨
+
 
 	@Override
 	public void tableChanged(TableModelEvent e) {

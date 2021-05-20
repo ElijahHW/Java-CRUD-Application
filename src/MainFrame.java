@@ -14,7 +14,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		private JMenuBar menuBar;
 	    private JMenu fileMenu, actionMenu, dateMenu;
 	    private JMenuItem addItem, listItem, retrieveItem, editItem, importItem, copyItem, exitItem;
-	    private JButton homeBtn;
+	    private JButton homeBtn, backBtn;
 	    
 	  //Body Elements
 	    private JPanel panel = new JPanel();
@@ -24,7 +24,9 @@ public class MainFrame extends JFrame implements ActionListener {
 	  //Extra Elements for Body
 	    DateTimeFormatter date = DateTimeFormatter.ofPattern("MM/dd : HH:mm");  
 	    LocalDateTime now = LocalDateTime.now();  
-	
+	    
+	  //Previous panel
+	    JPanel PreviousPanel;
 	    
     MainFrame() {
 		// Defining application size, layout and close operation.
@@ -84,6 +86,14 @@ public class MainFrame extends JFrame implements ActionListener {
         
         exitItem = new JMenuItem("Exit Application");
         exitItem.setBackground(Color.WHITE);
+        
+        backBtn = new JButton("Back");
+        backBtn.setFocusable(false);
+        backBtn.setBackground(Color.WHITE);
+        backBtn.setFont(new Font(null, Font.BOLD,15));
+        backBtn.setForeground(new Color(0x203c56));
+        backBtn.setBorder(null);
+        backBtn.setBorder(new EmptyBorder(0, 10, 0, 10));
 
         
         //Adding shortcuts to each JMenu for accessibility.
@@ -142,11 +152,13 @@ public class MainFrame extends JFrame implements ActionListener {
         importItem.addActionListener(this);
         copyItem.addActionListener(this);
         exitItem.addActionListener(this);
+        backBtn.addActionListener(this);
 
         menuBar.add(homeBtn);
         menuBar.add(fileMenu);
         menuBar.add(actionMenu);
         menuBar.add(dateMenu);
+        menuBar.add(backBtn);
         menuBar.setFocusable(false);
         
         
@@ -214,6 +226,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == homeBtn) {
+			PreviousPanel = (JPanel)this.getContentPane();
 			this.getContentPane().removeAll();
             this.add(panel);
             this.repaint();
@@ -221,6 +234,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.pack();
 		}
 		if(e.getSource() == addItem || e.getSource() == addBtn) {
+			PreviousPanel = (JPanel)this.getContentPane();
 	        this.setTitle("Management Application - Add Customer");
 			addCustomerView panel = new addCustomerView();
 			this.setContentPane(panel.getPanel());
@@ -230,6 +244,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			
 		} 
 		if(e.getSource() == listItem || e.getSource() == listBtn) {
+			PreviousPanel = (JPanel)this.getContentPane();
 	        this.setTitle("Management Application - List Orders");
 			DisplayTable panel = new DisplayTable();
 			this.setContentPane(panel.getPanel());
@@ -240,6 +255,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		} 
 		
 		 if(e.getSource() == retrieveItem || e.getSource() == retrieveBtn) {
+			PreviousPanel = (JPanel)this.getContentPane();
 	        this.setTitle("Management Application - Retrieve Employees");
 			getEmployees panel = new getEmployees();
 			this.setContentPane(panel.getPanel());
@@ -249,6 +265,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		}
 		 if(e.getSource() == editItem || e.getSource() == editBtn) {
+				PreviousPanel = (JPanel)this.getContentPane();
 		        this.setTitle("Management Application - Edit Tables");
 				EditTablesPanel panel = new EditTablesPanel();
 				this.setContentPane(panel.getPanel());
@@ -258,6 +275,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
 			}
 		if(e.getSource() == importItem || e.getSource() == importBtn) {
+			PreviousPanel = (JPanel)this.getContentPane();
 	        this.setTitle("Management Application - Import from File");
 			ImportFromFile panel = new ImportFromFile();
 			this.setContentPane(panel.getPanel());
@@ -268,7 +286,15 @@ public class MainFrame extends JFrame implements ActionListener {
 	
 		if(e.getSource() == copyItem ) {
 		///hmmmm
-		} 
+		}
+		
+		if (e.getSource() == backBtn) {
+			
+			this.setContentPane(PreviousPanel);
+			this.revalidate();
+			this.repaint();
+			this.pack();
+		}
 	
 		//Defining what the Exit button should do.
 		if(e.getSource()==exitItem) {
