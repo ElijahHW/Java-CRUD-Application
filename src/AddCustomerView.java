@@ -150,7 +150,31 @@ public class AddCustomerView implements ActionListener {
 								countryInput.getText(),
 								salesRepNumberList.getSelectedItem().toString(),
 								CreditNumber + "");
+						if(customerNumberInput.getText().equals("") || customerNumberInput.getText()== null) {
+							JOptionPane.showMessageDialog(null, "Customer number is empty");
+						}
 						
+						if(customerNameInput.getText().equals("") || customerNameInput.getText()== null) {
+							JOptionPane.showMessageDialog(null, "Customer name is empty");
+						}
+						if(contactLastNameInput.getText().equals("") || contactLastNameInput.getText()== null) {
+							JOptionPane.showMessageDialog(null, "Lastname is empty");
+						}
+						if(contactFirstNameInput.getText().equals("") || contactFirstNameInput.getText()== null) {
+							JOptionPane.showMessageDialog(null, "First name is empty");
+						}
+						if(phoneInput.getText().equals("") || phoneInput.getText()== null) {
+							JOptionPane.showMessageDialog(null, "You have not entered a phonenumber");
+						}
+						if(addressLine1Input.getText().equals("") || addressLine1Input.getText()== null) {
+							JOptionPane.showMessageDialog(null, "first adress is empty");
+						}
+						if(addressLine2Input.getText().equals("") || addressLine2Input.getText()== null) {
+							JOptionPane.showMessageDialog(null, "Second address is empty");
+						}
+						if(cityInput.getText().equals("") || cityInput.getText()== null) {
+							JOptionPane.showMessageDialog(null, "You have not entered a city");
+						}
 					
 						responseText.setText(respons);
 						
