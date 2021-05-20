@@ -195,8 +195,7 @@ public class MainFrame extends JFrame implements ActionListener {
         listBtn.setFont(new Font(null, Font.BOLD,15));
         listBtn.addActionListener(this);
 
-        deleteBtn = new JButton("Delete Data from Database");
-        deleteBtn.setToolTipText("Delete data from selected table");
+        deleteBtn = new JButton("Delete Data from Database");        
         deleteBtn.setFocusable(false);
         deleteBtn.setBackground(Color.WHITE);
         deleteBtn.setFont(new Font(null, Font.BOLD,15));
