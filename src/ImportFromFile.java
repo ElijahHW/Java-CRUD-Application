@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -99,6 +100,7 @@ public class ImportFromFile implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane(preview);
 		
 		validationMessage = new JLabel("");
+		validationMessage.setFont(new Font(null, Font.BOLD,15));
 		validationMessage.setAlignmentX(addToTable.CENTER_ALIGNMENT);
 		
 		addToTable = new JButton("Add to table");
@@ -254,10 +256,10 @@ public class ImportFromFile implements ActionListener {
 					String message = callDb();
 					if(message.equals("Data inserted")) {
 					validationMessage.setText(message);
-					validationMessage.setForeground(Color.green); 			
+					validationMessage.setForeground(new Color(0x11780f));			
 					}else {
 						validationMessage.setText("Error: " + message);
-						validationMessage.setForeground(Color.red);	
+						validationMessage.setForeground(Color.RED);	
 					}
 			}
 		}
