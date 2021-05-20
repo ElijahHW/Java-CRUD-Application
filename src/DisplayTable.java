@@ -178,20 +178,29 @@ public class DisplayTable {
 		try {
 			FileWriter TableExport = new FileWriter(savePath);
 			BufferedWriter WriterBuffer = new BufferedWriter(TableExport);
+			String line = "";
 			for (int i = 0; i < table.getRowCount(); i++) {
+				//line = "";
 				for (int r = 0; r < table.getColumnCount(); r++) {
 					if (table.getValueAt(i, r) != null && !table.getValueAt(i, r).equals("")) {
-						WriterBuffer.write(table.getValueAt(i, r).toString() + ";");
+						//WriterBuffer.write(table.getValueAt(i, r).toString() + "~");
+						line += table.getValueAt(i, r).toString() + "~";
 					} else {
 						//in case of a null or empty value
-						WriterBuffer.write(";");
+						//WriterBuffer.write(";");
+						line += "~";
 					}
 				}
+				line = line.substring(0, line.length()-1);
+				line = line.replaceAll("[\r\n]+", "");
+				WriterBuffer.write(line);
 				WriterBuffer.newLine();
+				System.out.println(line);
 			}
 			System.out.println("File Written");
 			JOptionPane.showMessageDialog(null, "File saved to your system.", "User Mangement - Export Data", JOptionPane.INFORMATION_MESSAGE);
 			WriterBuffer.close();
+			TableExport.close();
 			
 		} catch (IOException e) {
 			System.out.println("failed to export file");

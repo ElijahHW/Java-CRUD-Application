@@ -224,7 +224,7 @@ public class ImportFromFile implements ActionListener {
 						while (myReader.hasNextLine()) {
 							dataFromFile.add(new ArrayList<String>());
 							String textFromLine = myReader.nextLine(); 
-							String[] parts = textFromLine.split(";"); //Splits the row into an array based on the delimeter
+							String[] parts = textFromLine.split("~"); //Splits the row into an array based on the delimeter
 					    
 							for(int i = 0;i<parts.length;i++) {
 								dataFromFile.get(index).add(parts[i]);
@@ -264,7 +264,7 @@ public class ImportFromFile implements ActionListener {
 				if(errors.size() < 10) { // Under 10 errors, displays the row for the errors
 					UIManager.put("Button.background", Color.white);
 					JOptionPane.showMessageDialog(panel, "The expected number of columns for the " + tableComboBox.getSelectedItem() + " table is " + columnNames.length + ". Your text file is not matching this on line " + errors.toString()
-					+ "\n\n Each column value in the text file should be seperated by ; and rows by a newline");
+					+ "\n\n Each column value in the text file should be seperated by ~ and rows by a new line");
 				}
 				else { // 10 or more errors, displays a more generic error message
 					UIManager.put("Button.background", Color.white);
