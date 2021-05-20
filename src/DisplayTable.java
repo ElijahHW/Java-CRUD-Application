@@ -3,13 +3,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -36,13 +33,14 @@ public class DisplayTable {
 		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
 		
 		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
 		
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 0.75;
 		c.weighty = 0.75;
 		c.gridwidth = 10;
+		c.gridheight = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		panel.add(FilterSearchPanel(), c);
 		
 		c.gridx = 0;
@@ -51,13 +49,16 @@ public class DisplayTable {
 		c.gridwidth = 10;
 		c.weightx = 1;
 		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
 		panel.add(ScrollPanel(), c); 
 		
 		c.gridx = 0;
 		c.gridy = 9;
 		c.gridwidth = 10;
+		c.gridheight = 1;
 		c.weightx = 0; 
 		c.weighty = 0;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		panel.add(SorterChoicePanel(), c);
 	}
 	
@@ -278,7 +279,7 @@ public class DisplayTable {
 		c.gridy = 2;
 		c.gridwidth = 1;
 		panel.add(FilterLabel, c);
-		
+				
 		return panel;
 	}
 	
