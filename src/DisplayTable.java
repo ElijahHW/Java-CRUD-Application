@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -22,20 +23,21 @@ import java.util.regex.PatternSyntaxException;
 public class DisplayTable {
 	
 	private String SearchString = "";
-	private JPanel panel, ScrollPanel, FilterPanel, FilterPanelSticky, ExportPanel;
+	private JPanel panel, ScrollPanel, FilterPanel, FilterPanelSticky, SearchPanelSticky, ExportPanel;
 	private JTable DataTable;
 	private TableRowSorter<TableModel> sorter;
 	private JTextField searchField;
-	private JComboBox<String> filterTableList, SearchFilterColumns;
+	private JComboBox<String> filterTableList, searchFilterColumns;
 	private TableModel model;
 	private String[] columns = {""};
 	private JLabel searchLabel, filterLabel;
-	private JButton exportButton;
+	private JButton exportBtn;
 	
 	public DisplayTable() {
 		
 		panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
+
 		GridBagConstraints c = new GridBagConstraints();
 	
         c.weightx = 0.5;
@@ -45,8 +47,8 @@ public class DisplayTable {
 
 		panel.add(FilterPanel(), c);
 		
-		c.gridx = 1;
-		c.gridy = 0;
+		c.gridx = 0;
+		c.gridy = 1;
 		c.weightx = 0; 
 		c.weighty = 0;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -67,25 +69,28 @@ public class DisplayTable {
 		JPanel FilterPanel() {
 			
 			FilterPanel = new JPanel();
-			FilterPanel.setLayout(new FlowLayout(FlowLayout.LEFT) );
+			FilterPanel.setLayout(new GridLayout(3,1));
 
 			FilterPanelSticky = new JPanel();
-			FilterPanelSticky.setLayout(new FlowLayout(FlowLayout.LEFT) );
+			FilterPanelSticky.setLayout(new FlowLayout(FlowLayout.LEADING) );
 			
-			filterLabel = new JLabel("Filter by: ");
+			SearchPanelSticky = new JPanel();
+			SearchPanelSticky.setLayout(new FlowLayout(FlowLayout.LEADING) );
+			
+			filterLabel = new JLabel("Filter by Database Table: ");
 			filterLabel.setFont(new Font(null, Font.BOLD, 15));
 			
-			SearchFilterColumns = new JComboBox<String>();
-			SearchFilterColumns.setModel(new DefaultComboBoxModel<String>(DBConnection.getColumnNames("customers")));
-			SearchFilterColumns.setBackground(Color.WHITE);
+			searchFilterColumns = new JComboBox<String>();
+			searchFilterColumns.setModel(new DefaultComboBoxModel<String>(DBConnection.getColumnNames("customers")));
+			searchFilterColumns.setPreferredSize(new Dimension(140, 25));
+			searchFilterColumns.setBackground(Color.WHITE);
 			
+			searchLabel = new JLabel("Search: ");
+			searchLabel.setFont(new Font(null, Font.BOLD, 15));
 			searchField = new JTextField();
 			searchField.setPreferredSize(new Dimension(100, 25));
 			searchField.setBackground(Color.WHITE);
-
-			searchLabel = new JLabel("Search: ");
-			searchLabel.setFont(new Font(null, Font.BOLD, 15));
-
+			
 			String[] TableArray = {
 					"customers", 
 					"employees",
@@ -95,6 +100,7 @@ public class DisplayTable {
 					"payments",
 					"productlines",
 					"products"};
+			
 			filterTableList = new JComboBox<String>(TableArray);
 			filterTableList.setPreferredSize(new Dimension(100, 25));
 			filterTableList.setBackground(Color.WHITE);
@@ -116,7 +122,7 @@ public class DisplayTable {
 	                	sorter.setRowFilter(null);
 	                } else {
 	                	try {
-	                		int SelectedSortButton = SearchFilterColumns.getSelectedIndex();
+	                		int SelectedSortButton = searchFilterColumns.getSelectedIndex();
 	                		sorter.setRowFilter(RowFilter.regexFilter("(?i)" + SearchString, SelectedSortButton));
 	                	} catch (PatternSyntaxException pse) {
 	                		
@@ -126,12 +132,16 @@ public class DisplayTable {
 	                }
 	            }
 	        });
+			SearchPanelSticky.add(searchLabel);
+			SearchPanelSticky.add(searchField);
+			SearchPanelSticky.add(searchFilterColumns);
+
 			FilterPanelSticky.add(filterLabel);
 			FilterPanelSticky.add(filterTableList);
-			FilterPanel.add(searchLabel);
-			FilterPanel.add(searchField);
+			
 			FilterPanel.add(FilterPanelSticky);
-							
+			FilterPanel.add(SearchPanelSticky);
+	
 			return FilterPanel;
 		}
 		
@@ -139,12 +149,12 @@ public class DisplayTable {
 	//Creates the right panel with the choice of column to sort by
 	JPanel ExportPanel() {
 		ExportPanel = new JPanel();
-		ExportPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		ExportPanel.setLayout(new FlowLayout(FlowLayout.LEADING) );
 		
-		exportButton = new JButton("Export to File");
-		exportButton.setBackground(Color.WHITE);
+		exportBtn = new JButton("Export to File");
+		exportBtn.setBackground(Color.WHITE);
 		Icon iconD = UIManager.getIcon("FileView.floppyDriveIcon");
-		exportButton.setIcon(iconD);
+		exportBtn.setIcon(iconD);
 		
 		
 		//Creates a filechooser to select a folder
@@ -154,7 +164,7 @@ public class DisplayTable {
 		PathChooser.setBackground(Color.WHITE);
 
 		//A listener to initiate exporting the table. It gets the path from the filechooser and adds a filename 
-		exportButton.addActionListener(new ActionListener() {
+		exportBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int ReturnValue = PathChooser.showSaveDialog(null);
 				if (ReturnValue == JFileChooser.APPROVE_OPTION) {	
@@ -163,7 +173,7 @@ public class DisplayTable {
 			}
 		});
 		
-		ExportPanel.add(exportButton);
+		ExportPanel.add(exportBtn);
 		return ExportPanel;
 	}
 	//A function to export the table into a file at a given path
@@ -254,8 +264,7 @@ public class DisplayTable {
 	
 	//Function to Update the filterbox
 	void UpdateFilterBox() {
-		
-		SearchFilterColumns.setModel(new DefaultComboBoxModel<String>(columns));
+		searchFilterColumns.setModel(new DefaultComboBoxModel<String>(columns));
 		UpdateSorter();
 	}
 	
