@@ -1,10 +1,7 @@
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -23,7 +20,7 @@ import java.util.regex.PatternSyntaxException;
 public class DisplayTable {
 	
 	private String SearchString = "";
-	private JPanel panel, ScrollPanel, FilterPanel, FilterPanelSticky, SearchPanelSticky, ExportPanel;
+	private JPanel panel, FilterPanel, FilterPanelSticky, SearchPanelSticky, ExportPanel;
 	private JTable DataTable;
 	private TableRowSorter<TableModel> sorter;
 	private JTextField searchField;
