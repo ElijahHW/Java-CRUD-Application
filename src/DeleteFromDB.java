@@ -1,10 +1,8 @@
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -12,7 +10,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
 import java.util.*;
 
 public class DeleteFromDB {
@@ -22,10 +19,11 @@ public class DeleteFromDB {
 	private TableRowSorter<TableModel> sorter;
 	private JTextField SearchField;
 	private JComboBox<String> TableList;
-	private TableModel model;
+	private TableModel   model;
 	private String[] columns = {""};
+	private Object[][] Rows;
 	private JButton deleteButton;
-	private JCheckBox checkBox = null;
+	private String table;
 	
 	public DeleteFromDB() {
 		
@@ -61,17 +59,29 @@ public class DeleteFromDB {
 	
 	
 	//A function to convert the list list from the database into a 2d object array with date value types in the correct places
-	String[][] GetRows(String table, String[] columns) {
+	Object[][] GetRows() {
+
 		List<List<String>> ListTable = DBConnection.getTable(table);
-		String[][] data = new String[ListTable.size()][columns.length];
+		Object[][] data = new Object[ListTable.size()][columns.length];
+		
 		for (int i = 0; i < ListTable.size(); i++) {
-			String[] row = new String[ListTable.get(i).size()];
-			for (int r = 0; r < row.length; r++) {
-				row[r] = ListTable.get(i).get(r);
-			}
+			
+			Object[] row = new Object[columns.length]; 
+			
+			row[0] = false;
+			
+			for (int r = 1; r < row.length; r++) {
+				
+				if (ListTable.get(i).get(r-1) == null) {
+					
+					row[r] = "";
+				} else {
+					
+					row[r] = ListTable.get(i).get(r-1);
+				}
+			} 
 			
 			data[i] = row;
-			
 		}
 		
 		return data;
@@ -82,7 +92,8 @@ public class DeleteFromDB {
 	JScrollPane ScrollPanel() {
 		
 		DataTable = new JTable();
-		UpdateTable("customers");
+		table = "customers";
+		UpdateTable();
 		DataTable.setAutoCreateRowSorter(true);
 		DataTable.getTableHeader().setReorderingAllowed(false);
 		DataTable.setCellSelectionEnabled(true);
@@ -106,7 +117,16 @@ public class DeleteFromDB {
 		//A listener to initiate deleting the table. It gets the path from the fileChooser and adds a filename 
 		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected data?", "Warning Message",  JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE); 
+				 //JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected data?", "Warning Message",  JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE); 
+				
+				for (int i = 0; i < DataTable.getRowCount(); i++) {
+					
+					boolean cell = (boolean)DataTable.getValueAt(i, 0);
+					if (cell) {
+						
+						//Delete
+					}
+				}
 			}
 		});
 		return panel;
@@ -145,8 +165,9 @@ public class DeleteFromDB {
 		TableList = new JComboBox<String>(TableArray);
 		TableList.addActionListener(new ActionListener () {
 			
-		public void actionPerformed(ActionEvent e) {
-				UpdateTable(TableList.getSelectedItem().toString());
+			public void actionPerformed(ActionEvent e) {
+				table = TableList.getSelectedItem().toString();
+				UpdateTable();
 			}
 		});
 		
@@ -159,27 +180,81 @@ public class DeleteFromDB {
 	}
 	
 	//function to update the table based on a table name
-	void UpdateTable(String tableName) {
+	void UpdateTable() {
 		
-		columns = DBConnection.getColumnNames(tableName);
-		String[][] rows = GetRows(tableName, columns);
-		model = new DefaultTableModel(rows, columns) {
+		String[] tempColumns = DBConnection.getColumnNames(table);
 		
-			//an override needed to stop the table from being editable
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-		};;
+		columns = new String[tempColumns.length + 1];
+		columns[0] = "Delete";
+		for (int i = 1; i < columns.length; i++) {
+			
+			columns[i] = tempColumns[i-1];
+		}
+		
+		Rows = GetRows();
+		model = new model();
+		
 		DataTable.setModel(model);
 		SearchField.setText(null);
 
 	}
+	class model extends AbstractTableModel {
 		
+        String[] columnNames = columns;
+        Object[][] data = Rows;
+                
+        public int getColumnCount() {
+        	
+            return columnNames.length;
+        }
+
+        public int getRowCount() {
+        	
+            return data.length;
+        }
+
+        public String getColumnName(int col) {
+        	
+            return columnNames[col];
+        }
+
+        public Object getValueAt(int row, int col) {
+        	
+            return data[row][col];
+        }
+
+        //Makes the table render a checkmark instead of a true/false
+        public Class getColumnClass(int c) {
+        	
+            return getValueAt(0, c).getClass();
+        }
+
+        //Makes sure only the first column is editable
+        public boolean isCellEditable(int row, int col) {
+        	
+            if (col == 0) {
+            	
+                return true;
+            } else {
+            	
+                return false;
+            }
+        }
+
+        public void setValueAt(Object value, int row, int col) {
+        	
+            data[row][col] = value;
+            fireTableCellUpdated(row, col);
+        }
+
+    }
+		
+	
 	//Return the main panel
 	public JPanel getPanel() {
 		return panel;
 	}
 	
 }
+
 
