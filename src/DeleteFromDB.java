@@ -32,14 +32,14 @@ public class DeleteFromDB {
 		panel.setLayout(new GridBagLayout());
 		
 		GridBagConstraints c = new GridBagConstraints();
-		
+        
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 0.2;
 		c.weighty = 0.2;
 		c.fill = GridBagConstraints.BOTH;
-		panel.add(SearchPanel(), c);
-		
+		panel.add(SearchPanel());
+	
 		c.gridx = 90;
 		c.gridy = 0;
 		c.gridheight = 100;

@@ -22,14 +22,14 @@ import java.util.regex.PatternSyntaxException;
 public class DisplayTable {
 	
 	private String SearchString = "";
-	private JPanel panel, ScrollPanel, FilterPanel, ExportPanel;
+	private JPanel panel, ScrollPanel, FilterPanel, FilterPanelSticky, ExportPanel;
 	private JTable DataTable;
 	private TableRowSorter<TableModel> sorter;
 	private JTextField searchField;
-	private JComboBox<String> TableList, SearchFilterColumns;
+	private JComboBox<String> filterTableList, SearchFilterColumns;
 	private TableModel model;
 	private String[] columns = {""};
-	private JLabel searcLabel, filterLabel;
+	private JLabel searchLabel, filterLabel;
 	private JButton exportButton;
 	
 	public DisplayTable() {
@@ -39,72 +39,133 @@ public class DisplayTable {
 		GridBagConstraints c = new GridBagConstraints();
 	
         c.weightx = 0.5;
-		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
+		c.fill = GridBagConstraints.HORIZONTAL;
+
 		panel.add(FilterPanel(), c);
 		
-		c.gridx = 0;
+		c.gridx = 1;
 		c.gridy = 0;
-		c.weightx = 0.1;
-		c.weighty = 0.1;
+		c.weightx = 0; 
+		c.weighty = 0;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		panel.add(ExportPanel(), c);
 		
 		c.gridx = 0;
 		c.gridy = 10;
-		c.gridheight = 90;
-		c.gridwidth = 90;
+		c.gridheight = 80;
+		c.gridwidth = 50;
 		c.weightx = 1;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
 		panel.add(ScrollPanel(), c); 
 	
 	}
-	//Creates the right panel with the choice of column to sort by
-		JPanel ExportPanel() {
-			ExportPanel = new JPanel();
-			ExportPanel.setLayout(new GridLayout(5,1));
+	
+	//Generates the top panel
+		JPanel FilterPanel() {
 			
-			exportButton = new JButton("Export to File");
-			exportButton.setBackground(Color.WHITE);
-			Icon iconD = UIManager.getIcon("FileView.floppyDriveIcon");
-			exportButton.setIcon(iconD);
-			
-			
-			//Creates a filechooser to select a folder
-			JFileChooser PathChooser = new JFileChooser();
-			PathChooser.setDialogTitle("Export to...");
-			PathChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			PathChooser.setBackground(Color.WHITE);
+			FilterPanel = new JPanel();
+			FilterPanel.setLayout(new FlowLayout(FlowLayout.LEFT) );
 
-			//A listener to initiate exporting the table. It gets the path from the filechooser and adds a filename 
-			exportButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					int ReturnValue = PathChooser.showSaveDialog(null);
-					if (ReturnValue == JFileChooser.APPROVE_OPTION) {	
-						ExportTable(DataTable, PathChooser.getSelectedFile().getAbsolutePath() + "//" + TableList.getSelectedItem().toString() + ".txt");
-					}
-				}
+			FilterPanelSticky = new JPanel();
+			FilterPanelSticky.setLayout(new FlowLayout(FlowLayout.LEFT) );
+			
+			filterLabel = new JLabel("Filter by: ");
+			filterLabel.setFont(new Font(null, Font.BOLD, 15));
+			
+			SearchFilterColumns = new JComboBox<String>();
+			SearchFilterColumns.setModel(new DefaultComboBoxModel<String>(DBConnection.getColumnNames("customers")));
+			SearchFilterColumns.setBackground(Color.WHITE);
+			
+			searchField = new JTextField();
+			searchField.setPreferredSize(new Dimension(100, 25));
+			searchField.setBackground(Color.WHITE);
+
+			searchLabel = new JLabel("Search: ");
+			searchLabel.setFont(new Font(null, Font.BOLD, 15));
+
+			String[] TableArray = {
+					"customers", 
+					"employees",
+					"offices",
+					"orderdetails",
+					"orders",
+					"payments",
+					"productlines",
+					"products"};
+			filterTableList = new JComboBox<String>(TableArray);
+			filterTableList.setPreferredSize(new Dimension(100, 25));
+			filterTableList.setBackground(Color.WHITE);
+
+			filterTableList.addActionListener(new ActionListener () {	
+			public void actionPerformed(ActionEvent e) {
+					UpdateTable(filterTableList.getSelectedItem().toString());
+			}
 			});
 			
-			ExportPanel.add(exportButton);
-			return ExportPanel;
+			//a rather lengthy listener to add a onKeyUp function to the searchBar
+			searchField.addKeyListener(new KeyAdapter() {
+	            public void keyReleased(KeyEvent e) {
+	                JTextField textField = (JTextField) e.getSource();
+	                SearchString = textField.getText();
+	                
+	                //Checks what is selected
+	                if (SearchString.length() == 0) {
+	                	sorter.setRowFilter(null);
+	                } else {
+	                	try {
+	                		int SelectedSortButton = SearchFilterColumns.getSelectedIndex();
+	                		sorter.setRowFilter(RowFilter.regexFilter("(?i)" + SearchString, SelectedSortButton));
+	                	} catch (PatternSyntaxException pse) {
+	                		
+	                		System.out.println("Failed to search");
+	                		System.out.println(pse);
+	                	}
+	                }
+	            }
+	        });
+			FilterPanelSticky.add(filterLabel);
+			FilterPanelSticky.add(filterTableList);
+			FilterPanel.add(searchLabel);
+			FilterPanel.add(searchField);
+			FilterPanel.add(FilterPanelSticky);
+							
+			return FilterPanel;
 		}
+		
 	
-	//A function to convert the list list from the database into a 2d object array with date value types in the correct places
-	String[][] GetRows(String table, String[] columns) {
-		List<List<String>> ListTable = DBConnection.getTable(table);
-		String[][] data = new String[ListTable.size()][columns.length];
-		for (int i = 0; i < ListTable.size(); i++) {
-			String[] row = new String[ListTable.get(i).size()];
-			for (int r = 0; r < row.length; r++) {
-				row[r] = ListTable.get(i).get(r);
+	//Creates the right panel with the choice of column to sort by
+	JPanel ExportPanel() {
+		ExportPanel = new JPanel();
+		ExportPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		
+		exportButton = new JButton("Export to File");
+		exportButton.setBackground(Color.WHITE);
+		Icon iconD = UIManager.getIcon("FileView.floppyDriveIcon");
+		exportButton.setIcon(iconD);
+		
+		
+		//Creates a filechooser to select a folder
+		JFileChooser PathChooser = new JFileChooser();
+		PathChooser.setDialogTitle("Export to...");
+		PathChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		PathChooser.setBackground(Color.WHITE);
+
+		//A listener to initiate exporting the table. It gets the path from the filechooser and adds a filename 
+		exportButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int ReturnValue = PathChooser.showSaveDialog(null);
+				if (ReturnValue == JFileChooser.APPROVE_OPTION) {	
+					ExportTable(DataTable, PathChooser.getSelectedFile().getAbsolutePath() + "//" + filterTableList.getSelectedItem().toString() + ".txt");
+				}
 			}
-			data[i] = row;
-		}
-		return data;
+		});
+		
+		ExportPanel.add(exportButton);
+		return ExportPanel;
 	}
-	
 	//A function to export the table into a file at a given path
 	void ExportTable(JTable table, String savePath) {
 		try {
@@ -150,83 +211,25 @@ public class DisplayTable {
 
 		return ScrollPanel;
 	}
-	
-	
-	
+	//A function to convert the list list from the database into a 2d object array with date value types in the correct places
+		String[][] GetRows(String table, String[] columns) {
+			List<List<String>> ListTable = DBConnection.getTable(table);
+			String[][] data = new String[ListTable.size()][columns.length];
+			for (int i = 0; i < ListTable.size(); i++) {
+				String[] row = new String[ListTable.get(i).size()];
+				for (int r = 0; r < row.length; r++) {
+					row[r] = ListTable.get(i).get(r);
+				}
+				data[i] = row;
+			}
+			return data;
+		}
 	//a function to update the sorter when the displayed table changes
 	void UpdateSorter() {
 		sorter = new TableRowSorter<TableModel>(model);
 		DataTable.setRowSorter(sorter);
 	}
 	
-	//Generates the top panel
-	JPanel FilterPanel() {
-		
-		FilterPanel = new JPanel();
-		//FilterPanel.setLayout( new FlowLayout(FlowLayout.LEFT) );
-		FilterPanel.setLayout( new FlowLayout(FlowLayout.LEFT) );
-
-		filterLabel = new JLabel("Filter by: ");
-		filterLabel.setFont(new Font(null, Font.BOLD, 15));
-		SearchFilterColumns = new JComboBox<String>();
-		SearchFilterColumns.setModel(new DefaultComboBoxModel<String>(DBConnection.getColumnNames("customers")));
-		SearchFilterColumns.setPreferredSize(new Dimension(200, 10));
-		SearchFilterColumns.setBackground(Color.WHITE);
-		
-		searchField = new JTextField();
-		searchField.setPreferredSize(new Dimension(500, 20));
-		searchField.setBackground(Color.WHITE);
-		searchField.setFont(new Font(null, Font.BOLD, 15));
-
-		searcLabel = new JLabel("Search: ");
-		
-		String[] TableArray = {
-				"customers", 
-				"employees",
-				"offices",
-				"orderdetails",
-				"orders",
-				"payments",
-				"productlines",
-				"products"};
-		TableList = new JComboBox<String>(TableArray);
-		TableList.setPreferredSize(new Dimension(100, 20));
-		TableList.setBackground(Color.WHITE);
-		
-		TableList.addActionListener(new ActionListener () {	
-		public void actionPerformed(ActionEvent e) {
-				UpdateTable(TableList.getSelectedItem().toString());
-		}
-		});
-		
-		//a rather lengthy listener to add a onKeyUp function to the searchBar
-		searchField.addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent e) {
-                JTextField textField = (JTextField) e.getSource();
-                SearchString = textField.getText();
-                
-                //Checks what is selected
-                if (SearchString.length() == 0) {
-                	sorter.setRowFilter(null);
-                } else {
-                	try {
-                		int SelectedSortButton = SearchFilterColumns.getSelectedIndex();
-                		sorter.setRowFilter(RowFilter.regexFilter("(?i)" + SearchString, SelectedSortButton));
-                	} catch (PatternSyntaxException pse) {
-                		
-                		System.out.println("Failed to search");
-                		System.out.println(pse);
-                	}
-                }
-            }
-        });
-		FilterPanel.add(searcLabel);
-		FilterPanel.add(searchField);
-		FilterPanel.add(filterLabel);
-		FilterPanel.add(TableList);
-						
-		return FilterPanel;
-	}
 	
 	//function to update the table based on a table name
 	void UpdateTable(String tableName) {
