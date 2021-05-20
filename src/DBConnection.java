@@ -251,10 +251,10 @@ public class DBConnection {
     		return e.getMessage().toString(); 
     	}        		
    }
-    public static String delete(String table, String id)
+    public static String delete(String table, String PrimaryColumn, String id)
     {
         //SQL STMT
-        String sql="DELETE FROM " + table + " WHERE customerNumber ='"+id+"'";
+        String sql="DELETE FROM " + table + " WHERE " + PrimaryColumn +" ='"+id+"'";
         try
         {
             //GET COONECTION
@@ -267,7 +267,7 @@ public class DBConnection {
 
         }catch(Exception ex)
         {
-            ex.printStackTrace();
+            //ex.printStackTrace();
     		if(ex.getMessage().contains("foreign key")) {
     			return ("Can't delete one of the selected because of a foreign key constraint");
     		} else {

@@ -24,6 +24,7 @@ public class DeleteFromDB {
 	private Object[][] Rows;
 	private JButton deleteButton;
 	private String table;
+	private JLabel ResponseText;
 	
 	public DeleteFromDB() {
 		
@@ -124,11 +125,20 @@ public class DeleteFromDB {
 					boolean cell = (boolean)DataTable.getValueAt(i, 0);
 					if (cell) {
 						
-						DBConnection.delete(table, (String)DataTable.getValueAt(i, 1));
+						//String response = DBConnection.delete(table, (String)DataTable.getValueAt(i, 1));
+						
+						//ResponseText.setText(response);
+						
+						System.out.println(DataTable.getValueAt(i, 1));
 					}
 				}
 			}
 		});
+		
+		ResponseText = new JLabel();
+		
+		panel.add(ResponseText);
+		
 		return panel;
 	}
 	
