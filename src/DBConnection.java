@@ -7,7 +7,7 @@ public class DBConnection {
     private static Connection conn;
     private ResultSet rs;
     private String iq;
-    private static String connection= "jdbc:mysql://localhost:3311/classicmodels";
+    private static String connection= "jdbc:mysql://localhost:3306/classicmodels";
     private static String username = "root";
     private static String password = "";
 
