@@ -41,7 +41,7 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 		JPanel comboBoxPanel = new JPanel();
 		JLabel comboBoxLabel = new JLabel("Choose table to edit");
 		
-		String[] tableNames = dbConnection.getTableNames();		
+		String[] tableNames = DBConnection.getTableNames();		
 		selectTable = new JComboBox<String>(tableNames);
 		selectTable.addActionListener(this);
 		selectTable.setBackground(Color.WHITE);
@@ -55,8 +55,8 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 	//Method for the JTable
 	private JPanel displayTable() {
 		displayTable = new JPanel();
-		List<List<String>> dataList = dbConnection.getTable(selectTable.getSelectedItem().toString());
-		String[] columnNames = dbConnection.getColumnNames(selectTable.getSelectedItem().toString());
+		List<List<String>> dataList = DBConnection.getTable(selectTable.getSelectedItem().toString());
+		String[] columnNames = DBConnection.getColumnNames(selectTable.getSelectedItem().toString());
 		
 		String[][] dataArray = new String[dataList.size()][dataList.get(0).size()];
 		for (int i = 0; i < dataList.size(); i++) { //Transforms the 2d arraylist into a 2d array to use with JTable
@@ -135,7 +135,7 @@ public class EditTablesPanel implements ActionListener, TableModelListener {
 			for(int i = 0;i<row.size();i++) {
 				int index = row.get(i);
 				String[] data = getDataFromTable(index);
-				message = dbConnection.updateTable(selectTable.getSelectedItem().toString(), data, dbConnection.getColumnNames(selectTable.getSelectedItem().toString()));
+				message = DBConnection.updateTable(selectTable.getSelectedItem().toString(), data, DBConnection.getColumnNames(selectTable.getSelectedItem().toString()));
 			}
 			validation.setText(message);
 		}

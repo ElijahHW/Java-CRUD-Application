@@ -70,7 +70,7 @@ public class ImportFromFile implements ActionListener {
 	private JPanel selectTable() { 
 		JPanel selectTable = new JPanel();
 		JLabel dbTableLabel = new JLabel("Choose table to add data");
-		String[] tableNames = dbConnection.getTableNames();
+		String[] tableNames = DBConnection.getTableNames();
 		
 		tableComboBox = new JComboBox<String>(tableNames);
 		tableComboBox.addActionListener(this);
@@ -136,7 +136,7 @@ public class ImportFromFile implements ActionListener {
 		String error = "";
 		String data;
 		String table = tableComboBox.getSelectedItem().toString();
-		String[] dataTypes = dbConnection.getColumnDataType(table); //Gets the datatypes for each column in the table
+		String[] dataTypes = DBConnection.getColumnDataType(table); //Gets the datatypes for each column in the table
 		int rows = preview.getRowCount();
 		
 		outerloop:
@@ -178,7 +178,7 @@ public class ImportFromFile implements ActionListener {
 				row[j] = preview.getValueAt(i, j).toString();
 			};
 			if(result.equals("Data inserted")) { //Continue if result didnt change
-				result = dbConnection.insertIntoTable(tableComboBox.getSelectedItem().toString(), preview.getColumnCount(), row);
+				result = DBConnection.insertIntoTable(tableComboBox.getSelectedItem().toString(), preview.getColumnCount(), row);
 			}else { //an error happened, STOP!
 				result += " Stopped on row " + String.valueOf(rowCount);
 				break outerloop;
@@ -234,7 +234,7 @@ public class ImportFromFile implements ActionListener {
 				
 		
 		if (e.getSource() == tableComboBox && dataFromFile != null) { //Execute if user has selected table and file
-			String[] columnNames = dbConnection.getColumnNames(tableComboBox.getSelectedItem().toString());
+			String[] columnNames = DBConnection.getColumnNames(tableComboBox.getSelectedItem().toString());
 			
 			ArrayList<Integer> errors = checkIfDataMatches(columnNames, dataFromFile); //Checks for datatype errors in the text file format
 			

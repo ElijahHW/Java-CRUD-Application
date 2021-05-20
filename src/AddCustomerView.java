@@ -8,7 +8,7 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.border.Border;
 
-public class addCustomerView implements ActionListener {
+public class AddCustomerView implements ActionListener {
 	
 	private JTextField customerNumberInput, customerNameInput, contactLastNameInput, contactFirstNameInput, phoneInput, addressLine1Input,
 						addressLine2Input, cityInput, stateInput, postalCodeInput, countryInput, creditLimitInput;
@@ -27,7 +27,7 @@ public class addCustomerView implements ActionListener {
 	private boolean UniqueName = false, ValidCredit = true;
 	private double CreditNumber = 0f;
 	
-	public addCustomerView() {
+	public AddCustomerView() {
 		
 		UpdateConstraints();
 		
@@ -135,7 +135,7 @@ public class addCustomerView implements ActionListener {
 					
 					//tries to insert the values added to the database
 					try {
-						String respons = dbConnection.addCustomer(
+						String respons = DBConnection.addCustomer(
 								customerNumberInput.getText(), 
 								customerNameInput.getText(),
 								contactLastNameInput.getText(), 
@@ -192,7 +192,7 @@ public class addCustomerView implements ActionListener {
 	//A simple function to populate the listbox with valid sales personell
 	private void updateCombobox()
 	{
-			List<List<String>> list = dbConnection.getTable("employees");
+			List<List<String>> list = DBConnection.getTable("employees");
 			for (List<String> row : list) {
 				if (row.get(7).equals("Sales Rep")) {
 					salesRepNumberList.addItem(Integer.parseInt(row.get(0)));
@@ -231,7 +231,7 @@ public class addCustomerView implements ActionListener {
                 	}
                 	
                 	//checks if the number entered is unique. A rather reseource heavy task sadly
-                	List<List<String>> list = dbConnection.getTable("customers");
+                	List<List<String>> list = DBConnection.getTable("customers");
                 	for (List<String> row : list) {
                 		
                 		if (row.get(0).equals(SearchString)) {

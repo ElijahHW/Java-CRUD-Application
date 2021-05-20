@@ -63,7 +63,7 @@ public class DisplayTable {
 	//A function to convert the list list from the database into a 2d object array with date value types in the correct places
 	String[][] GetRows(String table, String[] columns) {
 		
-		List<List<String>> ListTable = dbConnection.getTable(table);
+		List<List<String>> ListTable = DBConnection.getTable(table);
 		String[][] data = new String[ListTable.size()][columns.length];
 		
 		for (int i = 0; i < ListTable.size(); i++) {
@@ -145,7 +145,7 @@ public class DisplayTable {
 		JLabel FilterButtonLabel = new JLabel("Filter by: ");
 				
 		SearchFilterColumns = new JComboBox<String>();
-		SearchFilterColumns.setModel(new DefaultComboBoxModel<String>(dbConnection.getColumnNames("customers")));
+		SearchFilterColumns.setModel(new DefaultComboBoxModel<String>(DBConnection.getColumnNames("customers")));
 		SearchFilterColumns.setPreferredSize(new Dimension(100, 50));
 		SearchFilterColumns.setMaximumSize(new Dimension(200, 50));
 		SearchFilterColumns.setBackground(Color.WHITE);
@@ -270,7 +270,7 @@ public class DisplayTable {
 	//function to update the table based on a table name
 	void UpdateTable(String tableName) {
 		
-		columns = dbConnection.getColumnNames(tableName);
+		columns = DBConnection.getColumnNames(tableName);
 		String[][] rows = GetRows(tableName, columns);
 		
 		model = new DefaultTableModel(rows, columns) {

@@ -13,7 +13,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	//Header Elements
 		private JMenuBar menuBar;
 	    private JMenu fileMenu, actionMenu, dateMenu;
-	    private JMenuItem addItem, listItem, retrieveItem, editItem, importItem, copyItem, exitItem;
+	    private JMenuItem addItem, listItem, retrieveItem, editItem, importItem, copyItem, exitItem, backBtn2;
 	    private JButton homeBtn, backBtn;
 	    
 	  //Body Elements
@@ -69,13 +69,13 @@ public class MainFrame extends JFrame implements ActionListener {
         addItem = new JMenuItem("Add Customer");
         addItem.setBackground(Color.WHITE);
 
-        listItem = new JMenuItem("List Orders");
+        listItem = new JMenuItem("Display Tables / Export");
         listItem.setBackground(Color.WHITE);
 
         retrieveItem = new JMenuItem("Retrieve Employees");
         retrieveItem.setBackground(Color.WHITE);
         
-        editItem = new JMenuItem("Edit Data in DB");
+        editItem = new JMenuItem("Update Data in Database");
         editItem.setBackground(Color.WHITE);
         
         importItem = new JMenuItem("Import from File");
@@ -180,7 +180,7 @@ public class MainFrame extends JFrame implements ActionListener {
         addBtn.setForeground(new Color(0x102533));
         addBtn.addActionListener(this);
         
-        listBtn = new JButton("List Orders");
+        listBtn = new JButton("Display Tables / Export");
         listBtn.setFocusable(false);
         listBtn.setBackground(Color.WHITE);
         listBtn.setFont(new Font(null, Font.BOLD,15));
@@ -192,7 +192,7 @@ public class MainFrame extends JFrame implements ActionListener {
         retrieveBtn.setFont(new Font(null, Font.BOLD,15));
         retrieveBtn.addActionListener(this);
         
-        editBtn = new JButton("Edit Data in DB");        
+        editBtn = new JButton("Update data in Database DB");        
         editBtn.setFocusable(false);
         editBtn.setBackground(Color.WHITE);
         editBtn.setFont(new Font(null, Font.BOLD,15));
@@ -239,7 +239,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		if(e.getSource() == addItem || e.getSource() == addBtn) {
 			PreviousPanel = (JPanel)this.getContentPane();
 	        this.setTitle("Management Application - Add Customer");
-			addCustomerView panel = new addCustomerView();
+			AddCustomerView panel = new AddCustomerView();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
@@ -248,7 +248,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		} 
 		if(e.getSource() == listItem || e.getSource() == listBtn) {
 			PreviousPanel = (JPanel)this.getContentPane();
-	        this.setTitle("Management Application - List Orders");
+	        this.setTitle("Management Application - Display Tables / Export");
 			DisplayTable panel = new DisplayTable();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
@@ -260,7 +260,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		 if(e.getSource() == retrieveItem || e.getSource() == retrieveBtn) {
 			PreviousPanel = (JPanel)this.getContentPane();
 	        this.setTitle("Management Application - Retrieve Employees");
-			getEmployees panel = new getEmployees();
+			GetEmployees panel = new GetEmployees();
 			this.setContentPane(panel.getPanel());
 			this.revalidate();
 			this.repaint();
@@ -270,7 +270,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 		 if(e.getSource() == editItem || e.getSource() == editBtn) {
 				PreviousPanel = (JPanel)this.getContentPane();
-		        this.setTitle("Management Application - Edit Tables");
+		        this.setTitle("Management Application - Update Data");
 				EditTablesPanel panel = new EditTablesPanel();
 				this.setContentPane(panel.getPanel());
 				this.revalidate();
@@ -289,11 +289,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	        this.pack();
 			backBtn.setVisible(true);
 		} 
-	
-		if(e.getSource() == copyItem ) {
-		///hmmmm
-		}
-		
+			
 		if (e.getSource() == backBtn) {
 			
 			this.setContentPane(PreviousPanel);
