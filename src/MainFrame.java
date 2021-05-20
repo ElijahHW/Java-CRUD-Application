@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -11,15 +10,15 @@ public class MainFrame extends JFrame implements ActionListener {
 	
 	//Header Elements
 		private JMenuBar menuBar;
-	    private JMenu fileMenu, actionMenu, dateMenu;
+	    private JMenu fileMenu, actionMenu, dateMenu, statusLabel;
 	    private JMenuItem addItem, listItem, deleteItem, editItem, importItem, copyItem, exitItem, backBtn2;
 	    private JButton homeBtn, backBtn;
-	    
+	    private JLabel f;
 	  //Body Elements
 	    private JPanel panel = new JPanel();
 	    private JLabel welcomeLabel = new JLabel("Welcome to the Management Application");
 	    private JButton addBtn, listBtn, deleteBtn, editBtn, importBtn;
-	    
+
 	  //Extra Elements for Body
 	    private DateTimeFormatter date = DateTimeFormatter.ofPattern("MM/dd : HH:mm");  
 	    private LocalDateTime now = LocalDateTime.now();  
@@ -162,9 +161,14 @@ public class MainFrame extends JFrame implements ActionListener {
         menuBar.add(actionMenu);
         menuBar.add(dateMenu);
         menuBar.add(backBtn);
+    	menuBar.add(Box.createHorizontalGlue()); 
         if(!status) {
-        	JLabel statusLabel  = new JLabel("No connection to database", SwingConstants.RIGHT);
+        	statusLabel = new JMenu("No connection to database");
         	statusLabel.setForeground(Color.RED);	
+        	menuBar.add(statusLabel);
+        } else {
+        	statusLabel = new JMenu("Connected to DB!");
+        	statusLabel.setForeground(new Color(0x11780f));
         	menuBar.add(statusLabel);
         }
         menuBar.setFocusable(false);
@@ -241,6 +245,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == homeBtn) {
+	        this.setTitle("Management Application - Home");
 			PreviousPanel = (JPanel)this.getContentPane();
 			this.setContentPane(StartPanel);
             this.repaint();
@@ -316,7 +321,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			 String[] exitResponse = {"Yes", "No"};
 			 System.out.println("Closing Application...");
 			 try {
-                 Thread.sleep(500);
+                 Thread.sleep(200);
     			 if (JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Application Manager",
     					 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
     				 		System.exit(0);
