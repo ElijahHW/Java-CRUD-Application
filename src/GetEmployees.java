@@ -8,7 +8,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -125,7 +124,7 @@ public class GetEmployees {
 		headerLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		headerLabel.setText("Table of all Employee Data");
 		
-		filterLabel = new JLabel("Search: ");
+		filterLabel = new JLabel("Search job title: ");
 		filterLabel.setFont(new Font(null, Font.BOLD,15));
 		
 		ExportButton = new JButton("Export to File");
