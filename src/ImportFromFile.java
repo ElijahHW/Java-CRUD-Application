@@ -266,8 +266,8 @@ public class ImportFromFile implements ActionListener {
 				}
 				else { // 10 or more errors, displays a more generic error message
 					UIManager.put("Button.background", Color.white);
-					JOptionPane.showMessageDialog(panel, "The expected number of columns for the " + tableComboBox.getSelectedItem() + " table is " + columnNames.length + " You have " + errors.size() + " rows where this doesn't match. Are you sure you are choosing the right table?"
-							+ "Each column value in the text file should be seperated by ~ and rows by a new line");
+					JOptionPane.showMessageDialog(panel, "The expected number of columns for the " + tableComboBox.getSelectedItem() + " table is " + columnNames.length + ". You have " + errors.size() + " rows where this doesn't match. Are you sure you are choosing the right table?"
+							+ "\nEach column value in the text file should be seperated by ~ and rows by a new line");
 				}
 				tableComboBox.setSelectedIndex(comboBoxIndex); //resets the combobox value to the working table
 			}
